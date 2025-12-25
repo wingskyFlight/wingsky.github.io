@@ -150,7 +150,7 @@
             z-index: 20;
             border: 3px solid var(--wander-primary);
             box-sizing: border-box;
-            overflow: hidden;
+            overflow: visible;
         }
 
         /* Custom Inputs style mimics */
@@ -1038,9 +1038,13 @@
         }
 
         .custom-dropdown-trigger .flag-emoji {
-            font-family: 'Twemoji Mozilla', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
             font-size: 1.2em;
             line-height: 1;
+            margin-right: 12px;
+        }
+
+        #popupFlagBox {
+            display: none !important;
         }
 
         .custom-dropdown-menu {
@@ -1096,9 +1100,9 @@
         }
 
         .custom-dropdown-item .flag-emoji {
-            font-family: 'Twemoji Mozilla', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
             font-size: 1.3em;
             line-height: 1;
+            margin-right: 12px;
         }
 
         /* Hide native select when custom dropdown is active */
@@ -2098,7 +2102,24 @@
             const sortedList = [...list].sort((a, b) => a.title.localeCompare(b.title));
 
             container.innerHTML = sortedList.map(f => {
-                const imgPath = `data/inputs/festivals/festivals_images/${f.month}/${f.image}`;
+                let imgPath = f.image;
+
+                // Check valid image source
+                if (imgPath) {
+                    if (imgPath.startsWith('http') || imgPath.startsWith('data:image')) {
+                        // Deja une URL ou Base64 complet
+                    } else if (imgPath.match(/^[A-Za-z0-9+/=]+$/) && imgPath.length > 100) {
+                        // Semble être du Base64 brut (longue chaîne sans espace)
+                        imgPath = `data:image/jpeg;base64,${imgPath}`;
+                    } else {
+                        // Fallback au chemin local si c'est un nom de fichier
+                        imgPath = `data/inputs/festivals/festivals_images/${f.month}/${f.image}`;
+                    }
+                } else {
+                    // Fallback Unsplash par défaut
+                    imgPath = "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80";
+                }
+
                 const festivalId = `${f.month}_${f.city}`.replace(/\s/g, '_');
 
                 return `
@@ -2601,11 +2622,17 @@
 
         // ========== CUSTOM DROPDOWN SYSTEM ==========
         function initCustomDropdowns() {
-            // List of selects to convert to custom dropdowns (only city selects with flags)
+            // List of selects to convert to custom dropdowns (ALL selects now)
             const selectsToConvert = [
-                { id: 'popupFromCity', container: null, isPopup: true },
-                { id: 'searchFrom', container: null, isPopup: false },
-                { id: 'dealsFrom', container: null, isPopup: false }
+                { id: 'popupFromCity', isPopup: true },
+                { id: 'searchFrom', isPopup: false },
+                { id: 'searchTo', isPopup: false },
+                { id: 'searchMonth', isPopup: false },
+                { id: 'dealsFrom', isPopup: false },
+                { id: 'dealsTo', isPopup: false },
+                { id: 'dealsMonth', isPopup: false },
+                { id: 'festivalCountryFilter', isPopup: false },
+                { id: 'festivalMonthFilter', isPopup: false }
             ];
 
             selectsToConvert.forEach(config => {
@@ -2675,6 +2702,31 @@
             // Event: Toggle dropdown
             trigger.addEventListener('click', (e) => {
                 e.stopPropagation();
+
+                // Validation logic for 'Going to' dropdown (searchTo)
+                if (select.id === 'searchTo') {
+                    const searchFrom = document.getElementById('searchFrom');
+                    const errorMsg = document.getElementById('searchError');
+
+                    if (searchFrom && !searchFrom.value) {
+                        // Show error
+                        if (errorMsg) {
+                            errorMsg.classList.remove('hidden');
+                            // Small shake animation
+                            customDropdown.animate([
+                                { transform: 'translateX(0)' },
+                                { transform: 'translateX(-5px)' },
+                                { transform: 'translateX(5px)' },
+                                { transform: 'translateX(0)' }
+                            ], { duration: 300 });
+                        }
+                        return; // Prevent opening
+                    } else {
+                        // Hide error if valid
+                        if (errorMsg) errorMsg.classList.add('hidden');
+                    }
+                }
+
                 // Close other dropdowns
                 document.querySelectorAll('.custom-dropdown.open').forEach(dd => {
                     if (dd !== customDropdown) dd.classList.remove('open');
@@ -2716,6 +2768,12 @@
             select.addEventListener('change', () => {
                 syncCustomDropdownWithSelect(customDropdown, select);
             });
+
+            // Observe changes to options (e.g. when 'Going to' is updated via JS)
+            const observer = new MutationObserver(() => {
+                updateCustomDropdown(customDropdown, select);
+            });
+            observer.observe(select, { childList: true, subtree: true });
         }
 
         function populateCustomDropdownMenu(menu, select) {
