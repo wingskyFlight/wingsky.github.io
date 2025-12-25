@@ -2966,7 +2966,8 @@
                         .sort((a, b) => a[1].localeCompare(b[1]))
                         .forEach(([code, name]) => {
                             const flag = getFlagEmoji(code);
-                            select.innerHTML += `<option value="${code}">${name} ${flag}</option>`;
+                            // Add data attributes for custom dropdown
+                            select.innerHTML += `<option value="${code}" data-flag="${flag}" data-cc="${code}">${name} ${flag}</option>`;
                         });
                 }
                 return;
@@ -2983,8 +2984,10 @@
 
                 dests.forEach(dest => {
                     const destDeal = allDeals.find(d => d.to === dest);
-                    const flag = destDeal && destDeal.countryCode ? getFlagEmoji(destDeal.countryCode) : '';
-                    select.innerHTML += `<option value="${dest}">${dest} ${flag}</option>`;
+                    const cc = destDeal && destDeal.countryCode ? destDeal.countryCode : '';
+                    const flag = cc ? getFlagEmoji(cc) : '';
+                    // Add data attributes for custom dropdown
+                    select.innerHTML += `<option value="${dest}" data-flag="${flag}" data-cc="${cc}">${dest} ${flag}</option>`;
                 });
             } else {
                 console.log('No UpdateToDropdown match for:', key);
@@ -3277,18 +3280,59 @@
 
         function renderDealsPage() {
             let filtered = allDeals;
+            console.log(`DEBUG: Initial deals: ${filtered.length}. Filter: City=${currentCity}, Dest=${currentDestinationFilter}`);
+
             if (currentCity) filtered = filtered.filter(d => d.from === currentCity);
+            console.log(`DEBUG: After City Filter: ${filtered.length}`);
+
             if (currentDestinationFilter) {
                 // If value is 2 chars, assume it is a country code (from new dropdown logic)
+                if (currentDestinationFilter.length === 2 || (currentDestinationFilter.length === 3 && currentDestinationFilter === currentDestinationFilter.toLowerCase())) {
+                    // J'ajoute une protection au cas où c'est 3 lettres mais sans majuscule, ou autre.
+                    // Mais restons sur length === 2 pour les pays ISO.
+                }
+
                 if (currentDestinationFilter.length === 2) {
+                    console.log(`DEBUG: Filtering by Country Code: ${currentDestinationFilter}`);
                     filtered = filtered.filter(d => d.countryCode && d.countryCode.toLowerCase() === currentDestinationFilter.toLowerCase());
                 } else {
+                    console.log(`DEBUG: Filtering by City Name: ${currentDestinationFilter}`);
                     // Otherwise it is a specific city
                     filtered = filtered.filter(d => d.to === currentDestinationFilter);
                 }
             }
+            console.log(`DEBUG: After Dest Filter: ${filtered.length}`);
 
-            const monthsToShow = currentMonthFilter ? [currentMonthFilter] : getNextThreeMonths();
+
+            // Determine which months to show based on filtered results
+            let monthsToShow = [];
+            if (currentMonthFilter) {
+                monthsToShow = [currentMonthFilter];
+            } else {
+                // If no specific month selected, show all months that have deals in the filtered set
+                // But keep them sorted chronologically
+                const distinctMonths = new Set();
+                filtered.forEach(d => {
+                    // Extract month from date string (e.g. "26 May" -> "May")
+                    // Date format is roughly "Day Month - Day Month"
+                    // We need to match with monthNames keys
+                    // Simple heuristic: check if date string contains any month name
+                    monthNames.forEach(m => {
+                        // Check short month name (first 3 chars)
+                        if (d.date.includes(m) || d.date.includes(m.substring(0, 3))) {
+                            distinctMonths.add(m);
+                        }
+                    });
+                });
+
+                // Sort months based on global monthNames order
+                monthsToShow = monthNames.filter(m => distinctMonths.has(m));
+
+                // Fallback: if no deals found or no months matched, show next 3 months as default view
+                if (monthsToShow.length === 0) {
+                    monthsToShow = getNextThreeMonths();
+                }
+            }
 
             let html = '';
 
