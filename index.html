@@ -38,6 +38,141 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Luckiest+Guy&display=swap"
         rel="stylesheet">
 
+    <!-- Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,fr,de,es,it,nl,pt',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript"
+        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <style>
+        /* COMPLETELY HIDE Google Translate widget and all its elements */
+        .goog-te-banner-frame,
+        .goog-te-gadget,
+        #google_translate_element,
+        .goog-te-gadget-simple,
+        .skiptranslate,
+        #goog-gt-tt,
+        .goog-te-balloon-frame,
+        .goog-text-highlight,
+        .goog-te-spinner-pos,
+        .goog-te-menu-frame,
+        iframe.goog-te-menu-frame,
+        .VIpgJd-ZVi9od-l4eHX-hSRGPd,
+        .VIpgJd-ZVi9od-ORHb-OEVmcd,
+        div[id^="goog-gt-"],
+        div[class*="VIpgJd"] {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            left: -9999px !important;
+            top: -9999px !important;
+        }
+
+        body {
+            top: 0 !important;
+            position: static !important;
+        }
+
+        html.translated-ltr body,
+        html.translated-rtl body {
+            top: 0 !important;
+        }
+
+        /* Custom Language Selector with Flags */
+        .custom-lang-selector {
+            position: relative;
+            z-index: 100;
+        }
+
+        .lang-trigger {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e5e7eb;
+            color: #556068;
+        }
+
+        .lang-trigger:hover {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .lang-trigger img {
+            width: 20px;
+            height: 14px;
+            border-radius: 2px;
+            object-fit: cover;
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s;
+            min-width: 140px;
+        }
+
+        .custom-lang-selector.open .lang-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #2C3E50;
+        }
+
+        .lang-option:hover {
+            background: #f3f4f6;
+        }
+
+        .lang-option.active {
+            background: var(--wander-primary);
+            color: white;
+        }
+
+        .lang-option img {
+            width: 24px;
+            height: 16px;
+            border-radius: 2px;
+            object-fit: cover;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
     <style>
         /* --- INTEGRATION DES STYLES V2/V3 --- */
         :root {
@@ -111,7 +246,7 @@
             align-items: center;
             padding: 15px 40px;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             border-radius: 30px;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
@@ -135,6 +270,7 @@
             opacity: 0.55;
             transition: background-image 1s ease-in-out;
             z-index: 0;
+            border-radius: 30px;
         }
 
         /* SEARCH WIDGET */
@@ -339,6 +475,27 @@
             /* Éviter tout débordement */
             body {
                 overflow-x: hidden;
+            }
+
+            /* Fix for main container overflow */
+            .max-w-\[1240px\] {
+                max-width: 100%;
+                overflow: hidden;
+            }
+
+            .hero-wrapper {
+                max-width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                overflow: hidden;
+            }
+
+            .hero-wrapper::before {
+                transform: none !important;
+            }
+
+            .hero-wrapper:hover::before {
+                transform: none !important;
             }
 
             .search-widget-container {
@@ -1063,6 +1220,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            text-transform: uppercase;
         }
 
         .custom-dropdown-trigger .flag-emoji {
@@ -1108,6 +1266,7 @@
             transition: background 0.15s ease;
             font-weight: 500;
             color: #2C3E50;
+            text-transform: uppercase;
         }
 
         .custom-dropdown-item:first-child {
@@ -1239,6 +1398,35 @@
                             data-page="festivals"><i class="fa-solid fa-champagne-glasses"></i> Festivals</a></li>
                     <li><a href="#"
                             class="bg-[#F4F6F7] px-5 py-2 rounded-full text-[#2C3E50] font-semibold text-sm">Support</a>
+                    </li>
+                    <!-- Custom Language Selector with Flags -->
+                    <li class="custom-lang-selector" id="langSelector">
+                        <div class="lang-trigger" onclick="this.parentElement.classList.toggle('open')">
+                            <img src="https://flagcdn.com/w40/gb.png" alt="EN" id="currentLangFlag">
+                            <span id="currentLangCode">EN</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="m6 9 6 6 6-6" />
+                            </svg>
+                        </div>
+                        <div class="lang-dropdown">
+                            <div class="lang-option active" data-lang="en" data-flag="gb">
+                                <img src="https://flagcdn.com/w40/gb.png" alt="EN"> English
+                            </div>
+                            <div class="lang-option" data-lang="fr" data-flag="fr">
+                                <img src="https://flagcdn.com/w40/fr.png" alt="FR"> Français
+                            </div>
+                            <div class="lang-option" data-lang="de" data-flag="de">
+                                <img src="https://flagcdn.com/w40/de.png" alt="DE"> Deutsch
+                            </div>
+                            <div class="lang-option" data-lang="es" data-flag="es">
+                                <img src="https://flagcdn.com/w40/es.png" alt="ES"> Español
+                            </div>
+                            <div class="lang-option" data-lang="it" data-flag="it">
+                                <img src="https://flagcdn.com/w40/it.png" alt="IT"> Italiano
+                            </div>
+                        </div>
+                        <div id="google_translate_element" style="display:none;"></div>
                     </li>
                 </ul>
             </nav>
@@ -3052,9 +3240,23 @@
             document.getElementById('goToDealsBtn').onclick = () => {
                 currentCity = document.getElementById('popupFromCity').value;
                 document.getElementById('cityPopup').classList.add('hidden');
+                sessionStorage.setItem('popupShown', 'true'); // Remember popup was shown
                 // Save city to persistent filters so it's restored on deals page
                 persistentFilters.city = currentCity;
                 isSearchFromHome = true;
+
+                // Sync the dealsFrom dropdown with the popup selection
+                const dealsFrom = document.getElementById('dealsFrom');
+                if (dealsFrom && currentCity) {
+                    dealsFrom.value = currentCity;
+                    // Update the custom dropdown display if it exists
+                    if (typeof syncCustomDropdownWithSelect === 'function') {
+                        syncCustomDropdownWithSelect(dealsFrom);
+                    }
+                    // Trigger change event to update destinations
+                    dealsFrom.dispatchEvent(new Event('change'));
+                }
+
                 showPage('deals');
             };
 
@@ -3471,8 +3673,87 @@
             }
         }));
 
-        document.getElementById('closePopupBtn').onclick = () => document.getElementById('cityPopup').classList.add('hidden');
-        document.getElementById('cityPopup').onclick = e => { if (e.target === e.currentTarget) e.currentTarget.classList.add('hidden'); };
+        // Popup session management - only show once per session
+        const cityPopup = document.getElementById('cityPopup');
+        const popupShown = sessionStorage.getItem('popupShown');
+
+        if (popupShown === 'true') {
+            // Already shown this session, hide it
+            cityPopup.classList.add('hidden');
+        }
+
+        // Function to close popup and remember
+        function closePopupAndRemember() {
+            cityPopup.classList.add('hidden');
+            sessionStorage.setItem('popupShown', 'true');
+        }
+
+        document.getElementById('closePopupBtn').onclick = closePopupAndRemember;
+        cityPopup.onclick = e => { if (e.target === e.currentTarget) closePopupAndRemember(); };
+
+        // Custom Language Selector Logic
+        const savedLang = localStorage.getItem('selectedLang') || 'en';
+        const savedFlag = localStorage.getItem('selectedFlag') || 'gb';
+
+        // Restore saved language on page load
+        if (savedLang !== 'en') {
+            document.getElementById('currentLangFlag').src = `https://flagcdn.com/w40/${savedFlag}.png`;
+            document.getElementById('currentLangCode').textContent = savedLang.toUpperCase();
+            // Update active state
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.remove('active');
+                if (opt.dataset.lang === savedLang) {
+                    opt.classList.add('active');
+                }
+            });
+        }
+
+        document.querySelectorAll('.lang-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const lang = this.dataset.lang;
+                const flag = this.dataset.flag;
+
+                // Save to localStorage
+                localStorage.setItem('selectedLang', lang);
+                localStorage.setItem('selectedFlag', flag);
+
+                // Update current display
+                document.getElementById('currentLangFlag').src = `https://flagcdn.com/w40/${flag}.png`;
+                document.getElementById('currentLangCode').textContent = lang.toUpperCase();
+
+                // Update active state
+                document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+
+                // Close dropdown
+                document.getElementById('langSelector').classList.remove('open');
+
+                // Trigger Google Translate
+                const googTransCookie = '/en/' + lang;
+                document.cookie = 'googtrans=' + googTransCookie + ';path=/';
+                document.cookie = 'googtrans=' + googTransCookie + ';path=/;domain=' + window.location.hostname;
+
+                // Reload to apply translation
+                if (lang !== 'en') {
+                    window.location.reload();
+                } else {
+                    // Clear translation cookie for English
+                    localStorage.removeItem('selectedLang');
+                    localStorage.removeItem('selectedFlag');
+                    document.cookie = 'googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    document.cookie = 'googtrans=;path=/;domain=' + window.location.hostname + ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                    window.location.reload();
+                }
+            });
+        });
+
+        // Close language dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const langSelector = document.getElementById('langSelector');
+            if (langSelector && !langSelector.contains(e.target)) {
+                langSelector.classList.remove('open');
+            }
+        });
 
         loadData();
     </script>
