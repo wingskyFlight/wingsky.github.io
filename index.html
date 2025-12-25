@@ -1982,7 +1982,7 @@
                                     end: f.date_retour || f.end,
                                     city: f.ville || f.city,
                                     country: f.pays || f.country,
-                                    image: f.nom_image_locale || f.image,
+                                    image: f.image_base64 || f.nom_image_locale || f.image,
                                     link: f.lien_source || f.link || "#",
                                     month: f.mois || f.month,
                                 });
