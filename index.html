@@ -2466,7 +2466,8 @@
             const generateOptions = (defaultText) => {
                 return `<option value="">${defaultText}</option>` +
                     availableCities.map(c => {
-                        const countryCode = cityToCountryCode[c] || cityCountryMap[c];
+                        // Priorité aux données dynamiques de Supabase, fallback sur le mapping statique
+                        const countryCode = cityCountryMap[c] || cityToCountryCode[c];
                         const flag = countryCode ? getFlagEmoji(countryCode) : '🌐';
                         return `<option value="${c}" data-flag="${flag}" data-cc="${countryCode || ''}">${flag} ${c}</option>`;
                     }).join('');
