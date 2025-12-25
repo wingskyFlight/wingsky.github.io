@@ -1012,6 +1012,143 @@
             height: 1px;
             border-top: 2px dashed #e5e7eb;
         }
+
+        /* ========== CUSTOM DROPDOWN STYLES ========== */
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .custom-dropdown-trigger {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0;
+            font-weight: 700;
+            color: #2C3E50;
+            font-size: 1rem;
+            width: 100%;
+            background: transparent;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .custom-dropdown-trigger .flag-emoji {
+            font-family: 'Twemoji Mozilla', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+            font-size: 1.2em;
+            line-height: 1;
+        }
+
+        .custom-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: -16px;
+            right: -16px;
+            background: white;
+            border: 2px solid var(--wander-primary);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            max-height: 280px;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+        }
+
+        .custom-dropdown.open .custom-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .custom-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            font-weight: 500;
+            color: #2C3E50;
+        }
+
+        .custom-dropdown-item:first-child {
+            border-radius: 10px 10px 0 0;
+        }
+
+        .custom-dropdown-item:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+
+        .custom-dropdown-item:hover {
+            background: var(--wander-light);
+        }
+
+        .custom-dropdown-item.selected {
+            background: var(--wander-primary);
+            color: white;
+        }
+
+        .custom-dropdown-item .flag-emoji {
+            font-family: 'Twemoji Mozilla', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+            font-size: 1.3em;
+            line-height: 1;
+        }
+
+        /* Hide native select when custom dropdown is active */
+        .v2-input-group.has-custom-dropdown select,
+        .popup-select-wrapper.has-custom-dropdown select {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Popup specific custom dropdown styling */
+        .popup-custom-dropdown .custom-dropdown-trigger {
+            font-size: 1.1rem;
+            padding: 12px 16px;
+            padding-right: 40px;
+        }
+
+        .popup-custom-dropdown .custom-dropdown-menu {
+            left: 0;
+            right: 0;
+        }
+
+        /* Scrollbar for dropdown menu */
+        .custom-dropdown-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-dropdown-menu::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .custom-dropdown-menu::-webkit-scrollbar-thumb {
+            background: var(--wander-primary);
+            border-radius: 3px;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 767px) {
+            .custom-dropdown-menu {
+                max-height: 220px;
+            }
+
+            .custom-dropdown-item {
+                padding: 10px 14px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 
@@ -2462,6 +2599,183 @@
             return String.fromCodePoint(...codePoints);
         }
 
+        // ========== CUSTOM DROPDOWN SYSTEM ==========
+        function initCustomDropdowns() {
+            // List of selects to convert to custom dropdowns (only city selects with flags)
+            const selectsToConvert = [
+                { id: 'popupFromCity', container: null, isPopup: true },
+                { id: 'searchFrom', container: null, isPopup: false },
+                { id: 'dealsFrom', container: null, isPopup: false }
+            ];
+
+            selectsToConvert.forEach(config => {
+                const select = document.getElementById(config.id);
+                if (!select) return;
+
+                // Find parent container
+                const parent = select.parentElement;
+                if (!parent) return;
+
+                // Check if custom dropdown already exists
+                let existingCustom = parent.querySelector('.custom-dropdown');
+                if (existingCustom) {
+                    // Update existing dropdown
+                    updateCustomDropdown(existingCustom, select);
+                    return;
+                }
+
+                // Create custom dropdown
+                createCustomDropdown(select, parent, config.isPopup);
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.custom-dropdown')) {
+                    document.querySelectorAll('.custom-dropdown.open').forEach(dd => {
+                        dd.classList.remove('open');
+                    });
+                }
+            });
+        }
+
+        function createCustomDropdown(select, parent, isPopup) {
+            // Add class to parent
+            if (isPopup) {
+                parent.classList.add('popup-select-wrapper', 'has-custom-dropdown');
+            } else {
+                parent.classList.add('has-custom-dropdown');
+            }
+
+            // Create custom dropdown structure
+            const customDropdown = document.createElement('div');
+            customDropdown.className = `custom-dropdown ${isPopup ? 'popup-custom-dropdown' : ''}`;
+            customDropdown.dataset.selectId = select.id;
+
+            // Create trigger (visible part)
+            const trigger = document.createElement('div');
+            trigger.className = 'custom-dropdown-trigger';
+
+            // Get default option text
+            const defaultOption = select.options[0];
+            trigger.innerHTML = `<span class="trigger-text">${defaultOption ? defaultOption.text : 'Select...'}</span>`;
+
+            // Create dropdown menu
+            const menu = document.createElement('div');
+            menu.className = 'custom-dropdown-menu';
+
+            // Populate menu from select options
+            populateCustomDropdownMenu(menu, select);
+
+            customDropdown.appendChild(trigger);
+            customDropdown.appendChild(menu);
+
+            // Insert before select
+            select.parentNode.insertBefore(customDropdown, select);
+
+            // Event: Toggle dropdown
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Close other dropdowns
+                document.querySelectorAll('.custom-dropdown.open').forEach(dd => {
+                    if (dd !== customDropdown) dd.classList.remove('open');
+                });
+                customDropdown.classList.toggle('open');
+            });
+
+            // Event: Select item
+            menu.addEventListener('click', (e) => {
+                const item = e.target.closest('.custom-dropdown-item');
+                if (!item) return;
+
+                const value = item.dataset.value;
+                const text = item.dataset.text;
+                const flag = item.dataset.flag || '';
+
+                // Update select value
+                select.value = value;
+
+                // Update trigger display
+                if (flag && value) {
+                    trigger.innerHTML = `<span class="flag-emoji">${flag}</span><span class="trigger-text">${text}</span>`;
+                } else {
+                    trigger.innerHTML = `<span class="trigger-text">${text}</span>`;
+                }
+
+                // Update selected state in menu
+                menu.querySelectorAll('.custom-dropdown-item').forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+
+                // Close dropdown
+                customDropdown.classList.remove('open');
+
+                // Trigger change event on original select
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+
+            // Sync if select value changes externally
+            select.addEventListener('change', () => {
+                syncCustomDropdownWithSelect(customDropdown, select);
+            });
+        }
+
+        function populateCustomDropdownMenu(menu, select) {
+            menu.innerHTML = '';
+            Array.from(select.options).forEach((option, index) => {
+                const item = document.createElement('div');
+                item.className = 'custom-dropdown-item';
+                if (option.selected) item.classList.add('selected');
+
+                const flag = option.dataset.flag || '';
+                const cc = option.dataset.cc || '';
+                const text = option.text.replace(/^[\u{1F1E6}-\u{1F1FF}]{2}\s*/u, '').trim(); // Remove emoji from text
+
+                item.dataset.value = option.value;
+                item.dataset.text = text;
+                item.dataset.flag = flag;
+                item.dataset.cc = cc;
+
+                if (flag && option.value) {
+                    item.innerHTML = `<span class="flag-emoji">${flag}</span><span>${text}</span>`;
+                } else {
+                    item.innerHTML = `<span>${text}</span>`;
+                }
+
+                menu.appendChild(item);
+            });
+        }
+
+        function updateCustomDropdown(customDropdown, select) {
+            const menu = customDropdown.querySelector('.custom-dropdown-menu');
+            if (menu) {
+                populateCustomDropdownMenu(menu, select);
+            }
+            syncCustomDropdownWithSelect(customDropdown, select);
+        }
+
+        function syncCustomDropdownWithSelect(customDropdown, select) {
+            const trigger = customDropdown.querySelector('.custom-dropdown-trigger');
+            const menu = customDropdown.querySelector('.custom-dropdown-menu');
+            if (!trigger || !menu) return;
+
+            const selectedOption = select.options[select.selectedIndex];
+            if (!selectedOption) return;
+
+            const flag = selectedOption.dataset.flag || '';
+            const text = selectedOption.text.replace(/^[\u{1F1E6}-\u{1F1FF}]{2}\s*/u, '').trim();
+
+            if (flag && selectedOption.value) {
+                trigger.innerHTML = `<span class="flag-emoji">${flag}</span><span class="trigger-text">${text}</span>`;
+            } else {
+                trigger.innerHTML = `<span class="trigger-text">${text}</span>`;
+            }
+
+            // Update selected state in menu
+            menu.querySelectorAll('.custom-dropdown-item').forEach(item => {
+                item.classList.toggle('selected', item.dataset.value === select.value);
+            });
+        }
+
+
         function populateDropdowns() {
             const generateOptions = (defaultText) => {
                 return `<option value="">${defaultText}</option>` +
@@ -2521,6 +2835,9 @@
                 updateToDropdown('dealsTo', initialCity);
                 updateToDropdown('searchTo', initialCity);
             }
+
+            // Initialize custom dropdowns for flag display
+            initCustomDropdowns();
         }
 
         function updateToDropdown(selectId, fromValue) {
