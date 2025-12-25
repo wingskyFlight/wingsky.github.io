@@ -1,0 +1,3283 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Wingsky - Find the best flight deals under €100. Real deals, real savings, attractive prices.">
+    <meta name="keywords" content="cheap flights, flight deals, budget travel, airline tickets, Wingsky">
+    <meta name="author" content="Wingsky">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Wingsky – Real Flight Deals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script>
+        // SUPABASE CONFIGURATION
+        const SUPABASE_URL = 'https://cmxrottwkqkevtmpcdjr.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_e5rESzLOStr5VKNBwz-oPg_C7l5V6R5';
+
+        // Initialisation du client
+        let supabaseClient = null;
+        if (typeof supabase !== 'undefined') {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Luckiest+Guy&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- INTEGRATION DES STYLES V2/V3 --- */
+        :root {
+            --primary-yellow: #F4D03F;
+            --bg-body: #EBF2F7;
+            --bg-white: #FFFFFF;
+            --text-dark: #1E272E;
+            --current-bg: url('https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg?auto=compress&cs=tinysrgb&w=800');
+        }
+
+        /* Hero Wrapper Polymorphe */
+        .hero-wrapper {
+            position: relative;
+            width: 100%;
+            height: 360px;
+            /* HAUTEUR V2/V3 */
+            margin-top: 10px;
+            margin-bottom: 0;
+            z-index: 5;
+            transition: all 0.5s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transform: translateZ(0);
+            overflow: hidden;
+            border: 2px solid hsl(270deg 91.67% 80.3%);
+        }
+
+        /* STYLE V2 : SMILE (Convexe) - Par défaut pour HOME */
+        .hero-wrapper.style-smile {
+            border-radius: 30px 30px 50% 50% / 30px 30px 40px 40px;
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
+            mask-image: -webkit-radial-gradient(white, black);
+        }
+
+        /* STYLE V3 : INVERTED (Concave) - Pour DEALS */
+        .hero-wrapper.style-inverted {
+            border-radius: 30px 30px 0 0;
+            -webkit-mask-image: radial-gradient(ellipse 110% 80px at 50% 100%, transparent 49%, black 50%);
+            mask-image: radial-gradient(ellipse 110% 80px at 50% 100%, transparent 49%, black 50%);
+        }
+
+        .hero-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: var(--current-bg);
+            background-size: cover;
+            background-position: center center;
+            z-index: 0;
+            transition: background-image 1s ease-in-out, transform 0.8s ease;
+        }
+
+        .hero-wrapper:hover::before {
+            transform: scale(1.03);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(200, 225, 240, 0.15) 0%, rgba(100, 150, 200, 0.08) 30%, rgba(0, 0, 0, 0.02) 60%, rgba(0, 0, 0, 0.12) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* HEADER GLASSMORPHISM */
+        .glass-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.5s ease;
+            z-index: 50;
+            margin-bottom: 0;
+            border: 2px solid hsl(270deg 91.67% 80.3%);
+        }
+
+        .glass-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: var(--current-bg);
+            background-size: cover;
+            background-position: center top;
+            opacity: 0.55;
+            transition: background-image 1s ease-in-out;
+            z-index: 0;
+        }
+
+        /* SEARCH WIDGET */
+        .search-widget-container {
+            position: relative;
+            background: white;
+            padding: 25px;
+            border-radius: 26px;
+            width: 900px;
+            max-width: calc(100% - 20px);
+            margin: -100px auto 50px auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            z-index: 20;
+            border: 3px solid var(--wander-primary);
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Custom Inputs style mimics */
+        .v2-input-group {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 16px;
+            flex: 1;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid var(--wander-primary);
+            margin: 0 4px;
+        }
+
+        .v2-input-group:first-child {
+            margin-left: 0;
+        }
+
+        .v2-input-group:last-of-type {
+            margin-right: 0;
+        }
+
+        .v2-label {
+            font-size: 0.7rem;
+            color: #BDC3C7;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .v2-select {
+            border: none;
+            font-weight: 700;
+            color: #2C3E50;
+            font-size: 1rem;
+            width: 100%;
+            outline: none;
+            background: transparent;
+            cursor: pointer;
+            appearance: none;
+            font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+        }
+
+        .btn-go-v2 {
+            width: 60px;
+            height: 60px;
+            background: var(--wander-primary);
+            border: none;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            color: white;
+        }
+
+        .btn-go-v2:hover {
+            transform: scale(1.05);
+            background: var(--wander-primary-dark);
+        }
+
+        /* Search Row - Desktop default (row) */
+        .search-row-flex {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        /* HERO CENTERED TEXT */
+        .hero-centered-text {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+            pointer-events: none;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .hero-centered-text h2 {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+            letter-spacing: -0.02em;
+        }
+
+        .hero-centered-text .text-gradient {
+            background: linear-gradient(135deg, var(--wander-primary), var(--wander-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-centered-text .subtext {
+            color: white;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+            font-size: 0.85em;
+        }
+
+        /* AR TAGS */
+        .ar-tag {
+            position: absolute;
+            background: rgba(30, 40, 50, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: #FFFFFF;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 2;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            cursor: default;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        .ar-tag.visible {
+            opacity: 1;
+            transform: scale(1);
+            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), float 4s ease-in-out infinite 0.8s;
+        }
+
+        .ar-tag.hidden {
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s ease-in;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #2ECC71;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #2ECC71;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-10px) scale(1);
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(20px);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05) translateY(-5px);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Mobile Adjustments - Phone < 768px */
+        @media (max-width: 767px) {
+
+            /* Éviter tout débordement */
+            body {
+                overflow-x: hidden;
+            }
+
+            .search-widget-container {
+                width: calc(100% - 24px);
+                max-width: none;
+                padding: 16px;
+                margin: -50px 12px 30px 12px;
+                box-sizing: border-box;
+            }
+
+            .v2-input-group {
+                border-right: none;
+                border-bottom: none;
+                padding: 8px 6px;
+                flex: none;
+                box-sizing: border-box;
+            }
+
+            .v2-select {
+                font-size: 0.85rem;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .v2-label {
+                font-size: 0.6rem;
+            }
+
+            /* Layout Flex Column mobile */
+            .search-row-flex {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+            }
+
+            /* Tous les input groups = style de base avec bordure thème */
+            .search-row-flex .v2-input-group {
+                background: #f8f9fa;
+                border-radius: 10px;
+                padding: 10px 12px;
+                border: 1px solid var(--wander-primary);
+                width: 100%;
+            }
+
+            /* Bouton Search pleine largeur */
+            .search-row-flex .btn-go-v2 {
+                width: 100%;
+                height: 48px;
+                font-size: 1rem;
+                border-radius: 10px;
+                flex-shrink: 0;
+                margin-top: 4px;
+            }
+
+            .hero-wrapper {
+                height: 200px;
+            }
+
+            .glass-header {
+                padding: 10px 12px;
+                border-radius: 16px;
+                margin: 0 8px;
+                width: calc(100% - 16px);
+            }
+
+            .hero-centered-text h2 {
+                font-size: 1.45rem;
+            }
+
+            .hero-centered-text .subtext {
+                font-size: 0.85rem;
+            }
+
+            /* Masquer AR tags sur mobile */
+            .ar-tag {
+                display: none;
+            }
+
+            /* Home grid compact */
+            .home-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+                padding: 0 8px;
+            }
+
+            /* Compact cards */
+            .compact-card {
+                border-radius: 10px;
+            }
+
+            .compact-card .p-4 {
+                padding: 10px !important;
+            }
+
+            .compact-card .text-2xl {
+                font-size: 0.9rem !important;
+            }
+
+            .compact-card .text-4xl {
+                font-size: 1.25rem !important;
+            }
+
+            /* Container principal */
+            .container {
+                padding: 0 8px;
+                max-width: 100%;
+                overflow: hidden;
+            }
+
+            main {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+        }
+
+        /* Mobile Menu Drawer */
+        .mobile-menu {
+            transition: right 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            right: 0 !important;
+        }
+
+        /* Tablet Adjustments - 768px to 1024px */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .search-widget-container {
+                width: 95%;
+                padding: 20px;
+                margin-top: -80px;
+            }
+
+            .search-row-flex {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .v2-input-group {
+                flex: 1 1 calc(50% - 12px);
+                min-width: 150px;
+                border-right: none;
+                border-bottom: 1px solid #eee;
+                padding: 10px 12px;
+            }
+
+            .v2-input-group:nth-child(2n) {
+                border-right: none;
+            }
+
+            /* Bouton search sur la dernière ligne centré */
+            .search-row-flex .btn-go-v2 {
+                flex: 0 0 auto;
+                width: 56px;
+                height: 56px;
+                margin-left: auto;
+            }
+
+            .hero-wrapper {
+                height: 320px;
+            }
+
+            .hero-centered-text h2 {
+                font-size: clamp(2.5rem, 5vw, 3.5rem);
+            }
+
+            .hero-centered-text .subtext {
+                font-size: 1.2rem;
+            }
+
+            .home-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+        }
+
+        :root {
+            --wander-primary: hsl(270, 80%, 60%);
+            --wander-primary-dark: hsl(270, 80%, 45%);
+            --wander-accent: hsl(300, 100%, 70%);
+            --wander-light: hsl(270, 50%, 96%);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        wander: {
+                            primary: 'var(--wander-primary)',
+                            primaryDark: 'var(--wander-primary-dark)',
+                            accent: 'var(--wander-accent)',
+                            light: 'var(--wander-light)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .text-gradient {
+            background: linear-gradient(to right, var(--wander-primary), var(--wander-accent), var(--wander-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 900;
+        }
+
+        .compact-card {
+            width: 100%;
+            /* Fluid width to fit grid */
+            flex-shrink: 0;
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.4s;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .compact-card:hover {
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            transform: translateY(-1.5rem);
+        }
+
+        /* FIX: Consistent flag image sizing and centering */
+        .compact-card .deal-image {
+            height: 120px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f0f0;
+        }
+
+        .compact-card .deal-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .compact-card:hover .deal-image img {
+            transform: scale(1.15);
+        }
+
+        @media (max-width: 480px) {
+            .compact-card {
+                /* Let grid handle width */
+                width: 100% !important;
+            }
+
+            .compact-card .deal-image {
+                height: 100px !important;
+            }
+
+            .compact-card .p-4 {
+                padding: 0.75rem !important;
+            }
+
+            .compact-card .text-2xl {
+                font-size: 1.1rem !important;
+            }
+
+            .compact-card .text-4xl {
+                font-size: 1.5rem !important;
+            }
+
+            .compact-card .text-base {
+                font-size: 0.75rem !important;
+            }
+
+            .compact-card .py-2 {
+                padding: 0.4rem 0 !important;
+            }
+
+            .compact-card .text-sm {
+                font-size: 0.65rem !important;
+            }
+        }
+
+        .carousel {
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            overflow-x: auto;
+            display: flex;
+            gap: 1.5rem;
+            padding-bottom: 1rem;
+        }
+
+        /* Keep carousel items fixed width to enable scrolling behavior */
+        .carousel .compact-card {
+            width: 208px !important;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 480px) {
+            .carousel .compact-card {
+                width: 160px !important;
+            }
+        }
+
+        /* Custom Scrollbar for Carousel */
+        .carousel::-webkit-scrollbar {
+            height: 8px;
+            display: block;
+        }
+
+        .carousel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+            margin: 0 20px;
+        }
+
+        .carousel::-webkit-scrollbar-thumb {
+            background: var(--wander-primary);
+            border-radius: 4px;
+        }
+
+        .carousel::-webkit-scrollbar-thumb:hover {
+            background: var(--wander-primary-dark);
+        }
+
+        .carousel {
+            scrollbar-width: thin;
+            scrollbar-color: var(--wander-primary) #f1f1f1;
+            padding-bottom: 1.5rem;
+            /* Space for scrollbar */
+        }
+
+        .home-grid {
+            display: grid;
+            gap: 1rem;
+            justify-content: center;
+            grid-template-columns: repeat(5, 1fr);
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1120px) {
+            .home-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .home-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 680px) {
+            .home-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .home-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .home-grid {
+                grid-template-columns: repeat(2, 140px);
+                gap: 0.5rem;
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-8px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(8px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.6s ease-in-out;
+            border-color: #ef4444 !important;
+        }
+
+        .shake .v2-label,
+        .shake .v2-select {
+            color: #ef4444 !important;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 320px;
+            height: 100vh;
+            background: white;
+            z-index: 999;
+            transition: right 0.4s ease;
+            padding: 6rem 2rem 2rem;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .mobile-menu.open {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--wander-primary);
+        }
+
+        .nav-link.active {
+            background-color: var(--wander-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .mobile-menu a.active {
+            background-color: var(--wander-primary);
+            color: white;
+            border-radius: 0.5rem;
+        }
+
+        .burger-btn {
+            display: none;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s;
+        }
+
+        .burger-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        @media (max-width: 768px) {
+            .burger-btn {
+                display: block;
+            }
+
+            .desktop-nav {
+                display: none;
+            }
+        }
+
+        /* --- PREMIUM FESTIVAL FLIGHT CARDS --- */
+        .flight-card-premium {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            color: #1e272e;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: white;
+            /* Fallback */
+            border: 2px solid #f3f4f6;
+        }
+
+        .dark-mode-card {
+            background: #1e1e2e;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .flight-card-premium:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(93, 63, 211, 0.2);
+            border-color: var(--wander-primary);
+        }
+
+        .flight-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .airport-code {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #BDC3C7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .city-name {
+            font-size: 1.25rem;
+            font-weight: 900;
+            margin-top: -2px;
+        }
+
+        .flight-path {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            justify-content: center;
+            position: relative;
+        }
+
+        .flight-path::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: repeating-linear-gradient(to right, #BDC3C7 0, #BDC3C7 4px, transparent 4px, transparent 8px);
+            z-index: 0;
+        }
+
+        .plane-icon-wrap {
+            background: white;
+            padding: 0 8px;
+            z-index: 1;
+            color: var(--wander-primary);
+        }
+
+        .price-tag-premium {
+            font-size: 2.5rem;
+            font-weight: 950;
+            background: linear-gradient(135deg, var(--wander-primary), var(--wander-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 8px 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-view-deal-premium {
+            background: linear-gradient(to right, var(--wander-primary), var(--wander-primaryDark));
+            color: white;
+            padding: 14px;
+            border-radius: 16px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(93, 63, 211, 0.3);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-view-deal-premium:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 15px 30px rgba(93, 63, 211, 0.4);
+            gap: 12px;
+        }
+
+        .flight-type-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary-yellow);
+            color: #000;
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            border-bottom-left-radius: 16px;
+            text-transform: uppercase;
+        }
+
+        /* Modal specific styling */
+        #flightModal .bg-white {
+            background: #fdfdfd;
+        }
+
+        .modal-gradient-bg {
+            background: radial-gradient(circle at top right, rgba(93, 63, 211, 0.05), transparent),
+                radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.03), transparent);
+        }
+
+        /* --- SIMPLE FLIGHT CARD FOR MODAL --- */
+        .simple-flight-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .simple-flight-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: var(--wander-primary);
+        }
+
+        .flight-path-simple {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #9ca3af;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .flight-path-line {
+            flex: 1;
+            height: 1px;
+            border-top: 2px dashed #e5e7eb;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 overflow-x-hidden">
+
+    <!-- POPUP AU DÉMARRAGE -->
+    <div id="cityPopup" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative">
+            <button id="closePopupBtn" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100"
+                aria-label="Close popup">
+                <i data-lucide="x" class="w-8 h-8 text-gray-600"></i>
+            </button>
+            <i data-lucide="plane-takeoff" class="w-20 h-20 text-wander-primary mx-auto mb-6"></i>
+            <h2 class="text-4xl font-black mb-4">Where are you flying from?</h2>
+            <div class="relative mb-6">
+                <div id="popupFlagBox"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 text-2xl hidden pointer-events-none"></div>
+                <select id="popupFromCity"
+                    class="w-full h-14 pl-6 pr-12 rounded-2xl border-2 border-wander-primary text-lg appearance-none bg-white focus:ring-4 focus:ring-wander-primary/20 outline-none transition-all"
+                    aria-label="Select departure city">
+                    <option value="">Select departure city</option>
+                </select>
+                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <i data-lucide="chevron-down" class="w-6 h-6 text-wander-primary"></i>
+                </div>
+            </div>
+            <button id="goToDealsBtn"
+                class="w-full h-16 bg-wander-primary hover:bg-wander-primaryDark text-white text-xl font-bold rounded-2xl shadow-xl"
+                disabled>
+                Show Me the Deals!
+            </button>
+        </div>
+    </div>
+
+    <!-- NOUVELLE STRUCTURE V2/V3 -->
+    <div class="max-w-[1240px] mx-auto relative px-4 pt-6">
+
+        <!-- HEADER V2 GLASS -->
+        <header class="glass-header">
+            <div class="flex items-center gap-3 relative z-10 cursor-pointer" onclick="goHomeAndReset()"
+                style="font-family: 'Luckiest Guy', cursive; color: #fff; text-shadow: 3px 3px 0px #5d3fd3, 6px 6px 10px rgba(0, 0, 0, 0.5); font-size: 2rem; letter-spacing: 1px;">
+                Wingsky
+            </div>
+
+            <nav class="hidden md:flex">
+                <ul class="flex gap-8 list-none items-center relative z-10">
+                    <!-- Ajout de la classe 'nav-link' pour que le script existant détecte les clics -->
+                    <li><a href="#home"
+                            class="text-[#556068] hover:text-[#2C3E50] font-medium text-sm transition nav-trigger nav-link flex items-center gap-2"
+                            data-page="home"><i class="fa-solid fa-house"></i> Home</a></li>
+                    <li><a href="#deals"
+                            class="text-[#556068] hover:text-[#2C3E50] font-medium text-sm transition nav-trigger nav-link flex items-center gap-2"
+                            data-page="deals"><i class="fa-solid fa-tag"></i> Deals</a></li>
+                    <li><a href="#festivals"
+                            class="text-[#556068] hover:text-[#2C3E50] font-medium text-sm transition nav-trigger nav-link flex items-center gap-2"
+                            data-page="festivals"><i class="fa-solid fa-champagne-glasses"></i> Festivals</a></li>
+                    <li><a href="#"
+                            class="bg-[#F4F6F7] px-5 py-2 rounded-full text-[#2C3E50] font-semibold text-sm">Support</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Mobile Burger -->
+            <button
+                class="md:hidden p-3 relative z-10 bg-white/90 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center"
+                onclick="document.getElementById('mobileMenu').classList.toggle('open')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-wander-primary w-6 h-6">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </header>
+
+        <!-- HEADER MOBILE DRAWER -->
+        <div id="mobileMenu"
+            class="mobile-menu bg-white fixed top-0 right-[-100%] w-[80%] max-w-[320px] h-full z-[100] transition-all duration-300 p-8 shadow-2xl">
+            <button class="absolute top-6 right-6 p-2 hover:bg-gray-100 rounded-full transition"
+                onclick="this.parentElement.classList.remove('open')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-gray-600 w-6 h-6">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                </svg>
+            </button>
+            <div class="flex flex-col gap-6 mt-16 text-lg font-semibold">
+                <a href="#home"
+                    class="mobile-nav-link nav-trigger flex items-center gap-4 p-3 rounded-xl hover:bg-purple-50 transition"
+                    data-page="home"
+                    onclick="event.preventDefault(); document.getElementById('mobileMenu').classList.remove('open'); if(typeof goHomeAndReset === 'function') goHomeAndReset(); else showPage('home');">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="text-wander-primary w-6 h-6">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg> Home
+                </a>
+                <a href="#deals"
+                    class="mobile-nav-link nav-trigger flex items-center gap-4 p-3 rounded-xl hover:bg-purple-50 transition"
+                    data-page="deals"
+                    onclick="event.preventDefault(); document.getElementById('mobileMenu').classList.remove('open'); if(typeof goToDealsAndReset === 'function') goToDealsAndReset(); else showPage('deals');">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="text-wander-primary w-6 h-6">
+                        <path
+                            d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l5 5a2 2 0 0 0 2.828 0l7.172-7.172a2 2 0 0 0 0-2.828l-5-5z" />
+                        <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
+                    </svg> Deals
+                </a>
+                <a href="#festivals"
+                    class="mobile-nav-link nav-trigger flex items-center gap-4 p-3 rounded-xl hover:bg-purple-50 transition"
+                    data-page="festivals"
+                    onclick="event.preventDefault(); document.getElementById('mobileMenu').classList.remove('open'); showPage('festivals');">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="text-wander-primary w-6 h-6">
+                        <path d="M8 22h8" />
+                        <path d="M7 10h10" />
+                        <path d="M12 15v7" />
+                        <path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z" />
+                    </svg> Festivals
+                </a>
+            </div>
+        </div>
+
+        <!-- HERO WRAPPER POLYMORPHE -->
+        <div class="hero-wrapper style-inverted" id="mainHero">
+            <div class="hero-overlay"></div>
+
+            <!-- SLOGAN CENTRÉ SUR LE HERO (Home) -->
+            <div class="hero-centered-text" id="heroTextHome">
+                <h2>
+                    <span id="sloganText" class="text-gradient transition-opacity duration-500">Real Flight Deals</span>
+                    <br>
+                    <span class="subtext">Under €100</span>
+                </h2>
+            </div>
+
+            <!-- TITRE CENTRÉ SUR LE HERO (Deals) -->
+            <div class="hero-centered-text hidden" id="heroTextDeals">
+                <h2>
+                    <span class="text-gradient">All Deals</span>
+                    <br>
+                    <span class="subtext" id="heroDealsCity">From All Cities</span>
+                </h2>
+            </div>
+
+            <!-- TITRE CENTRÉ SUR LE HERO (Festivals) -->
+            <div class="hero-centered-text hidden" id="heroTextFestivals">
+                <h2>
+                    <span class="text-gradient">Discover Festivals</span>
+                    <br>
+                    <span class="subtext">Across Europe</span>
+                </h2>
+            </div>
+
+            <!-- AR Tags injected via JS (évite la zone centrale) -->
+        </div>
+
+        <!-- SEARCH WIDGET HOME (Actif par défaut) -->
+        <div id="searchWidgetHome" class="search-widget-container transition-opacity duration-300">
+            <div class="flex gap-4 mb-5">
+                <span class="bg-[var(--primary-yellow)] rounded-2xl px-3 py-1 text-sm font-semibold text-[#222]">Round
+                    Trip Only</span>
+            </div>
+
+            <div class="search-row-flex flex items-center gap-2">
+                <div class="v2-input-group">
+                    <span class="v2-label">Leaving from</span>
+                    <select id="searchFrom" class="v2-select">
+                        <option value="">Select departure city</option>
+                    </select>
+                </div>
+                <div class="v2-input-group">
+                    <span class="v2-label">Going to</span>
+                    <select id="searchTo" class="v2-select">
+                        <option value="">All countries</option>
+                    </select>
+                </div>
+                <div class="v2-input-group">
+                    <span class="v2-label">Date</span>
+                    <select id="searchMonth" class="v2-select">
+                        <option value="">Any month</option>
+                    </select>
+                </div>
+                <!-- BOUTON SEARCH AVEC SVG -->
+                <button id="searchBtn" class="btn-go-v2 shadow-lg hover:shadow-xl flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </svg>
+                </button>
+            </div>
+            <p id="searchError" class="text-red-500 text-sm mt-3 text-center hidden font-bold">⚠️ Please select a
+                departure city first!</p>
+        </div>
+
+        <!-- SEARCH WIDGET DEALS (Masqué par défaut) -->
+        <div id="searchWidgetDeals" class="search-widget-container hidden transition-opacity duration-300">
+            <div class="flex gap-4 mb-5">
+                <span class="text-gray-500 text-sm font-bold uppercase tracking-wider"><i
+                        class="fa-solid fa-filter mr-2"></i>Filter Deals</span>
+            </div>
+            <div class="search-row-flex flex items-center gap-2">
+                <div class="v2-input-group">
+                    <span class="v2-label">Filter From</span>
+                    <select id="dealsFrom" class="v2-select">
+                        <option value="">All departure cities</option>
+                    </select>
+                </div>
+                <div class="v2-input-group">
+                    <span class="v2-label">Filter To</span>
+                    <select id="dealsTo" class="v2-select">
+                        <option value="">All countries</option>
+                    </select>
+                </div>
+                <div class="v2-input-group">
+                    <span class="v2-label">Month</span>
+                    <select id="dealsMonth" class="v2-select">
+                        <option value="">Any month</option>
+                    </select>
+                </div>
+                <!-- BOUTON DEALS AVEC SVG -->
+                <button id="dealsSearchBtn" class="btn-go-v2 shadow-lg hover:shadow-xl flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 pb-12"> <!-- Pas de padding top, géré par le widget -->
+
+        <!-- HOME SECTION -->
+        <section id="home" class="content-section">
+            <!-- Slogan maintenant affiché dans le Hero -->
+            <div class="home-grid mb-16" id="homeDeals"></div>
+
+            <div class="text-center">
+                <button id="loadMoreBtn"
+                    class="inline-block px-16 py-6 bg-wander-primary hover:bg-wander-primaryDark text-white text-2xl font-bold rounded-3xl shadow-2xl transition-all">
+                    More
+                </button>
+            </div>
+            </div>
+
+            <!-- FEATURES SECTION -->
+            <div class="py-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto text-center">
+                <div class="p-6 bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all">
+                    <div class="w-16 h-16 bg-wander-light rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="zap" class="w-8 h-8 text-wander-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Fast &amp; Easy</h3>
+                    <p class="text-gray-600">Find the best deals in seconds with our lightning-fast search engine.</p>
+                </div>
+                <div class="p-6 bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all">
+                    <div class="w-16 h-16 bg-wander-light rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="wallet" class="w-8 h-8 text-wander-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Best Prices</h3>
+                    <p class="text-gray-600">We scour the web to bring you flights under €100. Guaranteed.</p>
+                </div>
+                <div class="p-6 bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all">
+                    <div class="w-16 h-16 bg-wander-light rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="shield-check" class="w-8 h-8 text-wander-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Secure Booking</h3>
+                    <p class="text-gray-600">Book directly with trusted airlines and providers. No hidden fees.</p>
+                </div>
+            </div>
+
+            <!-- NEWSLETTER -->
+            <div class="py-20">
+                <div
+                    class="bg-gradient-to-r from-wander-primary to-wander-primaryDark rounded-3xl p-10 text-center text-white max-w-4xl mx-auto shadow-2xl relative overflow-hidden">
+                    <div
+                        class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+                    </div>
+                    <h3 class="text-3xl md:text-5xl font-black mb-4 relative z-10">Unlock Secret Deals</h3>
+                    <p class="text-lg md:text-xl mb-8 opacity-90 relative z-10">Get exclusive deals delivered straight
+                        to your inbox.</p>
+                    <div class="flex flex-col md:flex-row gap-4 justify-center max-w-lg mx-auto relative z-10">
+                        <input type="email" placeholder="Enter your email" aria-label="Email address"
+                            class="h-14 px-6 rounded-xl text-gray-800 w-full focus:outline-none focus:ring-4 focus:ring-white/30">
+                        <button
+                            class="h-14 px-8 bg-white text-wander-primaryDark font-bold rounded-xl hover:bg-gray-100 transition shadow-lg">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- DEALS PAGE -->
+        <section id="deals" class="hidden relative py-20">
+            <!-- Titre supprimé - Maintenant affiché dans le Hero -->
+            <div id="dynamicCarousels" class="space-y-16"></div>
+        </section>
+
+        <!-- FESTIVALS -->
+        <section id="festivals" class="hidden relative text-center" style="padding-top: 0.5rem;">
+            <!-- Abstract Gradient Background -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-[800px] -z-10 overflow-hidden"
+                style="mask-image: linear-gradient(to bottom, black 70%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);">
+                <div
+                    class="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-wander-primary/40 rounded-full blur-[100px]">
+                </div>
+                <div
+                    class="absolute top-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-wander-accent/40 rounded-full blur-[100px]">
+                </div>
+                <div
+                    class="absolute top-[20%] left-[20%] w-[60vw] h-[60vw] bg-wander-primaryDark/30 rounded-full blur-[120px]">
+                </div>
+                <div class="absolute inset-0 bg-white/30 backdrop-blur-3xl"></div>
+            </div>
+            <!-- Titre supprimé comme demandé -->
+
+            <!-- SEARCH WIDGET FESTIVALS -->
+            <div id="searchWidgetFestivals" class="search-widget-container transition-opacity duration-300 mb-8"
+                style="margin-top: -100px;">
+                <div class="flex gap-4 mb-5 justify-between items-center">
+                    <span class="text-gray-500 text-sm font-bold uppercase tracking-wider"><i
+                            class="fa-solid fa-music mr-2"></i>Find Festivals</span>
+                </div>
+                <div class="search-row-flex flex items-center gap-2">
+                    <div class="v2-input-group">
+                        <span class="v2-label">Country</span>
+                        <select id="festivalCountryFilter" class="v2-select">
+                            <option value="">All countries</option>
+                        </select>
+                    </div>
+                    <div class="v2-input-group">
+                        <span class="v2-label">Month</span>
+                        <select id="festivalMonthFilter" class="v2-select">
+                            <option value="">Any month</option>
+                        </select>
+                    </div>
+                    <div class="v2-input-group">
+                        <span class="v2-label">Sort</span>
+                        <select id="festivalSortFilter" class="v2-select">
+                            <option value="name-asc">A→Z</option>
+                            <option value="name-desc">Z→A</option>
+                        </select>
+                    </div>
+                    <button id="festivalSearchBtn" class="btn-go-v2 shadow-lg hover:shadow-xl flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <p class="text-2xl text-gray-600 mb-12 hidden">Page en construction – les meilleurs festivals arrivent
+                bientôt !</p>
+            <div class="home-grid" id="festivalDeals"></div>
+        </section>
+
+    </main>
+
+    <!-- FLIGHT MODAL -->
+    <div id="flightModal"
+        class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4 overflow-y-auto backdrop-blur-sm transition-all duration-300">
+        <div
+            class="bg-white rounded-[2rem] shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col my-8 modal-gradient-bg border border-white/20">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
+                <div>
+                    <h2 id="modalTitle" class="text-3xl font-black text-gray-900"></h2>
+                    <p id="modalSubtitle" class="text-gray-600 mt-1"></p>
+                </div>
+                <button onclick="closeFlightModal()" class="p-2 rounded-full hover:bg-gray-100 transition"
+                    aria-label="Close modal">
+                    <i data-lucide="x" class="w-8 h-8"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="p-6 overflow-y-auto flex-1">
+                <!-- Flight cards will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gradient-to-br from-wander-primary to-wander-primaryDark text-white py-16 text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <h3 class="text-4xl font-black mb-4">Wingsky</h3>
+            <p class="text-xl mb-8">Real deals. Real savings. Attractive prices.</p>
+
+            <div class="flex justify-center gap-8 mb-8">
+                <a href="#" class="hover:text-wander-light transition transform hover:scale-110" aria-label="Instagram">
+                    <i data-lucide="instagram" class="w-8 h-8"></i>
+                </a>
+                <a href="#" class="hover:text-wander-light transition transform hover:scale-110" aria-label="Twitter">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-twitter">
+                        <path
+                            d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z">
+                        </path>
+                    </svg>
+                </a>
+                <a href="#" class="hover:text-wander-light transition transform hover:scale-110" aria-label="Pinterest">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-pin">
+                        <line x1="12" x2="12" y1="17" y2="22"></line>
+                        <path
+                            d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="text-sm opacity-70">
+                &copy; 2025 Wingsky. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        console.log("SCRIPT STARTING");
+        let allDeals = [];
+        let allFestivals = [];
+        let currentCity = "";
+        let currentMonthFilter = "";
+        let currentDestinationFilter = "";
+        let availableCities = [];
+        let availableDestinations = {};
+        let cityCountryMap = {};
+        let flagStore = {}; // Global store for Base64 flags from Supabase
+        let countryNameToCode = {}; // Map country names to ISO codes for flag lookup
+
+        // IATA to English city name mapping (loaded from airport_Europe.csv)
+        let iataToCity = {};
+        let iataToCountry = {};
+        let iataToCountryCode = {};
+
+        const cityToCountryCode = {
+            'London': 'gb', 'Paris': 'fr', 'Berlin': 'de', 'Madrid': 'es', 'Rome': 'it',
+            'Amsterdam': 'nl', 'Brussels': 'be', 'Vienna': 'at', 'Prague': 'cz', 'Warsaw': 'pl',
+            'Budapest': 'hu', 'Lisbon': 'pt', 'Dublin': 'ie', 'Copenhagen': 'dk', 'Stockholm': 'se',
+            'Oslo': 'no', 'Helsinki': 'fi', 'Athens': 'gr', 'Bucharest': 'ro', 'Sofia': 'bg',
+            'Zagreb': 'hr', 'Belgrade': 'rs', 'Zurich': 'ch', 'Geneva': 'ch', 'Barcelona': 'es',
+            'Munich': 'de', 'Frankfurt': 'de', 'Frankfurt am Main': 'de', 'Hamburg': 'de',
+            'Milan': 'it', 'Venice': 'it', 'Naples': 'it', 'Manchester': 'gb', 'Edinburgh': 'gb',
+            'Glasgow': 'gb', 'Birmingham': 'gb', 'Liverpool': 'gb', 'Newcastle upon Tyne': 'gb',
+            'Inverness': 'gb', 'Belfast': 'ie', 'Lyon': 'fr', 'Marseille': 'fr', 'Nice': 'fr',
+            'Toulouse': 'fr', 'Bordeaux': 'fr', 'Nantes': 'fr', 'Krakow': 'pl', 'Gdansk': 'pl',
+            'Katowice': 'pl', 'Lublin': 'pl', 'Rzeszow': 'pl', 'Bydgoszcz': 'pl', 'Sarajevo': 'ba',
+            'Tirana': 'al', 'Ankara': 'tr', 'Istanbul': 'tr', 'Izmir': 'tr', 'Bergen': 'no',
+            'Košice': 'sk', 'Gothenburg': 'se', 'Alicante': 'es', 'Palma de Mallorca': 'es',
+            'Valencia': 'es', 'Bilbao': 'es', 'Kaunas': 'lt', 'Vilnius': 'lt', 'Riga': 'lv',
+            'Bacău': 'ro', 'Suceava': 'ro', 'Skopje': 'mk', 'Thessaloniki': 'gr', 'Corfu': 'gr',
+            'Dubrovnik': 'hr', 'Brindisi': 'it', 'Palermo': 'it', 'Porto': 'pt'
+        };
+
+        const globalCountryMap = {
+            'france': 'fr', 'united kingdom': 'gb', 'uk': 'gb', 'spain': 'es', 'italy': 'it',
+            'germany': 'de', 'portugal': 'pt', 'greece': 'gr', 'ireland': 'ie', 'netherlands': 'nl',
+            'belgium': 'be', 'austria': 'at', 'switzerland': 'ch', 'poland': 'pl', 'romania': 'ro',
+            'hungary': 'hu', 'bulgaria': 'bg', 'czech republic': 'cz', 'slovakia': 'sk',
+            'slovenia': 'si', 'croatia': 'hr', 'serbia': 'rs', 'bosnia & herzegovina': 'ba',
+            'bosnia and herzegovina': 'ba', 'albania': 'al', 'north macedonia': 'mk',
+            'montenegro': 'me', 'latvia': 'lv', 'estonia': 'ee', 'lithuania': 'lt',
+            'iceland': 'is', 'malta': 'mt', 'cyprus': 'cy', 'turkey': 'tr', 'turkiye': 'tr',
+            'finland': 'fi', 'sweden': 'se', 'norway': 'no', 'denmark': 'dk', 'luxembourg': 'lu',
+            'ukraine': 'ua', 'moldova': 'md', 'georgia': 'ge', 'armenia': 'am', 'azerbaijan': 'az',
+            'morocco': 'ma', 'tunisia': 'tn', 'egypt': 'eg', 'united states': 'us', 'usa': 'us',
+            'canada': 'ca', 'thailand': 'th', 'japan': 'jp', 'australia': 'au', 'brazil': 'br',
+            'mexico': 'mx', 'united arab emirates': 'ae', 'uae': 'ae', 'qatar': 'qa'
+        };
+
+        const countryCodeToName = {
+            'gb': 'United Kingdom', 'fr': 'France', 'de': 'Germany', 'es': 'Spain', 'it': 'Italy',
+            'nl': 'Netherlands', 'be': 'Belgium', 'at': 'Austria', 'cz': 'Czech Republic', 'pl': 'Poland',
+            'hu': 'Hungary', 'pt': 'Portugal', 'ie': 'Ireland', 'dk': 'Denmark', 'se': 'Sweden',
+            'no': 'Norway', 'fi': 'Finland', 'gr': 'Greece', 'ro': 'Romania', 'bg': 'Bulgaria',
+            'hr': 'Croatia', 'rs': 'Serbia', 'ch': 'Switzerland', 'ba': 'Bosnia & Herzegovina', 'al': 'Albania',
+            'tr': 'Turkey', 'sk': 'Slovakia', 'lt': 'Lithuania', 'lv': 'Latvia', 'mk': 'North Macedonia',
+            'me': 'Montenegro', 'cy': 'Cyprus', 'mt': 'Malta', 'is': 'Iceland', 'ee': 'Estonia',
+            'si': 'Slovenia', 'lu': 'Luxembourg', 'ua': 'Ukraine'
+        };
+
+        const slogans = [
+            "Real Flight Deals",
+            "Unbeatable Prices",
+            "Fly for Less",
+            "Your Next Adventure",
+            "Escape the Ordinary"
+        ];
+        let sloganIndex = 0;
+
+        let persistentFilters = {
+            city: "",
+            destination: "",
+            month: ""
+        };
+
+        let isSearchFromHome = false;
+        let homeDisplayedCount = 10;
+        let moreClicks = 0;
+
+        const today = new Date();
+        const currentMonthIndex = today.getMonth();
+        const currentYear = today.getFullYear();
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        // Calcule la semaine du mois (1-5)
+        function getWeekOfMonth(date = new Date()) {
+            return Math.ceil(date.getDate() / 7);
+        }
+
+        // Retourne si on doit sauter le mois courant (semaine 3, 4 ou 5)
+        function shouldSkipCurrentMonth(date = new Date()) {
+            return getWeekOfMonth(date) >= 3;
+        }
+
+        function getNextThreeMonths() {
+            const result = [];
+            // En semaine 3-4, on commence au mois suivant (offset = 1)
+            const startOffset = shouldSkipCurrentMonth(today) ? 1 : 0;
+
+            for (let i = 0; i < 3; i++) {
+                const offset = startOffset + i;
+                let month = (currentMonthIndex + offset) % 12;
+                let year = currentYear + Math.floor((currentMonthIndex + offset) / 12);
+                result.push(`${monthNames[month]} ${year}`);
+            }
+            return result;
+        }
+
+        // Pour debug: afficher les mois cibles dans la console
+        console.log(`📅 Semaine ${getWeekOfMonth(today)} - Mois cibles: ${getNextThreeMonths().join(', ')}${shouldSkipCurrentMonth(today) ? ' (mois courant ignoré)' : ''}`);
+
+
+        // Load airport data for city name normalization
+        async function fetchAirportData() {
+            try {
+                // 1. TRY SUPABASE DIRECT CLIENT FIRST
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('airports')
+                        .select('city, country, iata, country_code');
+
+                    if (!error && data && data.length > 0) {
+                        data.forEach(row => {
+                            const iata = row.iata ? row.iata.trim().toUpperCase() : "";
+                            if (iata && iata.length === 3) {
+                                const city = row.city ? row.city.trim() : "";
+                                const country = row.country ? row.country.trim() : "";
+                                const countryCode = row.country_code ? row.country_code.trim().toUpperCase() : "";
+                                // Capitalize city name properly
+                                const normalizedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+                                iataToCity[iata] = normalizedCity;
+                                iataToCountry[iata] = country;
+                                if (countryCode) iataToCountryCode[iata] = countryCode;
+                            }
+                        });
+                        console.log(`Loaded ${Object.keys(iataToCity).length} airport codes from Supabase`);
+                        return;
+                    }
+                }
+
+                // 2. FALLBACK TO LOCAL CSV
+                const response = await fetch('/data/inputs/airport_Europe.csv');
+                if (response.ok) {
+                    const text = await response.text();
+                    const lines = text.trim().split('\n').slice(1); // Skip header
+                    lines.forEach(line => {
+                        const cols = line.split(';');
+                        if (cols.length >= 4) {
+                            const city = cols[1].trim();
+                            const country = cols[2].trim();
+                            const iata = cols[3].trim().toUpperCase();
+                            if (iata && iata.length === 3) {
+                                const normalizedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+                                const countryCode = cols[8] ? cols[8].trim().toUpperCase() : "";
+                                iataToCity[iata] = normalizedCity;
+                                iataToCountry[iata] = country;
+                                if (countryCode) iataToCountryCode[iata] = countryCode;
+                            }
+                        }
+                    });
+                    console.log(`Loaded ${Object.keys(iataToCity).length} airport codes from CSV`);
+                }
+            } catch (e) {
+                console.warn("Could not load airport data:", e);
+            }
+        }
+
+        // Fetch Country Flags (Base64) - New (V2 style)
+        async function fetchFlagsData() {
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient
+                    .from('countries')
+                    .select('code, name, flag_base64');
+
+                if (error) throw error;
+
+                if (data) {
+                    data.forEach(c => {
+                        if (c.code) {
+                            const code = c.code.toLowerCase();
+                            flagStore[code] = c.flag_base64;
+                            if (c.name) {
+                                countryNameToCode[c.name.toLowerCase()] = code;
+                            }
+                        }
+                    });
+                    console.log(`✅ Loaded ${Object.keys(flagStore).length} flags and country mappings from Supabase`);
+                }
+            } catch (e) {
+                console.error("❌ Failed to load flags from Supabase:", e);
+            }
+        }
+
+        // Normalize city name using IATA lookup
+        function normalizeCity(cityName, iataCode) {
+            // First try IATA lookup
+            if (iataCode && iataToCity[iataCode.toUpperCase()]) {
+                return iataToCity[iataCode.toUpperCase()];
+            }
+            // Fallback: capitalize first letter of each word
+            return cityName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+        }
+
+        async function loadData() {
+            try {
+                await Promise.all([
+                    fetchAirportData(),
+                    fetchFlagsData(),
+                    fetchLatestDealsCSV(),
+                    fetchFestivalData()
+                ]);
+            } catch (e) {
+                console.error("Critical Error loading data:", e);
+                const container = document.getElementById('homeDeals');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="col-span-full bg-red-50 border-l-4 border-red-500 p-4 rounded-r shadow-md">
+                            <div class="flex items-center">
+                                <i data-lucide="alert-circle" class="w-6 h-6 text-red-500 mr-4"></i>
+                                <div>
+                                    <h3 class="font-bold text-red-700">Data Loading Error</h3>
+                                    <p class="text-sm text-red-600 mt-1">
+                                        Could not fetch data. Ensure you are running a local server (CORS restriction).<br>
+                                        Error: ${e.message}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>`;
+                    lucide.createIcons();
+                }
+            }
+            initApp();
+        }
+
+        async function fetchLatestDealsCSV() {
+            // 1. TRY SUPABASE DIRECT CLIENT FIRST
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient.from('explore_flights').select('*');
+                    if (!error && data && data.length > 0) {
+                        console.log(`Loaded ${data.length} deals from Supabase Client`);
+
+                        // Robust Mapping with Country Inference
+                        allDeals = data.map(d => {
+                            let iata = d.iata || d.dest_iata || "";
+                            let countryCode = d.dest_country_code || d.country_dest_code || d.country_code || "";
+                            let countryDest = d.country_dest || d.country || d.dest_country || "";
+
+                            // 1. Try to fill missing country/code using IATA
+                            if (iata) {
+                                if (iataToCountry[iata] && !countryDest) countryDest = iataToCountry[iata];
+                                if (iataToCountryCode[iata] && !countryCode) countryCode = iataToCountryCode[iata];
+                            }
+
+                            // 2. Try to fill missing ID/Code using Country Name
+                            if (!countryCode && countryDest) {
+                                const lowerC = countryDest.toLowerCase().trim();
+                                // Try dynamic map from Supabase first
+                                if (countryNameToCode[lowerC]) {
+                                    countryCode = countryNameToCode[lowerC];
+                                } else if (globalCountryMap[lowerC]) {
+                                    countryCode = globalCountryMap[lowerC];
+                                }
+                            }
+
+                            // 3. Last fallback: if it's already a 2-letter code in countryDest
+                            if (!countryCode && countryDest && countryDest.length === 2) {
+                                countryCode = countryDest.toLowerCase();
+                            }
+
+                            let fromCity = d.city_dep || d.from || d.origin;
+                            let fromIATA = d.city_dep_iata || d.origin_iata || d.iata_dep || "";
+                            let fromCountryCode = d.country_dep_code || d.country_from_code || d.country_code_dep || "";
+
+                            if (fromIATA && !fromCountryCode) fromCountryCode = iataToCountryCode[fromIATA.toUpperCase()];
+                            if (!fromCountryCode && fromCity) fromCountryCode = cityToCountryCode[fromCity];
+
+                            return {
+                                from: fromCity,
+                                fromCountryCode: fromCountryCode,
+                                to: d.city_dest || d.to || d.destination,
+                                countryCode: countryCode,
+                                price: parseFloat(d.price_from || d.price),
+                                date: d.date || d.date_depart,
+                                url: d.trip_url || d.url,
+                                iata: iata,
+                                cityDest: d.city_dest || d.to || d.destination,
+                                countryDest: countryDest
+                            };
+                        }).filter(d => d.from && d.to && !isNaN(d.price));
+
+                        // Populate filters logic
+                        availableCities = [...new Set(allDeals.map(d => d.from).filter(c => c))].sort();
+                        availableDestinations = {};
+
+                        allDeals.forEach(deal => {
+                            const f = deal.from ? deal.from.trim() : null;
+                            const t = deal.to ? deal.to.trim() : null;
+
+                            if (f && t) {
+                                if (!availableDestinations[f]) {
+                                    availableDestinations[f] = new Set();
+                                }
+                                availableDestinations[f].add(t);
+                                if (t && deal.countryCode) {
+                                    cityToCountryCode[t] = deal.countryCode.toLowerCase();
+                                }
+                                if (f && deal.fromCountryCode) {
+                                    cityCountryMap[f] = deal.fromCountryCode.toLowerCase();
+                                }
+                            }
+                        });
+
+                        populateDropdowns();
+                        renderHomeDeals();
+                        return; // Success, skip CSV
+                    }
+                }
+            } catch (e) {
+                console.warn("API fetch failed, falling back to CSV", e);
+            }
+
+            // 2. CSV FALLBACK (Old Logic)
+            // Try last 30 days to find the most recent file
+            for (let i = 0; i < 30; i++) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                const dateStr = `${yyyy}${mm}${dd}`;
+
+                const path = `/data/outputs/final_sheets/${dateStr}/all_merged_${dateStr}.csv`;
+
+                try {
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        const text = await response.text();
+                        console.log(`Loaded deals from ${path}`);
+                        parseCSVData(text);
+                        return;
+                    }
+                } catch (e) {
+                    console.log(`Could not load ${path}`, e);
+                }
+            }
+            console.error("No recent deals CSV found.");
+            // UI Feedback for error
+            const container = document.getElementById('homeDeals');
+            if (container) {
+                container.innerHTML = `
+                <div class="col-span-full bg-red-50 border-l-4 border-red-500 p-4 rounded-r shadow-md">
+                    <div class="flex items-center">
+                        <i data-lucide="alert-circle" class="w-6 h-6 text-red-500 mr-4"></i>
+                        <div>
+                            <h3 class="font-bold text-red-700">Unable to load flight deals</h3>
+                            <p class="text-sm text-red-600 mt-1">
+                                If you are opening this file directly (file://), please use a local server instead.<br>
+                                Run <code>node src/server.js</code> in the project root and visit <code>http://localhost:3000/</code>.
+                            </p>
+                        </div>
+                    </div>
+                </div>`;
+                lucide.createIcons();
+            }
+            fallbackData();
+        }
+
+        async function fetchFestivalData() {
+            allFestivals = [];
+
+            // 1. TRY SUPABASE DIRECT CLIENT FIRST
+            try {
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient.from('festivals').select('*');
+                    if (!error && data && data.length > 0) {
+                        console.log(`Loaded ${data.length} raw festivals from Supabase Client`);
+
+                        // DEDUPS : Utiliser un Map pour supprimer les doublons basés sur le titre
+                        const uniqueMap = new Map();
+
+                        data.forEach(f => {
+                            const title = f.titre || f.title;
+                            // On garde le premier ou celui avec le plus d'infos (ici le premier trouvé pour l'instant)
+                            if (title && !uniqueMap.has(title)) {
+                                uniqueMap.set(title, {
+                                    title: title,
+                                    start: f.date_depart || f.start,
+                                    end: f.date_retour || f.end,
+                                    city: f.ville || f.city,
+                                    country: f.pays || f.country,
+                                    image: f.nom_image_locale || f.image,
+                                    link: f.lien_source || f.link || "#",
+                                    month: f.mois || f.month,
+                                });
+                            }
+                        });
+
+                        allFestivals = Array.from(uniqueMap.values());
+                        console.log(`Unique festivals after dedupe: ${allFestivals.length}`);
+
+                        // Populate filters
+                        const festivalCountryEl = document.getElementById('festivalCountryFilter');
+                        if (festivalCountryEl && allFestivals.length > 0) {
+                            const countries = [...new Set(allFestivals.map(f => f.country).filter(c => c))].sort();
+                            festivalCountryEl.innerHTML = '<option value="">All countries</option>' +
+                                countries.map(c => `<option value="${c}">${c}</option>`).join('');
+                        }
+                        return; // Success
+                    }
+                }
+            } catch (e) {
+                console.warn("API festival fetch failed, falling back to CSV", e);
+            }
+
+            // 2. CSV FALLBACK (Old Logic)
+            // Basic month order or current month onwards? Let's load all months.
+            // Assumption: Files are named January.csv, February.csv etc. in data/inputs/festivals/festivals_data/
+            /*
+            const fetchPromises = monthNames.map(async (month) => {
+            ...
+            */
+
+            // Note: I'm keeping the map logic inside the fallback block below
+            const fetchPromises = monthNames.map(async (month) => {
+                const path = `/data/inputs/festivals/festivals_data/${month}.csv`;
+                try {
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        const text = await response.text();
+                        const rows = text.trim().split('\n').slice(1);
+                        rows.forEach(row => {
+                            // CSV Format: Titre,Date_Depart,Date_Retour,Ville,Lien_Source,Lien_Facebook,Nom_Image_Locale,Trip_URL
+                            // Handle CSV quote parsing roughly
+                            const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+                            cols.forEach((c, i) => cols[i] = c.replace(/^"|"$/g, '').trim());
+
+                            if (cols.length >= 7) {
+                                // Extraire le pays de la ville (format "City, Country")
+                                const cityField = cols[3];
+                                let city = cityField;
+                                let country = '';
+                                if (cityField && cityField.includes(',')) {
+                                    const parts = cityField.split(',');
+                                    city = parts[0].trim();
+                                    country = parts[parts.length - 1].trim();
+                                }
+
+                                allFestivals.push({
+                                    title: cols[0],
+                                    start: cols[1],
+                                    end: cols[2],
+                                    city: city,
+                                    country: country,
+                                    image: cols[6],
+                                    link: cols[7] || "#",
+                                    month: month
+                                });
+                            }
+                        });
+                    }
+                } catch (e) {
+                    // Ignore missing months
+                }
+            });
+
+            await Promise.all(fetchPromises);
+
+            // Populate Country Filter (tous les pays uniques des festivals)
+            const festivalCountryEl = document.getElementById('festivalCountryFilter');
+            if (festivalCountryEl && allFestivals.length > 0) {
+                const countries = [...new Set(allFestivals.map(f => f.country).filter(c => c))].sort();
+                festivalCountryEl.innerHTML = '<option value="">All countries</option>' +
+                    countries.map(c => `<option value="${c}">${c}</option>`).join('');
+            }
+
+            // Populate Month Filter - Afficher TOUS les mois
+            const festivalFilterInfo = document.getElementById('festivalMonthFilter');
+            if (festivalFilterInfo) {
+                // Afficher tous les 12 mois
+                festivalFilterInfo.innerHTML = '<option value="">All Months</option>' +
+                    monthNames.map(m => `<option value="${m}">${m}</option>`).join('');
+
+                festivalFilterInfo.onchange = function () {
+                    const val = this.value;
+                    if (val) {
+                        const filtered = allFestivals.filter(f => f.month === val);
+                        renderFestivalDeals(filtered);
+                    } else {
+                        renderFestivalDeals(allFestivals);
+                    }
+                };
+            }
+
+            renderFestivalDeals();
+        }
+
+        function renderFestivalDeals(festivalsToRender = null) {
+            const list = festivalsToRender || allFestivals;
+            const container = document.getElementById('festivalDeals');
+            if (!container) return;
+
+            if (list.length === 0) {
+                container.innerHTML = '\u003cp class="text-2xl text-gray-600 col-span-full">No festivals found for this selection.\u003c/p>';
+                return;
+            }
+
+            // Sort by title
+            const sortedList = [...list].sort((a, b) => a.title.localeCompare(b.title));
+
+            container.innerHTML = sortedList.map(f => {
+                const imgPath = `/data/inputs/festivals/festivals_images/${f.month}/${f.image}`;
+                const festivalId = `${f.month}_${f.city}`.replace(/\s/g, '_');
+
+                return `
+            <div class="compact-card group relative cursor-pointer" onclick="showFlightsModal('${f.city.replace(/'/g, "\\'")}', '${f.month}', '${f.title.replace(/'/g, "\\'")}')">
+                    <div class="deal-image h-40 overflow-hidden relative">
+                        <img src="${imgPath}" alt="${f.title}"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            loading="lazy"
+                            onerror="this.src='https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80'">
+                            <div class="absolute top-3 right-3 bg-black/70 text-white px-2 py-1 rounded-md text-xs font-bold backdrop-blur-sm">
+                                ${f.month}
+                            </div>
+                    </div>
+                    <div class="p-4 bg-white relative z-10 text-left">
+                        <h3 class="text-lg font-black text-gray-900 leading-tight mb-2" title="${f.title}">${f.title}</h3>
+                        <div class="flex items-center gap-2 text-sm text-gray-600 mb-2">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-wander-primary"></i> ${f.city}
+                        </div>
+                        <div class="flex items-center gap-2 text-sm font-bold text-wander-primary mb-3">
+                            <i data-lucide="calendar" class="w-4 h-4"></i> ${f.start} - ${f.end}
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="flex-1 bg-wander-primary hover:bg-wander-primaryDark text-white py-2 rounded-lg font-bold transition text-sm">
+                                View
+                            </button>
+                            <a href="${f.link}" target="_blank" 
+                               class="px-3 py-2 border-2 border-gray-200 hover:border-wander-primary rounded-lg text-gray-600 hover:text-wander-primary transition flex items-center justify-center"
+                               onclick="event.stopPropagation()" title="Visit Festival Website">
+                                <i data-lucide="external-link" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    </div>
+            </div>
+            `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        async function showFlightsModal(city, month, festivalTitle) {
+            const modal = document.getElementById('flightModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalSubtitle = document.getElementById('modalSubtitle');
+            const modalContent = document.getElementById('modalContent');
+
+            // Set title
+            modalTitle.textContent = festivalTitle;
+            modalSubtitle.textContent = `Premium Flight Manifest to ${city}`;
+
+            // Show loading state
+            modalContent.innerHTML = '<div class="flex justify-center p-12"><i data-lucide="loader" class="w-12 h-12 animate-spin text-wander-primary"></i></div>';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+
+            let matchingFlights = [];
+            // Robust match for festival link and image
+            const festival = allFestivals.find(f =>
+                (f.title && f.title.toLowerCase() === festivalTitle.toLowerCase()) ||
+                (f.title && f.city && `${f.title} (${f.city})`.toLowerCase() === festivalTitle.toLowerCase())
+            );
+            const festivalImg = festival ? `/data/inputs/festivals/festivals_images/${festival.month}/${festival.image}` : '';
+            const festivalLink = (festival && festival.link && festival.link !== '#') ? festival.link : 'https://Wingsky.com';
+
+            if (supabaseClient) {
+                try {
+                    // ALWAYS fetch from Supabase
+                    const { data, error } = await supabaseClient
+                        .from('festival_flights')
+                        .select('*')
+                        .ilike('event_name', festivalTitle);
+
+                    if (!error && data && data.length > 0) {
+                        console.log(`✅ Supabase: Found ${data.length} flights for ${festivalTitle}`);
+                        matchingFlights = data.map(d => {
+                            // Robust IATA extraction
+                            const depIATA = d.origin_iata || d.iata_dep || d.from_iata || d.origin?.substring(0, 3).toUpperCase() || 'DEP';
+                            const arrIATA = d.dest_iata || d.iata || d.to_iata || d.destination?.substring(0, 3).toUpperCase() || 'ARR';
+
+                            return {
+                                from: d.origin,
+                                to: d.destination || city,
+                                from_iata: depIATA,
+                                price: d.price,
+                                date: d.date_depart,
+                                url: d.url,
+                                countryCode: d.dest_country_code || 'eu',
+                                iata: arrIATA
+                            };
+                        });
+                    }
+                } catch (e) {
+                    console.error("❌ Supabase fetch failed in Modal:", e);
+                }
+            }
+
+            renderModalContent(modalContent, matchingFlights, city, festivalImg, festivalLink);
+            lucide.createIcons();
+        }
+
+        function parseEventCSV(text) {
+            const rows = text.trim().split('\n').slice(1);
+            return rows.map(row => {
+                // CSV: Origin,IATA,Country,Date_Depart,Date_Retour,URL,Price,Currency,Site,Destination,DestIATA
+                const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+                cols.forEach((c, i) => cols[i] = c.replace(/^"|"$/g, '').trim());
+                if (cols.length < 7) return null;
+
+                // Map to common deal format
+                return {
+                    from: cols[0],
+                    to: cols[9] || "Destination", // Destination City
+                    countryCode: (cols[2] || "FR").substring(0, 2).toLowerCase(), // Only have Origin Country name, assuming FR/US etc? 
+                    // Wait, col 2 is "France". We need 2-letter code for flag. 
+                    // Let's assume most users fly from known countries or we can map names.
+                    // Or just use a default flag or map 'France' -> 'fr'.
+                    // Actually logic in server.js/original parsedData used city mapping.
+                    // Let's reuse cityToCountryCode if possible or mapped name.
+                    // For now, simpler: map 'France' to 'fr', 'Germany' to 'de' etc if easy, or skip flag.
+                    originCountry: cols[2],
+                    price: parseInt(cols[6]) || 0,
+                    date: `${cols[3]} - ${cols[4]}`,
+                    url: cols[5] || "#",
+                    isSpecific: true
+                };
+            }).filter(Boolean).map(d => {
+                // Fix country code from name
+                const nameToCode = {
+                    'france': 'fr', 'united kingdom': 'gb', 'germany': 'de', 'spain': 'es',
+                    'italy': 'it', 'belgium': 'be', 'netherlands': 'nl', 'portugal': 'pt',
+                    'switzerland': 'ch'
+                };
+                if (d.originCountry && nameToCode[d.originCountry.toLowerCase()]) {
+                    d.countryCode = nameToCode[d.originCountry.toLowerCase()];
+                }
+                return d;
+            });
+        }
+
+        function renderModalContent(container, matchingFlights, cityLabel, festivalImg, festivalLink) {
+            if (matchingFlights.length === 0) {
+                // Modified "No flights" view with Request Form
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <i data-lucide="plane-takeoff" class="w-16 h-16 mx-auto text-gray-400 mb-4"></i>
+                        <p class="text-2xl font-bold text-gray-900 mb-2">No direct flights found</p>
+                        <p class="text-gray-600 mb-8">We currently don't have flight deals specifically to ${cityLabel}. Try searching on the Deals tab.</p>
+                        
+                        <div class="max-w-md mx-auto bg-gray-50 rounded-2xl p-6 text-left">
+                            <h4 class="font-bold text-lg mb-2">Don't see your city?</h4>
+                            <p class="text-sm text-gray-500 mb-4">Request a departure city and we'll try to add it!</p>
+                            <div class="flex gap-2">
+                                <input type="text" id="requestCityInput" placeholder="e.g. Lyon" class="flex-1 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:border-wander-primary">
+                                <button onclick="submitCityRequest()" class="bg-wander-primary text-white px-6 py-2 rounded-xl font-bold">Send</button>
+                            </div>
+                            <p id="requestConfirmation" class="text-green-600 text-sm mt-2 hidden font-bold"><i data-lucide="check" class="w-4 h-4 inline"></i> Request sent! Thanks.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+                        ${matchingFlights.map((d, i) => {
+                    return `
+                            <a href="${d.url}" target="_blank" class="simple-flight-card">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">From</span>
+                                        <span class="text-xl font-black text-gray-900">${d.from_iata}</span>
+                                        <span class="text-xs text-gray-500 font-medium">${d.from}</span>
+                                    </div>
+                                    <div class="flex-1 px-4 pt-6">
+                                        <div class="flight-path-simple">
+                                            <div class="flight-path-line"></div>
+                                            <i data-lucide="plane" class="w-4 h-4 rotate-90 text-wander-primary"></i>
+                                            <div class="flight-path-line"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col text-right">
+                                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">To</span>
+                                        <span class="text-xl font-black text-wander-primary">${d.iata}</span>
+                                        <span class="text-xs text-gray-500 font-medium">${d.to}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                                    <div class="flex items-center gap-2 text-gray-600">
+                                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                                        <span class="text-sm font-bold">${d.date}</span>
+                                    </div>
+                                    <div class="flex flex-col text-right">
+                                        <span class="text-xs font-bold text-gray-400 uppercase">Price</span>
+                                        <span class="text-2xl font-black text-gray-900">€${d.price}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 bg-gray-50 text-center py-3 rounded-xl text-sm font-black text-wander-primary group-hover:bg-wander-primary group-hover:text-white transition-all uppercase tracking-widest">
+                                    View Deal
+                                </div>
+                            </a>
+                            `;
+                }).join('')}
+                    </div>
+                    
+                     <div class="mt-12 max-w-md mx-auto bg-gray-50 rounded-2xl p-6 text-left border border-gray-100">
+                            <h4 class="font-bold text-lg mb-2">Missing your city?</h4>
+                            <p class="text-sm text-gray-500 mb-4">Tell us where you fly from:</p>
+                            <div class="flex gap-2">
+                                <input type="text" id="requestCityInput" placeholder="e.g. Manchester" class="flex-1 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:border-wander-primary">
+                                <button onclick="submitCityRequest()" class="bg-wander-primary text-white px-6 py-2 rounded-xl font-bold">Send</button>
+                            </div>
+                            <p id="requestConfirmation" class="text-green-600 text-sm mt-2 hidden font-bold"><i data-lucide="check" class="w-4 h-4 inline"></i> Received! We'll look into it.</p>
+                    </div>
+                `;
+            }
+
+            lucide.createIcons();
+        }
+
+        function submitCityRequest() {
+            const input = document.getElementById('requestCityInput');
+            const msg = document.getElementById('requestConfirmation');
+            if (input && input.value.trim() !== "") {
+                input.value = "";
+                if (msg) {
+                    msg.classList.remove('hidden');
+                    // Reset after 3s
+                    setTimeout(() => msg.classList.add('hidden'), 3000);
+                }
+            }
+        }
+
+        function closeFlightModal() {
+            const modal = document.getElementById('flightModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close modal when clicking outside (on the dark overlay)
+        document.addEventListener('click', function (event) {
+            const modal = document.getElementById('flightModal');
+            if (event.target === modal) {
+                closeFlightModal();
+            }
+        });
+
+        function dateToDDMM(dateStr) {
+            // "30 Jul" -> "3007"
+            // "3 Aug" -> "0308"
+            const months = {
+                'jan': '01', 'feb': '02', 'mar': '03', 'apr': '04', 'may': '05', 'jun': '06',
+                'jul': '07', 'aug': '08', 'sep': '09', 'oct': '10', 'nov': '11', 'dec': '12'
+            };
+            const parts = dateStr.trim().split(' ');
+            if (parts.length < 2) return "0101";
+
+            let day = parts[0].replace(/\D/g, '');
+            let month = months[parts[1].toLowerCase().substring(0, 3)];
+
+            if (day.length === 1) day = '0' + day;
+            return (day && month) ? (day + month) : "0101";
+        }
+
+        function parseCSVData(text) {
+            const rows = text.trim().split('\n').slice(1);
+            allDeals = rows.map(row => {
+                const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+                cols.forEach((c, i) => cols[i] = c.replace(/^"|"$/g, '').trim());
+
+                // Actual CSV Structure (13 cols):
+                // cityDep,CountryDep,cityDest,countryDest,IATA(Dest),depIATA,priceFrom,date,depDay,depMonth,retDay,retMonth,tripUrl
+                if (cols.length < 13) return null;
+
+                const price = parseInt(cols[6]);
+                if (!price || price === 0) return null; // Skip 0 price
+
+                // Use IATA codes to normalize city names
+                const destIATA = cols[4]; // IATA(Dest)
+                const depIATA = cols[5];  // depIATA
+
+                // Normalize city names using airport data
+                const normalizedFrom = normalizeCity(cols[0], depIATA);
+                const normalizedTo = normalizeCity(cols[2], destIATA);
+
+                // Infer country code for flag
+                let cc = cityToCountryCode[normalizedTo] || cityToCountryCode[cols[2]];
+
+                // Try using iataToCountry if we have the IATA
+                if (!cc && destIATA && iataToCountry[destIATA]) {
+                    // Map country name to code
+                    const countryName = iataToCountry[destIATA].toLowerCase().trim();
+                    cc = globalCountryMap[countryName];
+                }
+
+                return {
+                    from: normalizedFrom,
+                    to: normalizedTo,
+                    price: price,
+                    date: cols[7],
+                    url: cols[12],
+                    countryCode: cc || 'un' // default 'un' (unknown) or skip
+                };
+            }).filter(Boolean);
+
+            allDeals.forEach(d => {
+                if (!availableCities.includes(d.from)) {
+                    availableCities.push(d.from);
+                    availableDestinations[d.from] = new Set();
+                    cityCountryMap[d.from] = d.countryCode;
+                }
+                availableDestinations[d.from].add(d.to);
+            });
+            availableCities.sort();
+        }
+
+        function fallbackData() { allDeals = []; }
+
+        function initApp() {
+            populateDropdowns();
+            renderHomeDeals();
+            renderDealsPage();
+            lucide.createIcons();
+            setupEvents();
+            startSloganRotation();
+
+            // Check for URL deep links (e.g., ?page=deals&from=Paris&to=gb)
+            // This must be called AFTER data is loaded
+            handleDealsDeepLink();
+
+            // Check for deep link parameters from QR code (e.g., #festivals?event=XXX&city=YYY)
+            handleDeepLinkFromQRCode();
+        }
+
+        // Handle deep linking from V3 template QR codes
+        function handleDeepLinkFromQRCode() {
+            const hash = window.location.hash; // e.g., "#festivals?event=XXX&city=YYY"
+            if (!hash || !hash.includes('?')) return;
+
+            const [page, queryString] = hash.split('?');
+            if (!page.includes('festivals') || !queryString) return;
+
+            const params = new URLSearchParams(queryString);
+            const eventName = params.get('event');
+            const cityName = params.get('city');
+
+            if (eventName && cityName) {
+                console.log(`QR Code deep link detected: event="${eventName}", city="${cityName}"`);
+
+                // Show festivals page
+                showPage('festivals');
+
+                // Find the matching festival to get the month
+                const decodedEvent = decodeURIComponent(eventName);
+                const decodedCity = decodeURIComponent(cityName);
+
+                // Wait a bit for festivals to render, then open modal
+                setTimeout(() => {
+                    const matchingFestival = allFestivals.find(f =>
+                        f.title.toLowerCase() === decodedEvent.toLowerCase() ||
+                        f.title.toLowerCase().includes(decodedEvent.toLowerCase())
+                    );
+
+                    const month = matchingFestival ? matchingFestival.month : 'January'; // Default month if not found
+                    showFlightsModal(decodedCity, month, decodedEvent);
+
+                    // Clear the query params from URL to avoid re-opening on refresh
+                    history.replaceState(null, '', '#festivals');
+                }, 500);
+            }
+        }
+
+        // ============================================================================
+        // URL ROUTING SYSTEM - Deep linking for Deals page
+        // Supports URLs like: ?page=deals&from=Paris&to=gb&month=January%202025
+        // Works on GitHub Pages, custom domains, localhost, etc.
+        // ============================================================================
+
+        function getURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                page: params.get('page'),
+                from: params.get('from'),
+                to: params.get('to'),
+                month: params.get('month')
+            };
+        }
+
+        function updateURLParams(params) {
+            const url = new URL(window.location.href);
+
+            // Clear existing params we manage
+            ['page', 'from', 'to', 'month'].forEach(key => url.searchParams.delete(key));
+
+            // Set new params (only if they have values)
+            Object.entries(params).forEach(([key, value]) => {
+                if (value) url.searchParams.set(key, value);
+            });
+
+            // Update URL without page reload
+            history.replaceState(null, '', url.toString());
+        }
+
+        function handleDealsDeepLink() {
+            const params = getURLParams();
+
+            // Check for page=deals or page=festivals
+            if (params.page === 'deals') {
+                console.log('URL Deep link detected: deals page');
+
+                // Wait for data to load and dropdowns to populate
+                const waitForData = setInterval(() => {
+                    if (allDeals.length > 0 && availableCities.length > 0) {
+                        clearInterval(waitForData);
+
+                        // Apply from filter if provided
+                        if (params.from) {
+                            const fromValue = decodeURIComponent(params.from);
+                            const fromSelect = document.getElementById('dealsFrom');
+                            if (fromSelect) {
+                                // Find matching city (case insensitive)
+                                const matchCity = availableCities.find(c =>
+                                    c.toLowerCase() === fromValue.toLowerCase()
+                                );
+                                if (matchCity) {
+                                    fromSelect.value = matchCity;
+                                    currentCity = matchCity;
+                                    updateToDropdown('dealsTo', matchCity);
+                                }
+                            }
+                        }
+
+                        // Apply to filter if provided (after from dropdown updated)
+                        if (params.to) {
+                            setTimeout(() => {
+                                const toValue = decodeURIComponent(params.to);
+                                const toSelect = document.getElementById('dealsTo');
+                                if (toSelect) {
+                                    // Try to find by country code or name
+                                    const options = Array.from(toSelect.options);
+                                    const matchOption = options.find(o =>
+                                        o.value.toLowerCase() === toValue.toLowerCase()
+                                    );
+                                    if (matchOption) {
+                                        toSelect.value = matchOption.value;
+                                        currentDestinationFilter = matchOption.value;
+                                    }
+                                }
+
+                                // Apply month filter if provided
+                                if (params.month) {
+                                    const monthValue = decodeURIComponent(params.month);
+                                    const monthSelect = document.getElementById('dealsMonth');
+                                    if (monthSelect) {
+                                        const options = Array.from(monthSelect.options);
+                                        const matchOption = options.find(o =>
+                                            o.value.toLowerCase().includes(monthValue.toLowerCase())
+                                        );
+                                        if (matchOption) {
+                                            monthSelect.value = matchOption.value;
+                                            currentMonthFilter = matchOption.value;
+                                        }
+                                    }
+                                }
+
+                                // Navigate to deals and render
+                                showPage('deals');
+                                renderDealsPage();
+                            }, 100);
+                        } else {
+                            showPage('deals');
+                            renderDealsPage();
+                        }
+                    }
+                }, 100);
+
+                // Timeout after 5 seconds
+                setTimeout(() => clearInterval(waitForData), 5000);
+                return true;
+            }
+
+            if (params.page === 'festivals') {
+                showPage('festivals');
+                return true;
+            }
+
+            return false;
+        }
+
+        function getFlagEmoji(countryCode) {
+            if (!countryCode) return '';
+            const codePoints = countryCode
+                .toUpperCase()
+                .split('')
+                .map(char => 127397 + char.charCodeAt(0));
+            return String.fromCodePoint(...codePoints);
+        }
+
+        function populateDropdowns() {
+            const generateOptions = (defaultText) => {
+                return `<option value="">${defaultText}</option>` +
+                    availableCities.map(c => {
+                        const countryCode = cityToCountryCode[c] || cityCountryMap[c];
+                        const flag = countryCode ? getFlagEmoji(countryCode) : '🌐';
+                        return `<option value="${c}" data-flag="${flag}" data-cc="${countryCode || ''}">${flag} ${c}</option>`;
+                    }).join('');
+            };
+
+            const cityOptions = generateOptions("All departure cities");
+            const searchOptions = generateOptions("Select departure city");
+
+            document.getElementById('searchFrom').innerHTML = searchOptions;
+            document.getElementById('popupFromCity').innerHTML = searchOptions;
+            document.getElementById('dealsFrom').innerHTML = cityOptions;
+
+            // FESTIVALS : Peupler le dropdown de pays
+            const festivalCountryEl = document.getElementById('festivalCountryFilter');
+            if (festivalCountryEl && allFestivals && allFestivals.length > 0) {
+                const countries = new Set();
+                allFestivals.forEach(f => {
+                    if (f.country) countries.add(f.country);
+                });
+                const sortedCountries = [...countries].sort();
+                festivalCountryEl.innerHTML = '<option value="">All countries</option>' +
+                    sortedCountries.map(country => {
+                        // Trouver le code pays à partir du nom
+                        const code = Object.keys(countryCodeToName).find(k => countryCodeToName[k] === country);
+                        const flag = code ? getFlagEmoji(code) : '';
+                        return `<option value="${country}">${country} ${flag}</option>`;
+                    }).join('');
+            }
+
+            const months = getNextThreeMonths();
+            document.getElementById('searchMonth').innerHTML = '<option value="">Any month</option>' + months.map(m => `<option value="${m}">${m}</option>`).join('');
+            document.getElementById('dealsMonth').innerHTML = '<option value="">Any month</option>' + months.map(m => `<option value="${m}">${m}</option>`).join('');
+
+            // FESTIVALS : Peupler le dropdown de mois avec TOUS les 12 mois
+            const festivalMonthEl = document.getElementById('festivalMonthFilter');
+            if (festivalMonthEl) {
+                festivalMonthEl.innerHTML = '<option value="">Any month</option>' + monthNames.map(m => `<option value="${m}">${m}</option>`).join('');
+            }
+
+            // INITIALIZATION: Set default selection and update 'available destinations'
+            let initialCity = persistentFilters.city;
+
+            if (initialCity) {
+                const dealsFrom = document.getElementById('dealsFrom');
+                const searchFrom = document.getElementById('searchFrom');
+
+                if (dealsFrom) dealsFrom.value = initialCity;
+                if (searchFrom) searchFrom.value = initialCity;
+
+                // Force update destinations
+                updateToDropdown('dealsTo', initialCity);
+                updateToDropdown('searchTo', initialCity);
+            }
+        }
+
+        function updateToDropdown(selectId, fromValue) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+
+            // Use Trimmed fromValue to match availableDestinations keys
+            const key = fromValue ? fromValue.trim() : "";
+
+            // LOGIC FOR DEALS/SEARCH TO -> SHOW COUNTRIES
+            if (selectId === 'dealsTo' || selectId === 'searchTo') {
+                select.innerHTML = '<option value="">All destinations</option>';
+
+                if (key && availableDestinations[key]) {
+                    const uniqueCountries = new Map(); // Code -> Name
+
+                    [...availableDestinations[key]].forEach(destCity => {
+                        const deal = allDeals.find(d => d.from === key && d.to === destCity);
+                        if (deal && deal.countryCode) {
+                            const code = deal.countryCode.toLowerCase();
+                            let name = deal.countryDest;
+
+                            // Improve name using map or capitalization
+                            if (!name && countryCodeToName[code]) name = countryCodeToName[code];
+                            if (!name) name = code.toUpperCase();
+                            else name = name.charAt(0).toUpperCase() + name.slice(1);
+
+                            uniqueCountries.set(code, name);
+                        }
+                    });
+
+                    [...uniqueCountries.entries()]
+                        .sort((a, b) => a[1].localeCompare(b[1]))
+                        .forEach(([code, name]) => {
+                            const flag = getFlagEmoji(code);
+                            select.innerHTML += `<option value="${code}">${name} ${flag}</option>`;
+                        });
+                }
+                return;
+            }
+
+            select.innerHTML = '<option value="">All destinations</option>';
+
+            if (key && availableDestinations[key]) {
+                const dests = [...availableDestinations[key]].sort();
+
+                if (dests.length === 0) {
+                    console.warn('No destinations found for', key);
+                }
+
+                dests.forEach(dest => {
+                    const destDeal = allDeals.find(d => d.to === dest);
+                    const flag = destDeal && destDeal.countryCode ? getFlagEmoji(destDeal.countryCode) : '';
+                    select.innerHTML += `<option value="${dest}">${dest} ${flag}</option>`;
+                });
+            } else {
+                console.log('No UpdateToDropdown match for:', key);
+            }
+        }
+
+        function startSloganRotation() {
+            const el = document.getElementById('sloganText');
+            if (!el) return;
+            setInterval(() => {
+                el.classList.remove('opacity-100');
+                el.classList.add('opacity-0');
+                setTimeout(() => {
+                    sloganIndex = (sloganIndex + 1) % slogans.length;
+                    el.textContent = slogans[sloganIndex];
+                    el.classList.remove('opacity-0');
+                    el.classList.add('opacity-100');
+                }, 500);
+            }, 3000);
+        }
+
+        // GLOBAL EVENT LISTENER for robust handling
+        document.addEventListener('change', function (e) {
+            // Handle dealsFrom change
+            if (e.target && e.target.id === 'dealsFrom') {
+                console.log('GLOBAL LISTENER: dealsFrom changed to:', e.target.value);
+                updateToDropdown('dealsTo', e.target.value);
+                // Removed auto-search: applyDealsFilters();
+            }
+        });
+
+        function setupEvents() {
+            console.log('setupEvents initialized');
+            document.getElementById('searchFrom').addEventListener('change', () => updateToDropdown('searchTo', document.getElementById('searchFrom').value));
+
+            // dealsFrom listener is now handled by the global listener above
+
+            document.getElementById('popupFromCity').addEventListener('change', e => {
+                const val = e.target.value;
+                document.getElementById('goToDealsBtn').disabled = !val;
+
+                // Update Flag Box in Popup
+                const flagBox = document.getElementById('popupFlagBox');
+                const selectedOption = e.target.options[e.target.selectedIndex];
+                const flag = selectedOption ? selectedOption.getAttribute('data-flag') : '';
+                const cc = selectedOption ? selectedOption.getAttribute('data-cc') : '';
+
+                if (val && (flag || cc)) {
+                    if (cc && cc !== '') {
+                        flagBox.innerHTML = `<img src="https://flagcdn.com/w40/${cc.toLowerCase()}.png" class="w-8 h-6 rounded shadow-sm object-cover">`;
+                    } else {
+                        flagBox.textContent = flag || '🌐';
+                    }
+                    flagBox.classList.remove('hidden');
+                    e.target.style.paddingLeft = '4rem';
+                } else {
+                    flagBox.classList.add('hidden');
+                    e.target.style.paddingLeft = '1.5rem';
+                }
+            });
+
+            document.getElementById('goToDealsBtn').onclick = () => {
+                currentCity = document.getElementById('popupFromCity').value;
+                document.getElementById('cityPopup').classList.add('hidden');
+                // Save city to persistent filters so it's restored on deals page
+                persistentFilters.city = currentCity;
+                isSearchFromHome = true;
+                showPage('deals');
+            };
+
+            document.getElementById('searchFrom').addEventListener('click', () => {
+                document.getElementById('searchError').classList.add('hidden');
+            });
+            document.getElementById('searchFrom').addEventListener('change', () => {
+                document.getElementById('searchError').classList.add('hidden');
+            });
+
+            document.getElementById('searchBtn').onclick = () => {
+                const fromCity = document.getElementById('searchFrom').value;
+                if (!fromCity || fromCity === "") {
+                    const group = document.getElementById('searchFrom').parentElement;
+                    const error = document.getElementById('searchError');
+                    group.classList.add('shake');
+                    error.classList.remove('hidden');
+                    setTimeout(() => {
+                        group.classList.remove('shake');
+                    }, 1500);
+                    return;
+                }
+
+                currentCity = fromCity;
+                currentDestinationFilter = document.getElementById('searchTo').value;
+                currentMonthFilter = document.getElementById('searchMonth').value;
+                isSearchFromHome = true;
+                saveFiltersToPersistent();
+                showPage('deals');
+                // Aussi mettre à jour le style du hero pour Deals
+                if (typeof updateHeroStyle === 'function') updateHeroStyle('deals');
+            };
+
+
+            // Deals Search Button - triggers filter application
+            document.getElementById('dealsSearchBtn').onclick = () => {
+                applyDealsFilters();
+            };
+
+            // VALIDATION DROPDOWNS : Check Dropdown 1 when clicking Dropdown 2
+            ['search', 'deals'].forEach(prefix => {
+                const toSelect = document.getElementById(`${prefix}To`);
+                const fromSelect = document.getElementById(`${prefix}From`);
+
+                if (toSelect && fromSelect) {
+                    toSelect.addEventListener('mousedown', (e) => {
+                        if (!fromSelect.value) {
+                            e.preventDefault(); // Empêcher l'ouverture
+
+                            // Faire vibrer le CONTENEUR entier
+                            const container = fromSelect.parentElement;
+                            container.classList.add('shake');
+
+                            fromSelect.focus();
+
+                            // Retirer l'animation après 500ms
+                            setTimeout(() => {
+                                container.classList.remove('shake');
+                            }, 500);
+                        }
+                    });
+                }
+            });
+
+            // Dropdown 2 (dealsTo) and Dropdown 3 (dealsMonth)
+            // Removed auto-search listeners
+            // document.getElementById('dealsTo').addEventListener('change', applyDealsFilters);
+            // document.getElementById('dealsMonth').addEventListener('change', applyDealsFilters);
+
+            document.getElementById('loadMoreBtn').onclick = () => {
+                moreClicks++;
+                homeDisplayedCount += 8;
+                renderHomeDeals();
+
+                if (moreClicks >= 3) {
+                    document.getElementById('loadMoreBtn').textContent = "Explore All Deals";
+                    document.getElementById('loadMoreBtn').onclick = () => showPage('deals');
+                }
+            };
+
+            // FESTIVAL SEARCH BUTTON
+            const festivalSearchBtn = document.getElementById('festivalSearchBtn');
+            if (festivalSearchBtn) {
+                festivalSearchBtn.onclick = () => {
+                    const countryFilter = document.getElementById('festivalCountryFilter').value;
+                    const monthFilter = document.getElementById('festivalMonthFilter').value;
+                    const sortFilter = document.getElementById('festivalSortFilter').value;
+
+                    let filtered = allFestivals;
+
+                    // Filtrer par pays si sélectionné
+                    if (countryFilter) {
+                        filtered = filtered.filter(f => f.country === countryFilter);
+                    }
+
+                    // Filtrer par mois si sélectionné
+                    if (monthFilter) {
+                        filtered = filtered.filter(f => f.month === monthFilter);
+                    }
+
+                    // Trier selon le filtre
+                    if (sortFilter === 'name-desc') {
+                        filtered = [...filtered].sort((a, b) => b.title.localeCompare(a.title));
+                    } else {
+                        filtered = [...filtered].sort((a, b) => a.title.localeCompare(b.title));
+                    }
+
+                    renderFestivalDeals(filtered);
+                };
+            }
+        }
+
+        function saveFiltersToPersistent() {
+            persistentFilters.city = currentCity;
+            persistentFilters.destination = currentDestinationFilter;
+            persistentFilters.month = currentMonthFilter;
+        }
+
+        function restoreFiltersFromPersistent() {
+            currentCity = persistentFilters.city;
+            currentDestinationFilter = persistentFilters.destination;
+            currentMonthFilter = persistentFilters.month;
+
+            if (document.getElementById('dealsFrom')) document.getElementById('dealsFrom').value = currentCity || "";
+            if (document.getElementById('dealsTo')) document.getElementById('dealsTo').value = currentDestinationFilter || "";
+            if (document.getElementById('dealsMonth')) document.getElementById('dealsMonth').value = currentMonthFilter || "";
+
+            if (currentCity) updateToDropdown('dealsTo', currentCity);
+            renderDealsPage();
+        }
+
+        function resetDealsFilters() {
+            persistentFilters = { city: "", destination: "", month: "" };
+            currentCity = "";
+            currentDestinationFilter = "";
+            currentMonthFilter = "";
+            isSearchFromHome = false;
+        }
+
+        function goHomeAndReset() {
+            resetDealsFilters();
+            moreClicks = 0;
+            homeDisplayedCount = 8;
+            document.getElementById('loadMoreBtn').textContent = "More";
+            document.getElementById('loadMoreBtn').onclick = () => {
+                moreClicks++;
+                homeDisplayedCount += 8;
+                renderHomeDeals();
+                if (moreClicks >= 3) {
+                    document.getElementById('loadMoreBtn').textContent = "Explore All Deals";
+                    document.getElementById('loadMoreBtn').onclick = () => showPage('deals');
+                }
+            };
+            showPage('home');
+        }
+
+        function goToDealsAndReset() {
+            resetDealsFilters();
+            showPage('deals');
+        }
+
+        function applyDealsFilters() {
+            currentCity = document.getElementById('dealsFrom').value;
+            currentDestinationFilter = document.getElementById('dealsTo').value;
+            currentMonthFilter = document.getElementById('dealsMonth').value;
+
+            console.log('--- Applying Filters ---');
+            console.log('City:', currentCity || 'All');
+            console.log('Destination:', currentDestinationFilter || 'All');
+            console.log('Month:', currentMonthFilter || 'All');
+
+            // Update URL with current filters
+            updateURLParams({
+                page: 'deals',
+                from: currentCity || '',
+                to: currentDestinationFilter || '',
+                month: currentMonthFilter || ''
+            });
+
+            saveFiltersToPersistent();
+            renderDealsPage();
+        }
+
+        const compactCardTemplate = (d) => {
+            // Get departure country code for flag
+            const depCountryCode = cityToCountryCode[d.from] || 'eu';
+            const depFlagUrl = `https://flagcdn.com/w40/${depCountryCode.toLowerCase()}.png`;
+
+            return `
+            <a href="${d.url}" target="_blank" rel="noopener noreferrer" class="compact-card group">
+                <div class="deal-image relative overflow-hidden rounded-t-xl">
+                    <img src="${flagStore[d.countryCode?.toLowerCase()] || `https://flagcdn.com/w320/${d.countryCode?.toLowerCase()}.png`}" 
+                         alt="${d.to}" class="w-full h-full object-cover transition-all duration-500 shadow-sm" style="transform: scale(1.25);"
+                         onerror="this.src='https://picsum.photos/800/600?random=${d.to}'">
+                    <div class="absolute inset-0 bg-black/10 pointer-events-none"></div>
+                </div>
+                <div class="p-4 text-center">
+                    <h4 class="text-3xl font-black text-gray-900 mb-1 truncate">${d.to}</h4>
+                    <div class="flex flex-col items-center gap-1 mb-3">
+                        <span class="flex items-center gap-2 text-sm font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
+                            <span class="text-gray-400 text-xs uppercase">from</span>
+                            <img src="${depFlagUrl}" alt="${d.from}" class="w-5 h-4 object-cover rounded-sm shadow-sm" onerror="this.style.display='none'">
+                            <span class="font-bold">${d.from}</span>
+                        </span>
+                        <span class="text-sm font-bold text-wander-primary uppercase tracking-widest bg-wander-light px-2 py-1 rounded-md border border-wander-primary/20">${d.date}</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-sm font-bold text-gray-400 uppercase tracking-tighter mb-1">From only</span>
+                        <span class="text-4xl font-black text-wander-primary tracking-tighter">€${d.price}</span>
+                    </div>
+                    <div class="mt-4 bg-gray-50 group-hover:bg-wander-primary group-hover:text-white transition-all py-3 rounded-2xl text-sm font-black text-wander-primary uppercase tracking-widest border border-gray-100">
+                        View Deal
+                    </div>
+                </div>
+            </a>
+            `;
+        };
+
+        function renderHomeDeals() {
+            const deals = allDeals.filter(d => d.price < 80).sort((a, b) => a.price - b.price).slice(0, homeDisplayedCount);
+            document.getElementById('homeDeals').innerHTML = deals.map(compactCardTemplate).join('');
+        }
+
+        function renderDealsPage() {
+            let filtered = allDeals;
+            if (currentCity) filtered = filtered.filter(d => d.from === currentCity);
+            if (currentDestinationFilter) {
+                // If value is 2 chars, assume it is a country code (from new dropdown logic)
+                if (currentDestinationFilter.length === 2) {
+                    filtered = filtered.filter(d => d.countryCode && d.countryCode.toLowerCase() === currentDestinationFilter.toLowerCase());
+                } else {
+                    // Otherwise it is a specific city
+                    filtered = filtered.filter(d => d.to === currentDestinationFilter);
+                }
+            }
+
+            const monthsToShow = currentMonthFilter ? [currentMonthFilter] : getNextThreeMonths();
+
+            let html = '';
+
+            monthsToShow.forEach(month => {
+                const shortMonth = month.split(' ')[0].slice(0, 3);
+                let monthDeals = filtered.filter(d =>
+                    d.date.includes(shortMonth) || d.date.includes(month.split(' ')[0])
+                );
+
+                monthDeals.sort((a, b) => a.price - b.price || a.to.localeCompare(b.to));
+
+                html += `
+            <div class="carousel-container relative group">
+                <div class="flex flex-col gap-4 mb-8">
+                    <h3 class="text-3xl font-bold">${month} <span class="block text-xl text-gray-500 mt-1">(${monthDeals.length} deals)</span></h3>
+                    <div class="flex gap-4">
+                        <select class="sort-price h-12 px-4 rounded-xl border border-gray-300 text-sm" aria-label="Sort by price">
+                            <option value="price-asc" selected>Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                        </select>
+                        <select class="sort-city h-12 px-4 rounded-xl border border-gray-300 text-sm" aria-label="Sort by city">
+                            <option value="city-asc" selected>City: A → Z</option>
+                            <option value="city-desc">City: Z → A</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="carousel month-carousel pr-8">
+                        ${monthDeals.length ? monthDeals.map(compactCardTemplate).join('') : '<p class="text-center text-gray-500 text-xl w-full">No deals available.</p>'}
+                    </div>
+                </div>
+                <div class="carousel-controls absolute inset-y-0 left-0 right-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button class="carousel-prev absolute left-4 top-1/2 -translate-y-1/2 bg-white shadow-2xl p-3 rounded-full pointer-events-auto hover:scale-110" aria-label="Previous deals"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+                    <button class="carousel-next absolute right-4 top-1/2 -translate-y-1/2 bg-white shadow-2xl p-3 rounded-full pointer-events-auto hover:scale-110" aria-label="Next deals"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
+                </div>
+            </div>
+            `;
+            });
+
+            document.getElementById('dynamicCarousels').innerHTML = html;
+
+            document.querySelectorAll('.sort-price, .sort-city').forEach(select => {
+                select.addEventListener('change', function () {
+                    const carousel = this.closest('.carousel-container').querySelector('.month-carousel');
+                    const cards = Array.from(carousel.querySelectorAll('.compact-card'));
+                    let sorted = [...cards];
+
+                    if (this.classList.contains('sort-price')) {
+                        sorted.sort((a, b) => {
+                            const pa = parseInt(a.querySelector('.text-4xl').textContent.replace('€', ''));
+                            const pb = parseInt(b.querySelector('.text-4xl').textContent.replace('€', ''));
+                            return this.value === 'price-asc' ? pa - pb : pb - pa;
+                        });
+                    } else {
+                        sorted.sort((a, b) => {
+                            const ca = a.querySelector('.text-2xl').textContent;
+                            const cb = b.querySelector('.text-2xl').textContent;
+                            return this.value === 'city-asc' ? ca.localeCompare(cb) : cb.localeCompare(ca);
+                        });
+                    }
+
+                    sorted.forEach(card => carousel.appendChild(card));
+                });
+            });
+
+            setupCarouselControls();
+            lucide.createIcons();
+        }
+
+        function setupCarouselControls() {
+            document.querySelectorAll('.carousel-container').forEach(container => {
+                const carousel = container.querySelector('.carousel');
+                const prev = container.querySelector('.carousel-prev');
+                const next = container.querySelector('.carousel-next');
+                if (prev) prev.onclick = () => carousel.scrollBy({ left: -400, behavior: 'smooth' });
+                if (next) next.onclick = () => carousel.scrollBy({ left: 400, behavior: 'smooth' });
+            });
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('section[id]').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            window.scrollTo(0, 0);
+
+            // Update active navigation state
+            document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll(`[data-page="${id}"]`).forEach(link => link.classList.add('active'));
+
+            // Update Hero Style
+            if (typeof updateHeroStyle === 'function') {
+                updateHeroStyle(id);
+            }
+
+            // Update URL routing
+            if (id === 'home') {
+                // Clear URL params when going home
+                updateURLParams({});
+            } else if (id === 'deals') {
+                // Update URL with current page (filters will be updated by applyDealsFilters)
+                updateURLParams({ page: 'deals' });
+            } else if (id === 'festivals') {
+                updateURLParams({ page: 'festivals' });
+            }
+
+            if (id === 'deals') {
+                if (isSearchFromHome) {
+                    restoreFiltersFromPersistent();
+                    isSearchFromHome = false;
+                } else {
+                    resetDealsFilters();
+                    renderDealsPage();
+                }
+            }
+
+            if (id === 'festivals') {
+                if (typeof renderFestivalDeals === 'function') {
+                    renderFestivalDeals(allFestivals);
+                }
+            }
+        }
+
+        document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(l => l.addEventListener('click', e => {
+            e.preventDefault();
+            const page = l.getAttribute('data-page');
+
+            // Close mobile menu
+            document.getElementById('mobileMenu').classList.remove('open');
+
+            // Navigate
+            if (page === 'home') {
+                goHomeAndReset();
+            } else if (page === 'festivals') {
+                showPage('festivals');
+            } else if (page === 'deals') {
+                goToDealsAndReset();
+            }
+        }));
+
+        document.getElementById('closePopupBtn').onclick = () => document.getElementById('cityPopup').classList.add('hidden');
+        document.getElementById('cityPopup').onclick = e => { if (e.target === e.currentTarget) e.currentTarget.classList.add('hidden'); };
+
+        loadData();
+    </script>
+    <!-- THEME SWITCHER (TEMPORARY) -->
+    <button id="themeSwitcherBtn"
+        class="fixed bottom-6 left-6 z-50 p-4 bg-white rounded-full shadow-2xl hover:scale-110 transition border-4 border-wander-primary group"
+        title="Change Theme">
+        <i data-lucide="palette" class="w-6 h-6 text-wander-primary group-hover:rotate-12 transition"></i>
+    </button>
+
+    <div id="themeModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 relative max-h-[80vh] overflow-y-auto">
+            <button onclick="document.getElementById('themeModal').classList.add('hidden')"
+                class="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-3xl font-black mb-6">Choose a Theme</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="paletteGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const themes = [
+            { name: 'Original Orange', primary: '33.8, 100%, 51%', dark: '25, 100%, 45%', accent: '45, 100%, 51%', light: '34, 100%, 96%' },
+            { name: 'Ocean Blue', primary: '210, 100%, 50%', dark: '210, 100%, 40%', accent: '190, 100%, 50%', light: '210, 100%, 96%' },
+            { name: 'Emerald Green', primary: '150, 100%, 40%', dark: '150, 100%, 30%', accent: '120, 100%, 60%', light: '150, 50%, 96%' },
+            { name: 'Royal Purple', primary: '270, 80%, 60%', dark: '270, 80%, 45%', accent: '300, 100%, 70%', light: '270, 50%, 96%' },
+            { name: 'Sunset Red', primary: '0, 80%, 60%', dark: '0, 80%, 45%', accent: '30, 100%, 60%', light: '0, 50%, 96%' },
+            { name: 'Bubblegum Pink', primary: '330, 100%, 60%', dark: '330, 100%, 45%', accent: '300, 100%, 60%', light: '330, 50%, 96%' },
+            { name: 'Teal Dream', primary: '170, 100%, 40%', dark: '170, 100%, 30%', accent: '150, 100%, 60%', light: '170, 50%, 96%' },
+            { name: 'Midnight Navy', primary: '220, 80%, 50%', dark: '220, 80%, 35%', accent: '200, 100%, 60%', light: '220, 50%, 96%' },
+            { name: 'Golden Hour', primary: '45, 100%, 50%', dark: '40, 100%, 40%', accent: '60, 100%, 60%', light: '45, 50%, 96%' },
+            { name: 'Coral Reef', primary: '10, 90%, 60%', dark: '10, 90%, 45%', accent: '30, 100%, 60%', light: '10, 50%, 96%' },
+            { name: 'Mint Fresh', primary: '140, 70%, 50%', dark: '140, 70%, 35%', accent: '160, 80%, 60%', light: '140, 30%, 96%' },
+            { name: 'Lavender Haze', primary: '250, 70%, 65%', dark: '250, 70%, 50%', accent: '280, 80%, 70%', light: '250, 30%, 96%' },
+            { name: 'Cherry Blossom', primary: '340, 90%, 65%', dark: '340, 90%, 50%', accent: '350, 100%, 75%', light: '340, 30%, 96%' },
+            { name: 'Slate Cool', primary: '200, 40%, 50%', dark: '200, 40%, 35%', accent: '210, 60%, 60%', light: '200, 20%, 96%' },
+            { name: 'Coffee Bean', primary: '25, 60%, 40%', dark: '25, 60%, 25%', accent: '35, 70%, 55%', light: '25, 20%, 95%' },
+            { name: 'Neon Cyber', primary: '180, 100%, 50%', dark: '180, 100%, 35%', accent: '300, 100%, 50%', light: '180, 20%, 95%' },
+            { name: 'Forest Deep', primary: '120, 60%, 35%', dark: '120, 60%, 25%', accent: '90, 80%, 50%', light: '120, 20%, 96%' },
+            { name: 'Berry Blast', primary: '290, 80%, 50%', dark: '290, 80%, 35%', accent: '310, 100%, 60%', light: '290, 20%, 96%' },
+            { name: 'Electric Lime', primary: '80, 90%, 45%', dark: '80, 90%, 35%', accent: '100, 100%, 55%', light: '80, 30%, 96%' },
+            { name: 'Arctic Ice', primary: '195, 90%, 60%', dark: '195, 90%, 45%', accent: '210, 100%, 70%', light: '195, 30%, 96%' }
+        ];
+
+        const themeBtn = document.getElementById('themeSwitcherBtn');
+        const themeModal = document.getElementById('themeModal');
+        const paletteGrid = document.getElementById('paletteGrid');
+
+        themeBtn.onclick = () => themeModal.classList.remove('hidden');
+
+        themes.forEach(t => {
+            const btn = document.createElement('button');
+            btn.className = 'flex flex-col items-center gap-2 p-3 hover:bg-gray-50 rounded-xl transition group';
+            btn.onclick = () => {
+                document.documentElement.style.setProperty('--wander-primary', `hsl(${t.primary})`);
+                document.documentElement.style.setProperty('--wander-primary-dark', `hsl(${t.dark})`);
+                document.documentElement.style.setProperty('--wander-accent', `hsl(${t.accent})`);
+                document.documentElement.style.setProperty('--wander-light', `hsl(${t.light})`);
+                themeModal.classList.add('hidden');
+            };
+
+            btn.innerHTML = `
+                <div class="w-full aspect-video rounded-lg shadow-sm group-hover:shadow-md transition relative overflow-hidden" style="background: hsl(${t.primary})">
+                    <div class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-[hsl(${t.dark})]"></div>
+                    <div class="absolute top-0 right-0 w-1/3 h-full bg-[hsl(${t.accent})]"></div>
+                </div>
+                <span class="text-xs font-bold text-gray-700">${t.name}</span>
+            `;
+            paletteGrid.appendChild(btn);
+        });
+    </script>
+    <!-- CORE LOGIC SCRIPT (Original) -->
+    <script>
+        // ... (Le script original est au dessus) ...
+    </script>
+
+    <!-- DESIGN V2/V3 LOGIC SCRIPT (New) -->
+    <script>
+        /* --- GESTION DU DESIGN V2/V3 --- */
+        const heroWrapper = document.getElementById('mainHero');
+        const headerGlass = document.querySelector('.glass-header');
+        const widgetHome = document.getElementById('searchWidgetHome');
+        const widgetDeals = document.getElementById('searchWidgetDeals');
+        const heroTextHome = document.getElementById('heroTextHome');
+        const heroTextDeals = document.getElementById('heroTextDeals');
+        const root = document.documentElement;
+
+        // 1. BACKGROUND SYNC
+        function syncBackgrounds() {
+            if (!headerGlass || !heroWrapper) return;
+            const headerHeight = headerGlass.offsetHeight;
+            const gap = 20;
+            const totalOffset = headerHeight + 30;
+            heroWrapper.style.setProperty('--bg-hero-offset', `-${totalOffset}px`);
+        }
+
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            .hero-wrapper::before { background-position: center calc(0px + var(--bg-hero-offset, -120px)) !important; }
+        `;
+        document.head.appendChild(styleSheet);
+
+        window.addEventListener('load', syncBackgrounds);
+        window.addEventListener('resize', syncBackgrounds);
+        syncBackgrounds();
+
+        // 2. BACKGROUND CAROUSEL
+        // PERFORMANCE: Reduced image size from 1600px to 800px (saves ~60% bandwidth)
+        const bgImages = [
+            'https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg?auto=compress&cs=tinysrgb&w=800',
+            'https://images.pexels.com/photos/1004584/pexels-photo-1004584.jpeg?auto=compress&cs=tinysrgb&w=800',
+            'https://images.pexels.com/photos/912050/pexels-photo-912050.jpeg?auto=compress&cs=tinysrgb&w=800',
+            'https://images.pexels.com/photos/3768652/pexels-photo-3768652.jpeg?auto=compress&cs=tinysrgb&w=800',
+            'https://images.pexels.com/photos/2026324/pexels-photo-2026324.jpeg?auto=compress&cs=tinysrgb&w=800'
+        ];
+        let currentBgIndex = 0;
+        let imagesPreloaded = false;
+
+        // PERFORMANCE: Preload remaining images after initial page load
+        function preloadRemainingImages() {
+            if (imagesPreloaded) return;
+            imagesPreloaded = true;
+            bgImages.slice(1).forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+            console.log('✅ Background images preloaded');
+        }
+
+        // Preload after 2 seconds to not block initial render
+        setTimeout(preloadRemainingImages, 2000);
+
+        function changeBackgroundImage() {
+            currentBgIndex = (currentBgIndex + 1) % bgImages.length;
+            const newUrl = `url('${bgImages[currentBgIndex]}')`;
+            root.style.setProperty('--current-bg', newUrl);
+        }
+        setInterval(changeBackgroundImage, 12000);
+
+        // 3. AR TAGS (évite la zone centrale 25-75% horizontal, 30-70% vertical)
+        const tagMessages = ["Cheap Flight", "Under 50€", "Enjoy", "Best Deal", "Qatar Airlines", "Fast Travel", "Comfort", "Direct Flight", "Safe Trip", "Business Class"];
+        const maxTags = 4;
+        let activeTags = [];
+
+        function isInCenterZone(top, left) {
+            // Zone centrale à éviter : 30-70% vertical, 25-75% horizontal
+            return (top > 25 && top < 75) && (left > 20 && left < 80);
+        }
+
+        function checkCollision(top, left) {
+            for (let tag of activeTags) {
+                if (Math.abs(top - parseFloat(tag.dataset.top)) < 15 && Math.abs(left - parseFloat(tag.dataset.left)) < 20) return true;
+            }
+            return false;
+        }
+
+        function createTag() {
+            if (activeTags.length >= maxTags || !heroWrapper) return;
+            let top, left, attempts = 0, valid = false;
+
+            while (!valid && attempts < 20) {
+                // Générer dans les zones périphériques uniquement
+                const zone = Math.random();
+                if (zone < 0.25) {
+                    // Zone haut
+                    top = Math.random() * 20 + 5; // 5-25%
+                    left = Math.random() * 80 + 10; // 10-90%
+                } else if (zone < 0.5) {
+                    // Zone bas
+                    top = Math.random() * 15 + 80; // 80-95%
+                    left = Math.random() * 80 + 10;
+                } else if (zone < 0.75) {
+                    // Zone gauche
+                    top = Math.random() * 60 + 20;
+                    left = Math.random() * 15 + 3; // 3-18%
+                } else {
+                    // Zone droite
+                    top = Math.random() * 60 + 20;
+                    left = Math.random() * 15 + 82; // 82-97%
+                }
+
+                valid = !checkCollision(top, left) && !isInCenterZone(top, left);
+                attempts++;
+            }
+
+            if (!valid) return;
+
+            const text = tagMessages[Math.floor(Math.random() * tagMessages.length)];
+            const tag = document.createElement('div');
+            tag.className = 'ar-tag';
+            tag.innerHTML = `<span class="dot"></span> ${text}`;
+            tag.style.top = `${top}%`;
+            tag.style.left = `${left}%`;
+            tag.dataset.top = top;
+            tag.dataset.left = left;
+            heroWrapper.appendChild(tag);
+            activeTags.push(tag);
+            requestAnimationFrame(() => tag.classList.add('visible'));
+            setTimeout(() => {
+                tag.classList.remove('visible');
+                tag.classList.add('hidden');
+                setTimeout(() => {
+                    if (tag.parentNode) tag.parentNode.removeChild(tag);
+                    activeTags = activeTags.filter(t => t !== tag);
+                }, 600);
+            }, Math.random() * 2000 + 7000);
+        }
+        setInterval(() => { if (Math.random() > 0.4) createTag(); }, 1500);
+
+        // 4. NAVIGATION & STYLE SWITCHING
+        document.querySelectorAll('.nav-trigger').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const target = link.dataset.page || link.dataset.target;
+                updateHeroStyle(target);
+            });
+        });
+
+        function updateHeroStyle(page) {
+            const heroTextFestivals = document.getElementById('heroTextFestivals');
+            const widgetFestivals = document.getElementById('searchWidgetFestivals');
+
+            // Reset all styles - explicitly hide ALL widgets first
+            heroWrapper.classList.remove('style-smile', 'style-inverted');
+
+            // Hide all search widgets
+            if (widgetHome) widgetHome.classList.add('hidden');
+            if (widgetDeals) widgetDeals.classList.add('hidden');
+            if (widgetFestivals) widgetFestivals.classList.add('hidden');
+
+            // Hide all hero texts
+            if (heroTextHome) heroTextHome.classList.add('hidden');
+            if (heroTextDeals) heroTextDeals.classList.add('hidden');
+            if (heroTextFestivals) heroTextFestivals.classList.add('hidden');
+
+            if (page === 'deals') {
+                // MODE V2 SMILE (Convexe) pour Deals
+                heroWrapper.classList.add('style-smile');
+                if (widgetDeals) widgetDeals.classList.remove('hidden');
+                if (heroTextDeals) heroTextDeals.classList.remove('hidden');
+            } else if (page === 'festivals') {
+                // MODE SMILE pour Festivals avec texte centré
+                heroWrapper.classList.add('style-smile');
+                if (widgetFestivals) widgetFestivals.classList.remove('hidden');
+                if (heroTextFestivals) heroTextFestivals.classList.remove('hidden');
+            } else {
+                // MODE V3 INVERTED (Concave) - DEFAULT HOME
+                heroWrapper.classList.add('style-inverted');
+                if (widgetHome) widgetHome.classList.remove('hidden');
+                if (heroTextHome) heroTextHome.classList.remove('hidden');
+            }
+        }
+
+        // Init state based on hash
+        const initialHash = window.location.hash.replace('#', '') || 'home';
+        updateHeroStyle(initialHash);
+
+        // 5. FESTIVAL SORT BY NAME
+        const festivalSortFilter = document.getElementById('festivalSortFilter');
+        if (festivalSortFilter) {
+            festivalSortFilter.addEventListener('change', function () {
+                const sortValue = this.value;
+                const monthValue = document.getElementById('festivalMonthFilter').value;
+
+                let filtered = monthValue
+                    ? allFestivals.filter(f => f.month === monthValue)
+                    : allFestivals;
+
+                if (sortValue === 'name-desc') {
+                    filtered = [...filtered].sort((a, b) => b.title.localeCompare(a.title));
+                } else {
+                    filtered = [...filtered].sort((a, b) => a.title.localeCompare(b.title));
+                }
+
+                renderFestivalDeals(filtered);
+            });
+        }
+    </script>
+</body>
+
+</html>
