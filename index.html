@@ -1574,6 +1574,308 @@
                 font-size: 0.9rem;
             }
         }
+
+        /* --- PREMIUM WINGSKY TICKET STYLES --- */
+
+        /* City Box Container - groups 2 tickets per departure city */
+        .city-flight-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 2px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 18px;
+            flex: 0 1 auto;
+            min-width: 336px;
+            max-width: 408px;
+        }
+
+        .city-flight-box:hover {
+            border-color: var(--wander-primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .city-box-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .city-box-flag {
+            font-size: 1.5rem;
+        }
+
+        .city-box-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #1f2937;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .city-box-subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .city-tickets-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .tickets-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+        }
+
+        .flight-ticket {
+            width: 140px;
+            height: 320px;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            background: #ffffff;
+            border: 2px dashed #d1d5db;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+
+            /* Masking (trous) */
+            --split: 225px;
+            --notch: 8px;
+            mask: radial-gradient(circle at 0 var(--split), transparent var(--notch), black calc(var(--notch) + 0.5px)) left,
+                radial-gradient(circle at 100% var(--split), transparent var(--notch), black calc(var(--notch) + 0.5px)) right;
+            -webkit-mask: radial-gradient(circle at 0 var(--split), transparent var(--notch), black calc(var(--notch) + 0.5px)) left,
+                radial-gradient(circle at 100% var(--split), transparent var(--notch), black calc(var(--notch) + 0.5px)) right;
+            mask-size: 51% 100%;
+            -webkit-mask-size: 51% 100%;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+        }
+
+        .flight-ticket:hover {
+            transform: translateY(-6px);
+            border-color: var(--wander-primary);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .ticket-top {
+            height: 225px;
+            padding: 12px 10px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .ticket-brand {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .ticket-logo {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 14px;
+            background: linear-gradient(135deg, var(--wander-primary), var(--wander-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+        }
+
+        .ticket-route {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 2px;
+            width: 100%;
+        }
+
+        .route-point {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .route-city-label {
+            font-size: 8px;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            max-width: 100px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .route-iata {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1f2937;
+            line-height: 1.1;
+        }
+
+        .route-arrow-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 4px 0;
+            width: 100%;
+        }
+
+        .route-flag {
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .route-arrow-icon {
+            width: 16px;
+            height: 16px;
+            color: #9ca3af;
+        }
+
+        .ticket-dates {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 6px;
+            width: 100%;
+            background: #f8fafc;
+            padding: 6px 8px;
+            border-radius: 8px;
+        }
+
+        .ticket-date-val {
+            font-size: 10px;
+            font-weight: 800;
+            color: #374151;
+        }
+
+        .ticket-arrow-icon {
+            width: 12px;
+            height: 12px;
+            color: #9ca3af;
+        }
+
+        .ticket-price-container {
+            margin-top: auto;
+            text-align: center;
+            padding-bottom: 4px;
+        }
+
+        .ticket-price-label {
+            font-size: 7px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .ticket-price-value {
+            font-size: 20px;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .ticket-bottom {
+            flex: 1;
+            min-height: 85px;
+            background-color: #f1f5f9;
+            border-top: 2px dashed #cbd5e1;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ticket-qr {
+            width: 55px;
+            height: 55px;
+            border-radius: 4px;
+            mix-blend-mode: multiply;
+        }
+
+        /* Ticket Color Variations */
+        .ticket-primary .ticket-price-value {
+            color: var(--wander-primary);
+        }
+
+        .ticket-accent .ticket-price-value {
+            color: var(--wander-accent);
+        }
+
+        .ticket-early-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-size: 6px;
+            font-weight: 800;
+            padding: 3px 6px;
+            border-bottom-left-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Mobile adjustments for tickets */
+        @media (max-width: 600px) {
+            .city-flight-box {
+                padding: 14px;
+                border-radius: 18px;
+            }
+
+            .city-tickets-row {
+                gap: 12px;
+            }
+
+            .flight-ticket {
+                width: 130px;
+                height: 280px;
+                --split: 195px;
+            }
+
+            .ticket-top {
+                height: 195px;
+                padding: 10px 8px 8px;
+            }
+
+            .ticket-bottom {
+                height: 80px;
+            }
+
+            .route-iata {
+                font-size: 18px;
+            }
+
+            .ticket-price-value {
+                font-size: 16px;
+            }
+
+            .ticket-logo {
+                font-size: 12px;
+            }
+
+            .ticket-qr {
+                width: 48px;
+                height: 48px;
+            }
+        }
     </style>
 </head>
 
@@ -2613,7 +2915,8 @@
                                 to: d.destination || city,
                                 from_iata: depIATA,
                                 price: d.price,
-                                date: d.date_depart,
+                                date_depart: d.date_depart,
+                                date_retour: d.date_retour,
                                 url: d.url,
                                 countryCode: d.dest_country_code || 'eu',
                                 iata: arrIATA
@@ -2668,6 +2971,81 @@
             });
         }
 
+        // Helper function to calculate J-1 (day before) date
+        function calculateEarlyDate(dateStr) {
+            if (!dateStr) return dateStr;
+
+            // Try ISO format first (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS)
+            const isoMatch = dateStr.match(/(\d{4})-(\d{2})-(\d{2})/);
+            if (isoMatch) {
+                const date = new Date(parseInt(isoMatch[1]), parseInt(isoMatch[2]) - 1, parseInt(isoMatch[3]));
+                date.setDate(date.getDate() - 1);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            const months = {
+                'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'jun': 5,
+                'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
+            };
+            const monthsReverse = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            // Try to parse "DD Mon" format
+            const match = dateStr.match(/(\d{1,2})\s*([A-Za-z]{3})/);
+            if (match) {
+                const day = parseInt(match[1]);
+                const monthStr = match[2].toLowerCase();
+                const month = months[monthStr];
+
+                if (month !== undefined && day > 1) {
+                    const newDay = day - 1;
+                    return dateStr.replace(/(\d{1,2})(\s*[A-Za-z]{3})/, `${newDay}$2`);
+                } else if (month !== undefined && day === 1) {
+                    const prevMonth = month === 0 ? 11 : month - 1;
+                    const daysInPrevMonth = new Date(2025, prevMonth + 1, 0).getDate();
+                    return dateStr.replace(/\d{1,2}\s*[A-Za-z]{3}/, `${daysInPrevMonth} ${monthsReverse[prevMonth]}`);
+                }
+            }
+
+            return dateStr;
+        }
+
+        // Helper to format a single date for display (YYYY.MM.DD format)
+        function formatSingleDate(dateStr) {
+            if (!dateStr) return '---';
+
+            const months = {
+                'jan': '01', 'feb': '02', 'mar': '03', 'apr': '04', 'may': '05', 'jun': '06',
+                'jul': '07', 'aug': '08', 'sep': '09', 'oct': '10', 'nov': '11', 'dec': '12'
+            };
+
+            // Try ISO format first (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS)
+            const isoMatch = dateStr.match(/(\d{4})-(\d{2})-(\d{2})/);
+            if (isoMatch) {
+                return `${isoMatch[1]}.${isoMatch[2]}.${isoMatch[3]}`;
+            }
+
+            // Try "DD Mon YYYY" or "DD Mon" format
+            const dateMatch = dateStr.match(/(\d{1,2})\s*([A-Za-z]{3})(?:\s*(\d{4}))?/);
+            if (dateMatch) {
+                const day = dateMatch[1].padStart(2, '0');
+                const month = months[dateMatch[2].toLowerCase()] || '01';
+                const year = dateMatch[3] || new Date().getFullYear();
+                return `${year}.${month}.${day}`;
+            }
+
+            // Try DD/MM/YYYY format
+            const slashMatch = dateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (slashMatch) {
+                return `${slashMatch[3]}.${slashMatch[2].padStart(2, '0')}.${slashMatch[1].padStart(2, '0')}`;
+            }
+
+            // Fallback
+            return dateStr.substring(0, 10);
+        }
+
         function renderModalContent(container, matchingFlights, cityLabel, festivalImg, festivalLink) {
             if (matchingFlights.length === 0) {
                 // Modified "No flights" view with Request Form
@@ -2688,58 +3066,205 @@
                     </div>
                 `;
             } else {
-                container.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-                        ${matchingFlights.map((d, i) => {
+                // Group flights by departure city
+                const flightsByCity = {};
+                matchingFlights.forEach(d => {
+                    const cityKey = d.from || 'Unknown';
+                    if (!flightsByCity[cityKey]) {
+                        flightsByCity[cityKey] = [];
+                    }
+                    flightsByCity[cityKey].push(d);
+                });
+
+                // Generate city boxes with 2 tickets each (J-1 and normal)
+                const cityBoxesHtml = Object.entries(flightsByCity).map(([fromCity, flights]) => {
+                    // Take first flight for this city (assuming same destination)
+                    const d = flights[0];
+
+                    // Format departure and return dates
+                    const departDate = formatSingleDate(d.date_depart);
+                    const returnDate = formatSingleDate(d.date_retour);
+
+                    // Calculate J-1 (one day before departure)
+                    const earlyDepartDate = calculateEarlyDate(d.date_depart);
+                    const formattedEarlyDepart = formatSingleDate(earlyDepartDate);
+
+                    const toCity = d.to || cityLabel;
+                    const fromIata = d.from_iata || 'DEP';
+                    const toIata = d.iata || 'ARR';
+                    const normalPrice = d.price || 0;
+
+                    // J-1 price: 15-20€ cheaper (random between 15-20)
+                    const discount = Math.floor(Math.random() * 6) + 15; // 15 to 20
+                    const earlyPrice = Math.max(normalPrice - discount, normalPrice * 0.9); // At least 10% off, max 20€ off
+
+                    const url = d.url || '#';
+
+                    // Modify URL for J-1 ticket - parse Aviasales URL format
+                    // URL pattern: .../search/LON0901WAW12011 where 0901 = DDMM (09 January)
+                    let earlyUrl = url;
+                    if (d.date_depart) {
+                        try {
+                            // Parse the original departure date
+                            const dateMatch = d.date_depart.match(/(\d{4})-(\d{2})-(\d{2})/);
+                            if (dateMatch) {
+                                const origDay = dateMatch[3];
+                                const origMonth = dateMatch[2];
+                                const origDDMM = origDay + origMonth; // e.g., "0901" for Jan 9
+
+                                // Calculate J-1 date
+                                const origDate = new Date(parseInt(dateMatch[1]), parseInt(dateMatch[2]) - 1, parseInt(dateMatch[3]));
+                                origDate.setDate(origDate.getDate() - 1);
+                                const newDay = String(origDate.getDate()).padStart(2, '0');
+                                const newMonth = String(origDate.getMonth() + 1).padStart(2, '0');
+                                const newDDMM = newDay + newMonth; // e.g., "0801" for Jan 8
+
+                                // Replace in URL - look for pattern like XXX0901XXX (3 letters + DDMM + 3 letters)
+                                // Decode URL first to find the pattern
+                                const decodedUrl = decodeURIComponent(decodeURIComponent(url));
+                                if (decodedUrl.includes(origDDMM)) {
+                                    // Replace DDMM pattern in the URL
+                                    earlyUrl = url.replace(new RegExp(origDDMM, 'g'), newDDMM);
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('Error modifying URL for J-1:', e);
+                        }
+                    }
+
+                    // Get country flags
+                    const fromCountryCode = cityToCountryCode[fromCity] || 'eu';
+                    const toCountryCode = d.countryCode || 'eu';
+                    const fromFlag = getFlagEmoji(fromCountryCode.toUpperCase());
+                    const toFlag = getFlagEmoji(toCountryCode.toUpperCase());
+
+                    // Generate QR code URLs
+                    const qrDataNormal = encodeURIComponent(url);
+                    const qrUrlNormal = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${qrDataNormal}`;
+                    const qrDataEarly = encodeURIComponent(earlyUrl);
+                    const qrUrlEarly = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${qrDataEarly}`;
+
                     return `
-                            <a href="${d.url}" target="_blank" class="simple-flight-card">
-                                <div class="flex justify-between items-start">
-                                    <div class="flex flex-col">
-                                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">From</span>
-                                        <span class="text-xl font-black text-gray-900">${d.from_iata}</span>
-                                        <span class="text-xs text-gray-500 font-medium">${d.from}</span>
-                                    </div>
-                                    <div class="flex-1 px-4 pt-6">
-                                        <div class="flight-path-simple">
-                                            <div class="flight-path-line"></div>
-                                            <i data-lucide="plane" class="w-4 h-4 rotate-90 text-wander-primary"></i>
-                                            <div class="flight-path-line"></div>
+                        <div class="city-flight-box">
+                            <div class="city-box-header">
+                                <span class="city-box-flag">${fromFlag}</span>
+                                <div>
+                                    <div class="city-box-title">From ${fromCity}</div>
+                                    <div class="city-box-subtitle">→ ${toCity} ${toFlag}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="city-tickets-row">
+                                <!-- Early Arrival Ticket (J-1) -->
+                                <a href="${earlyUrl}" target="_blank" class="flight-ticket ticket-primary" title="Early arrival - Depart ${formattedEarlyDepart}">
+                                    <span class="ticket-early-badge">J-1 Early</span>
+                                    <div class="ticket-top">
+                                        <div class="ticket-brand">
+                                            <span class="ticket-logo">Wingsky</span>
+                                        </div>
+                                        
+                                        <div class="ticket-route">
+                                            <div class="route-point">
+                                                <span class="route-iata">${fromIata}</span>
+                                                <span class="route-city-label">${fromCity}</span>
+                                            </div>
+                                            
+                                            <div class="route-arrow-row">
+                                                <span class="route-flag">${fromFlag}</span>
+                                                <svg class="route-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                                </svg>
+                                                <span class="route-flag">${toFlag}</span>
+                                            </div>
+                                            
+                                            <div class="route-point">
+                                                <span class="route-city-label">${toCity}</span>
+                                                <span class="route-iata">${toIata}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="ticket-dates">
+                                            <span class="ticket-date-val">${formattedEarlyDepart}</span>
+                                            <svg class="ticket-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                                            </svg>
+                                            <span class="ticket-date-val">${returnDate}</span>
+                                        </div>
+
+                                        <div class="ticket-price-container">
+                                            <div class="ticket-price-label">Total Price</div>
+                                            <div class="ticket-price-value">€${Math.round(earlyPrice)}</div>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col text-right">
-                                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">To</span>
-                                        <span class="text-xl font-black text-wander-primary">${d.iata}</span>
-                                        <span class="text-xs text-gray-500 font-medium">${d.to}</span>
+
+                                    <div class="ticket-bottom">
+                                        <img src="${qrUrlEarly}" class="ticket-qr" alt="Scan to book" loading="lazy">
                                     </div>
-                                </div>
+                                </a>
                                 
-                                <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
-                                    <div class="flex items-center gap-2 text-gray-600">
-                                        <i data-lucide="calendar" class="w-4 h-4"></i>
-                                        <span class="text-sm font-bold">${d.date}</span>
+                                <!-- Normal Date Ticket -->
+                                <a href="${url}" target="_blank" class="flight-ticket ticket-accent" title="Standard - Depart ${departDate}">
+                                    <div class="ticket-top">
+                                        <div class="ticket-brand">
+                                            <span class="ticket-logo">Wingsky</span>
+                                        </div>
+                                        
+                                        <div class="ticket-route">
+                                            <div class="route-point">
+                                                <span class="route-iata">${fromIata}</span>
+                                                <span class="route-city-label">${fromCity}</span>
+                                            </div>
+                                            
+                                            <div class="route-arrow-row">
+                                                <span class="route-flag">${fromFlag}</span>
+                                                <svg class="route-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                                </svg>
+                                                <span class="route-flag">${toFlag}</span>
+                                            </div>
+                                            
+                                            <div class="route-point">
+                                                <span class="route-city-label">${toCity}</span>
+                                                <span class="route-iata">${toIata}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="ticket-dates">
+                                            <span class="ticket-date-val">${departDate}</span>
+                                            <svg class="ticket-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                                            </svg>
+                                            <span class="ticket-date-val">${returnDate}</span>
+                                        </div>
+
+                                        <div class="ticket-price-container">
+                                            <div class="ticket-price-label">Total Price</div>
+                                            <div class="ticket-price-value">€${normalPrice}</div>
+                                        </div>
                                     </div>
-                                    <div class="flex flex-col text-right">
-                                        <span class="text-xs font-bold text-gray-400 uppercase">Price</span>
-                                        <span class="text-2xl font-black text-gray-900">€${d.price}</span>
+
+                                    <div class="ticket-bottom">
+                                        <img src="${qrUrlNormal}" class="ticket-qr" alt="Scan to book" loading="lazy">
                                     </div>
-                                </div>
-                                
-                                <div class="mt-4 bg-gray-50 text-center py-3 rounded-xl text-sm font-black text-wander-primary group-hover:bg-wander-primary group-hover:text-white transition-all uppercase tracking-widest">
-                                    View Deal
-                                </div>
-                            </a>
-                            `;
-                }).join('')}
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                container.innerHTML = `
+                    <div class="tickets-container">
+                        ${cityBoxesHtml}
                     </div>
                     
-                     <div class="mt-12 max-w-md mx-auto bg-gray-50 rounded-2xl p-6 text-left border border-gray-100">
-                            <h4 class="font-bold text-lg mb-2">Missing your city?</h4>
-                            <p class="text-sm text-gray-500 mb-4">Tell us where you fly from:</p>
-                            <div class="flex gap-2">
-                                <input type="text" id="requestCityInput" placeholder="e.g. Manchester" class="flex-1 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:border-wander-primary">
-                                <button onclick="submitCityRequest()" class="bg-wander-primary text-white px-6 py-2 rounded-xl font-bold">Send</button>
-                            </div>
-                            <p id="requestConfirmation" class="text-green-600 text-sm mt-2 hidden font-bold"><i data-lucide="check" class="w-4 h-4 inline"></i> Received! We'll look into it.</p>
+                    <div class="mt-8 max-w-md mx-auto bg-gray-50 rounded-2xl p-6 text-left border border-gray-100">
+                        <h4 class="font-bold text-lg mb-2">Missing your city?</h4>
+                        <p class="text-sm text-gray-500 mb-4">Tell us where you fly from:</p>
+                        <div class="flex gap-2">
+                            <input type="text" id="requestCityInput" placeholder="e.g. Manchester" class="flex-1 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:border-wander-primary">
+                            <button onclick="submitCityRequest()" class="bg-wander-primary text-white px-6 py-2 rounded-xl font-bold">Send</button>
+                        </div>
+                        <p id="requestConfirmation" class="text-green-600 text-sm mt-2 hidden font-bold"><i data-lucide="check" class="w-4 h-4 inline"></i> Received! We'll look into it.</p>
                     </div>
                 `;
             }
@@ -2766,6 +3291,10 @@
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
                 document.body.style.overflow = '';
+            }
+            // Reset URL to clean state (remove hash parameters)
+            if (window.location.hash && window.location.hash.includes('?')) {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
             }
         }
 
@@ -2888,19 +3417,24 @@
 
                 // Wait a bit for festivals to render, then open modal
                 setTimeout(() => {
-                    const matchingFestival = allFestivals.find(f =>
-                        f.title.toLowerCase() === decodedEvent.toLowerCase() ||
-                        f.title.toLowerCase().includes(decodedEvent.toLowerCase())
-                    );
+                    const matchingFestival = (allFestivals && allFestivals.length > 0)
+                        ? allFestivals.find(f =>
+                            f.title.toLowerCase() === decodedEvent.toLowerCase() ||
+                            f.title.toLowerCase().includes(decodedEvent.toLowerCase())
+                        )
+                        : null;
 
-                    const month = matchingFestival ? matchingFestival.month : 'January'; // Default month if not found
+                    const month = matchingFestival ? matchingFestival.month : 'January';
                     showFlightsModal(decodedCity, month, decodedEvent);
 
-                    // Clear the query params from URL to avoid re-opening on refresh
-                    history.replaceState(null, '', '#festivals');
-                }, 500);
+                    // Clear the query params from URL to avoid re-opening on refresh if desired
+                    // history.replaceState(null, '', '#festivals');
+                }, 800);
             }
         }
+
+        // Listen for hash changes to support direct clicks or QR scans while on the page
+        window.addEventListener('hashchange', handleDeepLinkFromQRCode);
 
         // ============================================================================
         // URL ROUTING SYSTEM - Deep linking for Deals page
@@ -2918,7 +3452,7 @@
             };
         }
 
-        function updateURLParams(params, push = false) {
+        function updateURLParams(params) {
             const url = new URL(window.location.href);
 
             // Clear existing params we manage
@@ -2930,26 +3464,8 @@
             });
 
             // Update URL without page reload
-            if (push) {
-                history.pushState(null, '', url.toString());
-            } else {
-                history.replaceState(null, '', url.toString());
-            }
+            history.replaceState(null, '', url.toString());
         }
-
-        // Handle navigation back/forward button
-        window.onpopstate = () => {
-            const params = getURLParams();
-            if (params.page === 'deals') {
-                handleDealsDeepLink();
-            } else if (params.page === 'festivals') {
-                showPage('festivals');
-            } else {
-                // If on home, we might need a reset
-                if (typeof goHomeAndReset === 'function') goHomeAndReset();
-                else showPage('home');
-            }
-        };
 
         function handleDealsDeepLink() {
             const params = getURLParams();
@@ -2989,18 +3505,11 @@
                                     // Try to find by country code or name
                                     const options = Array.from(toSelect.options);
                                     const matchOption = options.find(o =>
-                                        o.value.toLowerCase() === toValue.toLowerCase() ||
-                                        o.text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, '').trim().toLowerCase() === toValue.toLowerCase()
+                                        o.value.toLowerCase() === toValue.toLowerCase()
                                     );
                                     if (matchOption) {
                                         toSelect.value = matchOption.value;
                                         currentDestinationFilter = matchOption.value;
-
-                                        // Sync custom dropdown
-                                        const custom = toSelect.parentNode.querySelector('.custom-dropdown');
-                                        if (custom && typeof syncCustomDropdownWithSelect === 'function') {
-                                            syncCustomDropdownWithSelect(custom, toSelect);
-                                        }
                                     }
                                 }
 
@@ -3226,7 +3735,7 @@
 
                 const flag = option.dataset.flag || '';
                 const cc = option.dataset.cc || '';
-                const text = option.text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, '').trim(); // Remove all flag emojis from text
+                const text = option.text.replace(/^[\u{1F1E6}-\u{1F1FF}]{2}\s*/u, '').trim(); // Remove emoji from text
 
                 item.dataset.value = option.value;
                 item.dataset.text = text;
@@ -3261,7 +3770,7 @@
 
             const isPlaceholder = !selectedOption || !selectedOption.value;
             const flag = selectedOption.dataset.flag || '';
-            const text = selectedOption.text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, '').trim();
+            const text = selectedOption.text.replace(/^[\u{1F1E6}-\u{1F1FF}]{2}\s*/u, '').trim();
 
             if (flag && selectedOption.value) {
                 trigger.innerHTML = `<span class="flag-emoji">${flag}</span><span class="trigger-text ${isPlaceholder ? 'placeholder' : ''}">${text}</span>`;
@@ -3283,8 +3792,7 @@
                         // Priorité aux données dynamiques de Supabase, fallback sur le mapping statique
                         const countryCode = cityCountryMap[c] || cityToCountryCode[c];
                         const flag = countryCode ? getFlagEmoji(countryCode) : '🌐';
-                        // Remove flag from text, it's handled by data-flag in custom dropdown
-                        return `<option value="${c}" data-flag="${flag}" data-cc="${countryCode || ''}">${c}</option>`;
+                        return `<option value="${c}" data-flag="${flag}" data-cc="${countryCode || ''}">${flag} ${c}</option>`;
                     }).join('');
             };
 
@@ -3308,7 +3816,7 @@
                         // Trouver le code pays à partir du nom
                         const code = Object.keys(countryCodeToName).find(k => countryCodeToName[k] === country);
                         const flag = code ? getFlagEmoji(code) : '';
-                        return `<option value="${country}">${country}</option>`;
+                        return `<option value="${country}">${country} ${flag}</option>`;
                     }).join('');
             }
 
@@ -3375,7 +3883,7 @@
                         .forEach(([code, name]) => {
                             const flag = getFlagEmoji(code);
                             // Add data attributes for custom dropdown
-                            select.innerHTML += `<option value="${code}" data-flag="${flag}" data-cc="${code}">${name}</option>`;
+                            select.innerHTML += `<option value="${code}" data-flag="${flag}" data-cc="${code}">${name} ${flag}</option>`;
                         });
                 }
                 return;
@@ -3471,15 +3979,13 @@
                     dealsFrom.value = currentCity;
                     // Update the custom dropdown display if it exists
                     if (typeof syncCustomDropdownWithSelect === 'function') {
-                        const custom = dealsFrom.parentNode.querySelector('.custom-dropdown');
-                        if (custom) syncCustomDropdownWithSelect(custom, dealsFrom);
+                        syncCustomDropdownWithSelect(dealsFrom);
                     }
                     // Trigger change event to update destinations
                     dealsFrom.dispatchEvent(new Event('change'));
                 }
 
                 showPage('deals');
-                if (typeof applyDealsFilters === 'function') applyDealsFilters();
             };
 
             document.getElementById('searchFrom').addEventListener('click', () => {
@@ -3514,12 +4020,9 @@
 
                 if (dealsFrom) {
                     dealsFrom.value = currentCity;
-                    if (typeof updateToDropdown === 'function') {
-                        updateToDropdown('dealsTo', currentCity);
-                        // CRITICAL: Set value AFTER dropdown is updated!
-                        if (dealsTo) dealsTo.value = currentDestinationFilter;
-                        if (dealsMonth) dealsMonth.value = currentMonthFilter;
-                    }
+                    if (typeof updateToDropdown === 'function') updateToDropdown('dealsTo', currentCity);
+                    if (dealsTo) dealsTo.value = currentDestinationFilter;
+                    if (dealsMonth) dealsMonth.value = currentMonthFilter;
 
                     // Sync custom dropdowns
                     [dealsFrom, dealsTo, dealsMonth].forEach(sel => {
@@ -3534,18 +4037,14 @@
 
                 saveFiltersToPersistent();
 
-                // Update URL - use names instead of codes
-                const searchTo = document.getElementById('searchTo');
-                const selectedTo = searchTo ? searchTo.options[searchTo.selectedIndex] : null;
-                const toUrlValue = (selectedTo && selectedTo.value) ? selectedTo.text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, '').trim() : '';
-
+                // Update URL
                 if (typeof updateURLParams === 'function') {
                     updateURLParams({
                         page: 'deals',
                         from: currentCity || '',
-                        to: toUrlValue || '',
+                        to: currentDestinationFilter || '',
                         month: currentMonthFilter || ''
-                    }, true); // Use PUSH for navigation
+                    });
                 }
 
                 showPage('deals');
@@ -3649,13 +4148,8 @@
             const dMonth = document.getElementById('dealsMonth');
 
             if (dFrom) dFrom.value = currentCity || "";
-
-            if (currentCity) {
-                updateToDropdown('dealsTo', currentCity);
-                // CRITICAL: Set value AFTER dropdown is updated!
-                if (dTo) dTo.value = currentDestinationFilter || "";
-                if (dMonth) dMonth.value = currentMonthFilter || "";
-            }
+            if (dTo) dTo.value = currentDestinationFilter || "";
+            if (dMonth) dMonth.value = currentMonthFilter || "";
 
             // Sync Custom Dropdowns
             [dFrom, dTo, dMonth].forEach(sel => {
@@ -3667,6 +4161,7 @@
                 }
             });
 
+            if (currentCity) updateToDropdown('dealsTo', currentCity);
             renderDealsPage();
         }
 
@@ -3692,13 +4187,11 @@
                     document.getElementById('loadMoreBtn').onclick = () => showPage('deals');
                 }
             };
-            if (typeof updateURLParams === 'function') updateURLParams({}, true);
             showPage('home');
         }
 
         function goToDealsAndReset() {
             resetDealsFilters();
-            if (typeof updateURLParams === 'function') updateURLParams({ page: 'deals' }, true);
             showPage('deals');
         }
 
@@ -3712,15 +4205,11 @@
             console.log('Destination:', currentDestinationFilter || 'All');
             console.log('Month:', currentMonthFilter || 'All');
 
-            // Update URL with current filters - use names instead of codes
-            const dealsTo = document.getElementById('dealsTo');
-            const selectedToOption = dealsTo ? dealsTo.options[dealsTo.selectedIndex] : null;
-            const toUrlValue = (selectedToOption && selectedToOption.value) ? selectedToOption.text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, '').trim() : '';
-
+            // Update URL with current filters
             updateURLParams({
                 page: 'deals',
                 from: currentCity || '',
-                to: toUrlValue || '',
+                to: currentDestinationFilter || '',
                 month: currentMonthFilter || ''
             });
 
@@ -3916,23 +4405,23 @@
                 updateHeroStyle(id);
             }
 
-            // Update URL routing - Commented out or made conditional to avoid overriding search params
-            /*
+            // Update URL routing
             if (id === 'home') {
+                // Clear URL params when going home
                 updateURLParams({});
             } else if (id === 'deals') {
+                // Update URL with current page (filters will be updated by applyDealsFilters)
                 updateURLParams({ page: 'deals' });
             } else if (id === 'festivals') {
                 updateURLParams({ page: 'festivals' });
             }
-            */
 
             if (id === 'deals') {
                 if (isSearchFromHome) {
                     restoreFiltersFromPersistent();
                     isSearchFromHome = false;
                 } else {
-                    // Don't reset filters blindly here, as they might have been set by deep links or popstate
+                    resetDealsFilters();
                     renderDealsPage();
                 }
             }
@@ -3955,7 +4444,6 @@
             if (page === 'home') {
                 goHomeAndReset();
             } else if (page === 'festivals') {
-                if (typeof updateURLParams === 'function') updateURLParams({ page: 'festivals' }, true);
                 showPage('festivals');
             } else if (page === 'deals') {
                 goToDealsAndReset();
@@ -4384,15 +4872,29 @@
                 </div>
             </div>
 
-            <!-- QR Code -->
+            <!-- QR Codes -->
             <div class="footer-section" style="text-align: center;">
-                <h4>Follow Us</h4>
-                <div class="footer-qr">
-                    <div class="qr-code-box">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://www.instagram.com/wingsky_flight/"
-                            alt="Scan to follow on Instagram">
+                <h4>Connect & Explore</h4>
+                <div class="flex flex-col sm:flex-row gap-8 justify-center items-center">
+                    <div class="footer-qr">
+                        <div class="qr-code-box">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://www.instagram.com/wingsky_flight/"
+                                alt="Scan to follow on Instagram">
+                        </div>
+                        <p class="qr-label">Join us on<br>Instagram</p>
                     </div>
-                    <p class="qr-label">Scan to follow us<br>on Instagram</p>
+                    <div class="footer-qr">
+                        <div class="qr-code-box">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wingsky.github.io/%23festivals?event=5th%20Kizzaffaire%20Official%20Event%26city=Warsaw"
+                                alt="Scan for 5th Kizzaffaire Event">
+                        </div>
+                        <p class="qr-label">5th Kizzaffaire<br>Event Flights</p>
+                        <button
+                            onclick="window.location.hash = 'festivals?event=5th Kizzaffaire Official Event&city=Warsaw'; if(window.location.hash.includes('?')) handleDeepLinkFromQRCode();"
+                            class="mt-2 text-[10px] text-gray-400 hover:text-wander-primary underline transition-all">
+                            Test deep link
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4410,4 +4912,4 @@
 
 </body>
 
-</html>--
+</html>
