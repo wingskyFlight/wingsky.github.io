@@ -172,6 +172,217 @@
             object-fit: cover;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
+
+        /* ========== PREMIUM FOOTER ========== */
+        .premium-footer {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 60px 20px 30px;
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--wander-primary), var(--wander-accent), var(--wander-primary));
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--wander-primary), var(--wander-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-tagline {
+            color: #9ca3af;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--wander-primary);
+            padding-left: 5px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 600px) {
+            .footer-social {
+                justify-content: center;
+            }
+        }
+
+        .social-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .social-icon.instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        }
+
+        .social-icon.facebook {
+            background: #1877f2;
+        }
+
+        .social-icon.tiktok {
+            background: #000;
+            border: 1px solid #333;
+        }
+
+        .social-icon.pinterest {
+            background: #e60023;
+        }
+
+        .social-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+        }
+
+        .footer-qr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .qr-code-box {
+            background: white;
+            padding: 12px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .qr-code-box img {
+            width: 120px;
+            height: 120px;
+            display: block;
+        }
+
+        .qr-label {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        .footer-bottom {
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 600px) {
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .footer-copyright {
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        .footer-copyright span {
+            color: var(--wander-primary);
+            font-weight: 600;
+        }
+
+        .footer-made-with {
+            color: #6b7280;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .footer-made-with .heart {
+            color: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
     </style>
     <style>
         /* --- INTEGRATION DES STYLES V2/V3 --- */
@@ -480,14 +691,14 @@
             /* Fix for main container overflow */
             .max-w-\[1240px\] {
                 max-width: 100%;
-                overflow: hidden;
+                overflow: visible;
             }
 
             .hero-wrapper {
                 max-width: 100%;
                 margin-left: 0;
                 margin-right: 0;
-                overflow: hidden;
+                overflow: visible;
             }
 
             .hero-wrapper::before {
@@ -564,6 +775,15 @@
                 width: calc(100% - 16px);
             }
 
+            .glass-header::before {
+                border-radius: 16px;
+            }
+
+            .search-widget-container {
+                z-index: 50;
+                /* Plus haut que d'autres éléments absolus */
+            }
+
             .hero-centered-text h2 {
                 font-size: 1.45rem;
             }
@@ -605,7 +825,16 @@
             .container {
                 padding: 0 8px;
                 max-width: 100%;
-                overflow: hidden;
+                overflow: visible;
+                /* Fix pour les dropdowns */
+            }
+
+            /* Ajustement pour que les dropdowns ne sortent pas de l'écran sur mobile */
+            .custom-dropdown-menu {
+                left: 0 !important;
+                right: 0 !important;
+                width: auto !important;
+                min-width: 280px;
             }
 
             main {
@@ -1223,6 +1452,11 @@
             text-transform: uppercase;
         }
 
+        .custom-dropdown-trigger .trigger-text.placeholder {
+            font-size: 0.65rem;
+            color: #94A3B8;
+        }
+
         .custom-dropdown-trigger .flag-emoji {
             font-size: 1.2em;
             line-height: 1;
@@ -1396,9 +1630,6 @@
                     <li><a href="#festivals"
                             class="text-[#556068] hover:text-[#2C3E50] font-medium text-sm transition nav-trigger nav-link flex items-center gap-2"
                             data-page="festivals"><i class="fa-solid fa-champagne-glasses"></i> Festivals</a></li>
-                    <li><a href="#"
-                            class="bg-[#F4F6F7] px-5 py-2 rounded-full text-[#2C3E50] font-semibold text-sm">Support</a>
-                    </li>
                     <!-- Custom Language Selector with Flags -->
                     <li class="custom-lang-selector" id="langSelector">
                         <div class="lang-trigger" onclick="this.parentElement.classList.toggle('open')">
@@ -1652,9 +1883,6 @@
             <div class="py-20">
                 <div
                     class="bg-gradient-to-r from-wander-primary to-wander-primaryDark rounded-3xl p-10 text-center text-white max-w-4xl mx-auto shadow-2xl relative overflow-hidden">
-                    <div
-                        class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
-                    </div>
                     <h3 class="text-3xl md:text-5xl font-black mb-4 relative z-10">Unlock Secret Deals</h3>
                     <p class="text-lg md:text-xl mb-8 opacity-90 relative z-10">Get exclusive deals delivered straight
                         to your inbox.</p>
@@ -1757,42 +1985,6 @@
             </div>
         </div>
     </div>
-
-    <footer class="bg-gradient-to-br from-wander-primary to-wander-primaryDark text-white py-16 text-center">
-        <div class="max-w-4xl mx-auto px-4">
-            <h3 class="text-4xl font-black mb-4">Wingsky</h3>
-            <p class="text-xl mb-8">Real deals. Real savings. Attractive prices.</p>
-
-            <div class="flex justify-center gap-8 mb-8">
-                <a href="#" class="hover:text-wander-light transition transform hover:scale-110" aria-label="Instagram">
-                    <i data-lucide="instagram" class="w-8 h-8"></i>
-                </a>
-                <a href="#" class="hover:text-wander-light transition transform hover:scale-110" aria-label="Twitter">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-twitter">
-                        <path
-                            d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z">
-                        </path>
-                    </svg>
-                </a>
-                <a href="#" class="hover:text-wander-light transition transform hover:scale-110" aria-label="Pinterest">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-pin">
-                        <line x1="12" x2="12" y1="17" y2="22"></line>
-                        <path
-                            d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z">
-                        </path>
-                    </svg>
-                </a>
-            </div>
-
-            <div class="text-sm opacity-70">
-                &copy; 2025 Wingsky. All rights reserved.
-            </div>
-        </div>
-    </footer>
 
     <script>
         console.log("SCRIPT STARTING");
@@ -2354,7 +2546,7 @@
                         <div class="flex items-center gap-2 text-sm text-gray-600 mb-2">
                             <i data-lucide="map-pin" class="w-4 h-4 text-wander-primary"></i> ${f.city}
                         </div>
-                        <div class="flex items-center gap-2 text-sm font-bold text-wander-primary mb-3">
+                        <div class="flex items-center gap-2 text-sm font-black text-wander-primary mb-3">
                             <i data-lucide="calendar" class="w-4 h-4"></i> ${f.start} - ${f.end}
                         </div>
                         <div class="flex gap-2">
@@ -2726,7 +2918,7 @@
             };
         }
 
-        function updateURLParams(params) {
+        function updateURLParams(params, push = false) {
             const url = new URL(window.location.href);
 
             // Clear existing params we manage
@@ -2738,8 +2930,26 @@
             });
 
             // Update URL without page reload
-            history.replaceState(null, '', url.toString());
+            if (push) {
+                history.pushState(null, '', url.toString());
+            } else {
+                history.replaceState(null, '', url.toString());
+            }
         }
+
+        // Handle navigation back/forward button
+        window.onpopstate = () => {
+            const params = getURLParams();
+            if (params.page === 'deals') {
+                handleDealsDeepLink();
+            } else if (params.page === 'festivals') {
+                showPage('festivals');
+            } else {
+                // If on home, we might need a reset
+                if (typeof goHomeAndReset === 'function') goHomeAndReset();
+                else showPage('home');
+            }
+        };
 
         function handleDealsDeepLink() {
             const params = getURLParams();
@@ -2779,11 +2989,18 @@
                                     // Try to find by country code or name
                                     const options = Array.from(toSelect.options);
                                     const matchOption = options.find(o =>
-                                        o.value.toLowerCase() === toValue.toLowerCase()
+                                        o.value.toLowerCase() === toValue.toLowerCase() ||
+                                        o.text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, '').trim().toLowerCase() === toValue.toLowerCase()
                                     );
                                     if (matchOption) {
                                         toSelect.value = matchOption.value;
                                         currentDestinationFilter = matchOption.value;
+
+                                        // Sync custom dropdown
+                                        const custom = toSelect.parentNode.querySelector('.custom-dropdown');
+                                        if (custom && typeof syncCustomDropdownWithSelect === 'function') {
+                                            syncCustomDropdownWithSelect(custom, toSelect);
+                                        }
                                     }
                                 }
 
@@ -2899,8 +3116,9 @@
             trigger.className = 'custom-dropdown-trigger';
 
             // Get default option text
-            const defaultOption = select.options[0];
-            trigger.innerHTML = `<span class="trigger-text">${defaultOption ? defaultOption.text : 'Select...'}</span>`;
+            const defaultOption = select.options[select.selectedIndex] || select.options[0];
+            const isPlaceholder = !defaultOption || !defaultOption.value;
+            trigger.innerHTML = `<span class="trigger-text ${isPlaceholder ? 'placeholder' : ''}">${defaultOption ? defaultOption.text : 'Select...'}</span>`;
 
             // Create dropdown menu
             const menu = document.createElement('div');
@@ -3008,7 +3226,7 @@
 
                 const flag = option.dataset.flag || '';
                 const cc = option.dataset.cc || '';
-                const text = option.text.replace(/^[\u{1F1E6}-\u{1F1FF}]{2}\s*/u, '').trim(); // Remove emoji from text
+                const text = option.text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, '').trim(); // Remove all flag emojis from text
 
                 item.dataset.value = option.value;
                 item.dataset.text = text;
@@ -3041,13 +3259,14 @@
             const selectedOption = select.options[select.selectedIndex];
             if (!selectedOption) return;
 
+            const isPlaceholder = !selectedOption || !selectedOption.value;
             const flag = selectedOption.dataset.flag || '';
-            const text = selectedOption.text.replace(/^[\u{1F1E6}-\u{1F1FF}]{2}\s*/u, '').trim();
+            const text = selectedOption.text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, '').trim();
 
             if (flag && selectedOption.value) {
-                trigger.innerHTML = `<span class="flag-emoji">${flag}</span><span class="trigger-text">${text}</span>`;
+                trigger.innerHTML = `<span class="flag-emoji">${flag}</span><span class="trigger-text ${isPlaceholder ? 'placeholder' : ''}">${text}</span>`;
             } else {
-                trigger.innerHTML = `<span class="trigger-text">${text}</span>`;
+                trigger.innerHTML = `<span class="trigger-text ${isPlaceholder ? 'placeholder' : ''}">${text}</span>`;
             }
 
             // Update selected state in menu
@@ -3064,7 +3283,8 @@
                         // Priorité aux données dynamiques de Supabase, fallback sur le mapping statique
                         const countryCode = cityCountryMap[c] || cityToCountryCode[c];
                         const flag = countryCode ? getFlagEmoji(countryCode) : '🌐';
-                        return `<option value="${c}" data-flag="${flag}" data-cc="${countryCode || ''}">${flag} ${c}</option>`;
+                        // Remove flag from text, it's handled by data-flag in custom dropdown
+                        return `<option value="${c}" data-flag="${flag}" data-cc="${countryCode || ''}">${c}</option>`;
                     }).join('');
             };
 
@@ -3088,7 +3308,7 @@
                         // Trouver le code pays à partir du nom
                         const code = Object.keys(countryCodeToName).find(k => countryCodeToName[k] === country);
                         const flag = code ? getFlagEmoji(code) : '';
-                        return `<option value="${country}">${country} ${flag}</option>`;
+                        return `<option value="${country}">${country}</option>`;
                     }).join('');
             }
 
@@ -3155,7 +3375,7 @@
                         .forEach(([code, name]) => {
                             const flag = getFlagEmoji(code);
                             // Add data attributes for custom dropdown
-                            select.innerHTML += `<option value="${code}" data-flag="${flag}" data-cc="${code}">${name} ${flag}</option>`;
+                            select.innerHTML += `<option value="${code}" data-flag="${flag}" data-cc="${code}">${name}</option>`;
                         });
                 }
                 return;
@@ -3251,13 +3471,15 @@
                     dealsFrom.value = currentCity;
                     // Update the custom dropdown display if it exists
                     if (typeof syncCustomDropdownWithSelect === 'function') {
-                        syncCustomDropdownWithSelect(dealsFrom);
+                        const custom = dealsFrom.parentNode.querySelector('.custom-dropdown');
+                        if (custom) syncCustomDropdownWithSelect(custom, dealsFrom);
                     }
                     // Trigger change event to update destinations
                     dealsFrom.dispatchEvent(new Event('change'));
                 }
 
                 showPage('deals');
+                if (typeof applyDealsFilters === 'function') applyDealsFilters();
             };
 
             document.getElementById('searchFrom').addEventListener('click', () => {
@@ -3284,9 +3506,51 @@
                 currentDestinationFilter = document.getElementById('searchTo').value;
                 currentMonthFilter = document.getElementById('searchMonth').value;
                 isSearchFromHome = true;
+
+                // Sync with Deals page elements
+                const dealsFrom = document.getElementById('dealsFrom');
+                const dealsTo = document.getElementById('dealsTo');
+                const dealsMonth = document.getElementById('dealsMonth');
+
+                if (dealsFrom) {
+                    dealsFrom.value = currentCity;
+                    if (typeof updateToDropdown === 'function') {
+                        updateToDropdown('dealsTo', currentCity);
+                        // CRITICAL: Set value AFTER dropdown is updated!
+                        if (dealsTo) dealsTo.value = currentDestinationFilter;
+                        if (dealsMonth) dealsMonth.value = currentMonthFilter;
+                    }
+
+                    // Sync custom dropdowns
+                    [dealsFrom, dealsTo, dealsMonth].forEach(sel => {
+                        if (sel && sel.parentNode) {
+                            const custom = sel.parentNode.querySelector('.custom-dropdown');
+                            if (custom && typeof syncCustomDropdownWithSelect === 'function') {
+                                syncCustomDropdownWithSelect(custom, sel);
+                            }
+                        }
+                    });
+                }
+
                 saveFiltersToPersistent();
+
+                // Update URL - use names instead of codes
+                const searchTo = document.getElementById('searchTo');
+                const selectedTo = searchTo ? searchTo.options[searchTo.selectedIndex] : null;
+                const toUrlValue = (selectedTo && selectedTo.value) ? selectedTo.text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, '').trim() : '';
+
+                if (typeof updateURLParams === 'function') {
+                    updateURLParams({
+                        page: 'deals',
+                        from: currentCity || '',
+                        to: toUrlValue || '',
+                        month: currentMonthFilter || ''
+                    }, true); // Use PUSH for navigation
+                }
+
                 showPage('deals');
-                // Aussi mettre à jour le style du hero pour Deals
+                if (typeof applyDealsFilters === 'function') applyDealsFilters();
+
                 if (typeof updateHeroStyle === 'function') updateHeroStyle('deals');
             };
 
@@ -3380,11 +3644,29 @@
             currentDestinationFilter = persistentFilters.destination;
             currentMonthFilter = persistentFilters.month;
 
-            if (document.getElementById('dealsFrom')) document.getElementById('dealsFrom').value = currentCity || "";
-            if (document.getElementById('dealsTo')) document.getElementById('dealsTo').value = currentDestinationFilter || "";
-            if (document.getElementById('dealsMonth')) document.getElementById('dealsMonth').value = currentMonthFilter || "";
+            const dFrom = document.getElementById('dealsFrom');
+            const dTo = document.getElementById('dealsTo');
+            const dMonth = document.getElementById('dealsMonth');
 
-            if (currentCity) updateToDropdown('dealsTo', currentCity);
+            if (dFrom) dFrom.value = currentCity || "";
+
+            if (currentCity) {
+                updateToDropdown('dealsTo', currentCity);
+                // CRITICAL: Set value AFTER dropdown is updated!
+                if (dTo) dTo.value = currentDestinationFilter || "";
+                if (dMonth) dMonth.value = currentMonthFilter || "";
+            }
+
+            // Sync Custom Dropdowns
+            [dFrom, dTo, dMonth].forEach(sel => {
+                if (sel && sel.parentNode) {
+                    const custom = sel.parentNode.querySelector('.custom-dropdown');
+                    if (custom && typeof syncCustomDropdownWithSelect === 'function') {
+                        syncCustomDropdownWithSelect(custom, sel);
+                    }
+                }
+            });
+
             renderDealsPage();
         }
 
@@ -3410,11 +3692,13 @@
                     document.getElementById('loadMoreBtn').onclick = () => showPage('deals');
                 }
             };
+            if (typeof updateURLParams === 'function') updateURLParams({}, true);
             showPage('home');
         }
 
         function goToDealsAndReset() {
             resetDealsFilters();
+            if (typeof updateURLParams === 'function') updateURLParams({ page: 'deals' }, true);
             showPage('deals');
         }
 
@@ -3428,11 +3712,15 @@
             console.log('Destination:', currentDestinationFilter || 'All');
             console.log('Month:', currentMonthFilter || 'All');
 
-            // Update URL with current filters
+            // Update URL with current filters - use names instead of codes
+            const dealsTo = document.getElementById('dealsTo');
+            const selectedToOption = dealsTo ? dealsTo.options[dealsTo.selectedIndex] : null;
+            const toUrlValue = (selectedToOption && selectedToOption.value) ? selectedToOption.text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, '').trim() : '';
+
             updateURLParams({
                 page: 'deals',
                 from: currentCity || '',
-                to: currentDestinationFilter || '',
+                to: toUrlValue || '',
                 month: currentMonthFilter || ''
             });
 
@@ -3461,7 +3749,7 @@
                             <img src="${depFlagUrl}" alt="${d.from}" class="w-5 h-4 object-cover rounded-sm shadow-sm" onerror="this.style.display='none'">
                             <span class="font-bold">${d.from}</span>
                         </span>
-                        <span class="text-sm font-bold text-wander-primary uppercase tracking-widest bg-wander-light px-2 py-1 rounded-md border border-wander-primary/20">${d.date}</span>
+                        <span class="text-sm font-black text-wander-primary uppercase tracking-widest bg-wander-light px-2 py-1 rounded-md border border-wander-primary/20">${d.date}</span>
                     </div>
                     <div class="flex flex-col items-center">
                         <span class="text-sm font-bold text-gray-400 uppercase tracking-tighter mb-1">From only</span>
@@ -3628,23 +3916,23 @@
                 updateHeroStyle(id);
             }
 
-            // Update URL routing
+            // Update URL routing - Commented out or made conditional to avoid overriding search params
+            /*
             if (id === 'home') {
-                // Clear URL params when going home
                 updateURLParams({});
             } else if (id === 'deals') {
-                // Update URL with current page (filters will be updated by applyDealsFilters)
                 updateURLParams({ page: 'deals' });
             } else if (id === 'festivals') {
                 updateURLParams({ page: 'festivals' });
             }
+            */
 
             if (id === 'deals') {
                 if (isSearchFromHome) {
                     restoreFiltersFromPersistent();
                     isSearchFromHome = false;
                 } else {
-                    resetDealsFilters();
+                    // Don't reset filters blindly here, as they might have been set by deep links or popstate
                     renderDealsPage();
                 }
             }
@@ -3667,6 +3955,7 @@
             if (page === 'home') {
                 goHomeAndReset();
             } else if (page === 'festivals') {
+                if (typeof updateURLParams === 'function') updateURLParams({ page: 'festivals' }, true);
                 showPage('festivals');
             } else if (page === 'deals') {
                 goToDealsAndReset();
@@ -4032,6 +4321,93 @@
             });
         }
     </script>
+
+    <!-- ========== PREMIUM FOOTER ========== -->
+    <footer class="premium-footer">
+        <div class="footer-container">
+            <!-- Brand Column -->
+            <div class="footer-brand">
+                <div class="footer-logo">Wingsky</div>
+                <p class="footer-tagline">
+                    Discover the best flight deals under €100. Real deals, real savings, real adventures awaiting you
+                    across Europe and beyond.
+                </p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/wingsky_flight/" target="_blank" class="social-icon instagram"
+                        title="Instagram">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.facebook.com/groups/629026353602233/" target="_blank"
+                        class="social-icon facebook" title="Facebook">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@wingssky__" target="_blank" class="social-icon tiktok"
+                        title="TikTok">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+                        </svg>
+                    </a>
+                    <a href="https://fr.pinterest.com/wingsskycontact/" target="_blank" class="social-icon pinterest"
+                        title="Pinterest">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <div class="footer-links">
+                    <a href="#home" onclick="showPage('home')">Home</a>
+                    <a href="#deals" onclick="showPage('deals')">Flight Deals</a>
+                    <a href="#festivals" onclick="showPage('festivals')">Festivals</a>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="footer-section">
+                <h4>About</h4>
+                <div class="footer-links">
+                    <a href="#">How it Works</a>
+                    <a href="https://www.facebook.com/groups/629026353602233/" target="_blank">Our Story</a>
+                    <a href="mailto:wingsky.contact@gmail.com">Contact Us</a>
+                </div>
+            </div>
+
+            <!-- QR Code -->
+            <div class="footer-section" style="text-align: center;">
+                <h4>Follow Us</h4>
+                <div class="footer-qr">
+                    <div class="qr-code-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://www.instagram.com/wingsky_flight/"
+                            alt="Scan to follow on Instagram">
+                    </div>
+                    <p class="qr-label">Scan to follow us<br>on Instagram</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p class="footer-copyright">
+                © 2024 <span>Wingsky</span>. All rights reserved.
+            </p>
+            <p class="footer-made-with">
+                Made with <span class="heart">❤️</span> for travelers worldwide
+            </p>
+        </div>
+    </footer>
+
 </body>
 
 </html>--
