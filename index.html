@@ -1836,44 +1836,94 @@
         /* Mobile adjustments for tickets */
         @media (max-width: 600px) {
             .city-flight-box {
-                padding: 14px;
-                border-radius: 18px;
+                padding: 12px;
+                border-radius: 16px;
+                min-width: unset;
+                max-width: unset;
+                width: 100%;
             }
 
             .city-tickets-row {
-                gap: 12px;
+                gap: 10px;
+                flex-wrap: nowrap;
+                justify-content: center;
             }
 
             .flight-ticket {
-                width: 130px;
+                width: 140px;
                 height: 280px;
-                --split: 195px;
+                --split: 188px;
             }
 
             .ticket-top {
-                height: 195px;
-                padding: 10px 8px 8px;
+                height: 188px;
+                padding: 8px 6px 8px;
             }
 
             .ticket-bottom {
-                height: 80px;
+                min-height: 85px;
+                flex: 0 0 auto;
             }
 
             .route-iata {
-                font-size: 18px;
+                font-size: 20px;
+            }
+
+            .route-city-label {
+                font-size: 10px;
             }
 
             .ticket-price-value {
-                font-size: 16px;
+                font-size: 25px;
+            }
+
+            .ticket-price-label {
+                font-size: 8px;
             }
 
             .ticket-logo {
-                font-size: 12px;
+                font-size: 15px;
             }
 
             .ticket-qr {
-                width: 48px;
-                height: 48px;
+                width: 70px;
+                height: 70px;
+            }
+
+            .ticket-dates {
+                padding: 6px 7px;
+                margin-bottom: 5px;
+            }
+
+            .ticket-date-val {
+                font-size: 11px;
+            }
+
+            .ticket-price-container {
+                padding-bottom: 2px;
+            }
+
+            .route-arrow-row {
+                padding: 4px 0;
+            }
+
+            .route-flag {
+                font-size: 14px;
+            }
+
+            .route-arrow-icon {
+                width: 17px;
+                height: 17px;
+            }
+
+            .ticket-arrow-icon {
+                width: 14px;
+                height: 14px;
+            }
+
+            .tickets-container {
+                gap: 16px;
+                padding: 8px;
             }
         }
     </style>
@@ -4882,18 +4932,6 @@
                                 alt="Scan to follow on Instagram">
                         </div>
                         <p class="qr-label">Join us on<br>Instagram</p>
-                    </div>
-                    <div class="footer-qr">
-                        <div class="qr-code-box">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wingsky.github.io/%23festivals?event=5th%20Kizzaffaire%20Official%20Event%26city=Warsaw"
-                                alt="Scan for 5th Kizzaffaire Event">
-                        </div>
-                        <p class="qr-label">5th Kizzaffaire<br>Event Flights</p>
-                        <button
-                            onclick="window.location.hash = 'festivals?event=5th Kizzaffaire Official Event&city=Warsaw'; if(window.location.hash.includes('?')) handleDeepLinkFromQRCode();"
-                            class="mt-2 text-[10px] text-gray-400 hover:text-wander-primary underline transition-all">
-                            Test deep link
-                        </button>
                     </div>
                 </div>
             </div>
