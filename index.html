@@ -1013,6 +1013,34 @@
             border-top: 2px dashed #e5e7eb;
         }
 
+        /* SHAKE ANIMATION SLOWER */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-4px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(4px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.8s ease-in-out !important;
+        }
+
         /* ========== CUSTOM DROPDOWN STYLES ========== */
         .custom-dropdown {
             position: relative;
@@ -2712,13 +2740,20 @@
                         // Show error
                         if (errorMsg) {
                             errorMsg.classList.remove('hidden');
-                            // Small shake animation
-                            customDropdown.animate([
+
+                            // Find searchFrom custom dropdown wrapper
+                            const searchFromDropdown = searchFrom.parentNode.querySelector('.custom-dropdown');
+                            const targetToAnimate = searchFromDropdown || customDropdown;
+
+                            // Slow shake animation on the SearchFrom element (to draw attention there)
+                            targetToAnimate.animate([
                                 { transform: 'translateX(0)' },
-                                { transform: 'translateX(-5px)' },
-                                { transform: 'translateX(5px)' },
+                                { transform: 'translateX(-6px)' },
+                                { transform: 'translateX(6px)' },
+                                { transform: 'translateX(-6px)' },
+                                { transform: 'translateX(6px)' },
                                 { transform: 'translateX(0)' }
-                            ], { duration: 300 });
+                            ], { duration: 600, easing: 'ease-in-out' }); // Slower (600ms)
                         }
                         return; // Prevent opening
                     } else {
