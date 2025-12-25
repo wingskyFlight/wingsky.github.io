@@ -12,16 +12,26 @@
     <title>Wingsky – Real Flight Deals</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // SUPABASE CONFIGURATION
         const SUPABASE_URL = 'https://cmxrottwkqkevtmpcdjr.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_e5rESzLOStr5VKNBwz-oPg_C7l5V6R5';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNteHJvdHR3a3FrZXZ0bXBjZGpyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NTc0NDA3MCwiZXhwIjoyMDgxMzIwMDcwfQ.Ag4yw72RJmo9z3sa8UaEoDtmt0TyqoqAZ_c1nAcvH4w'; // ⚠️ WARNING: This is a SERVICE_ROLE key - replace with ANON key for production!
 
         // Initialisation du client
         let supabaseClient = null;
-        if (typeof supabase !== 'undefined') {
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        function initSupabase() {
+            if (typeof supabase !== 'undefined') {
+                try {
+                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                    console.log("✅ Supabase Client initialized successfully");
+                } catch (e) {
+                    console.error("❌ Failed to create Supabase client:", e);
+                }
+            } else {
+                console.warn("⚠️ Supabase SDK not found. Check if the script is loaded correctly.");
+            }
         }
     </script>
     <link
@@ -1572,7 +1582,7 @@
                 }
 
                 // 2. FALLBACK TO LOCAL CSV
-                const response = await fetch('/data/inputs/airport_Europe.csv');
+                const response = await fetch('data/inputs/airport_Europe.csv');
                 if (response.ok) {
                     const text = await response.text();
                     const lines = text.trim().split('\n').slice(1); // Skip header
@@ -1636,6 +1646,9 @@
         }
 
         async function loadData() {
+            console.log("🚀 loadData() starting...");
+            initSupabase(); // Initialize right before loading data
+
             try {
                 await Promise.all([
                     fetchAirportData(),
@@ -1643,8 +1656,9 @@
                     fetchLatestDealsCSV(),
                     fetchFestivalData()
                 ]);
+                console.log("✅ All data fetches completed");
             } catch (e) {
-                console.error("Critical Error loading data:", e);
+                console.error("❌ Critical Error loading data:", e);
                 const container = document.getElementById('homeDeals');
                 if (container) {
                     container.innerHTML = `
@@ -1654,13 +1668,12 @@
                                 <div>
                                     <h3 class="font-bold text-red-700">Data Loading Error</h3>
                                     <p class="text-sm text-red-600 mt-1">
-                                        Could not fetch data. Ensure you are running a local server (CORS restriction).<br>
-                                        Error: ${e.message}
+                                        Could not fetch data. Error: ${e.message}
                                     </p>
                                 </div>
                             </div>
                         </div>`;
-                    lucide.createIcons();
+                    if (window.lucide) lucide.createIcons();
                 }
             }
             initApp();
@@ -1764,7 +1777,7 @@
                 const dd = String(d.getDate()).padStart(2, '0');
                 const dateStr = `${yyyy}${mm}${dd}`;
 
-                const path = `/data/outputs/final_sheets/${dateStr}/all_merged_${dateStr}.csv`;
+                const path = `data/outputs/final_sheets/${dateStr}/all_merged_${dateStr}.csv`;
 
                 try {
                     const response = await fetch(path);
@@ -1857,7 +1870,7 @@
 
             // Note: I'm keeping the map logic inside the fallback block below
             const fetchPromises = monthNames.map(async (month) => {
-                const path = `/data/inputs/festivals/festivals_data/${month}.csv`;
+                const path = `data/inputs/festivals/festivals_data/${month}.csv`;
                 try {
                     const response = await fetch(path);
                     if (response.ok) {
@@ -1943,7 +1956,7 @@
             const sortedList = [...list].sort((a, b) => a.title.localeCompare(b.title));
 
             container.innerHTML = sortedList.map(f => {
-                const imgPath = `/data/inputs/festivals/festivals_images/${f.month}/${f.image}`;
+                const imgPath = `data/inputs/festivals/festivals_images/${f.month}/${f.image}`;
                 const festivalId = `${f.month}_${f.city}`.replace(/\s/g, '_');
 
                 return `
