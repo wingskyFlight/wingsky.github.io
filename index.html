@@ -2713,8 +2713,6 @@
                             }
                         });
 
-                        populateDropdowns();
-                        renderHomeDeals();
                         return; // Success, skip CSV
                     }
                 }
@@ -3926,6 +3924,8 @@
 
 
         function populateDropdowns() {
+            let initialCity = persistentFilters.city;
+
             const generateOptions = (defaultText) => {
                 return `<option value="">${defaultText}</option>` +
                     availableCities.map(c => {
@@ -3960,9 +3960,9 @@
                     }).join('');
             }
 
-            const months = getNextThreeMonths();
-            document.getElementById('searchMonth').innerHTML = '<option value="">Any month</option>' + months.map(m => `<option value="${m}">${m}</option>`).join('');
-            document.getElementById('dealsMonth').innerHTML = '<option value="">Any month</option>' + months.map(m => `<option value="${m}">${m}</option>`).join('');
+            // Initial month population based on available data
+            updateMonthDropdown('searchMonth', initialCity, "");
+            updateMonthDropdown('dealsMonth', initialCity, "");
 
             // FESTIVALS : Peupler le dropdown de mois avec TOUS les 12 mois
             const festivalMonthEl = document.getElementById('festivalMonthFilter');
@@ -3971,7 +3971,6 @@
             }
 
             // INITIALIZATION: Set default selection and update 'available destinations'
-            let initialCity = persistentFilters.city;
 
             if (initialCity) {
                 const dealsFrom = document.getElementById('dealsFrom');
@@ -4026,6 +4025,12 @@
                             select.innerHTML += `<option value="${code}" data-flag="${flag}" data-cc="${code}">${name} ${flag}</option>`;
                         });
                 }
+
+                // Also update Month dropdown for this prefix (search or deals)
+                const prefix = selectId.replace('To', '');
+                const currentFrom = document.getElementById(prefix + 'From').value;
+                updateMonthDropdown(prefix + 'Month', currentFrom, select.value);
+
                 return;
             }
 
@@ -4048,6 +4053,54 @@
             } else {
                 console.log('No UpdateToDropdown match for:', key);
             }
+        }
+
+        function updateMonthDropdown(selectId, fromCity, toValue) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+
+            const existingValue = select.value;
+            select.innerHTML = '<option value="">Any month</option>';
+
+            if (!fromCity) return;
+
+            let filteredDeals = allDeals.filter(d => d.from === fromCity);
+
+            if (toValue) {
+                if (toValue.length === 2) {
+                    filteredDeals = filteredDeals.filter(d => d.countryCode && d.countryCode.toLowerCase() === toValue.toLowerCase());
+                } else {
+                    filteredDeals = filteredDeals.filter(d => d.to === toValue);
+                }
+            }
+
+            const availableMonths = new Set();
+            filteredDeals.forEach(d => {
+                if (!d.date) return;
+                monthNames.forEach(m => {
+                    const shortM = m.substring(0, 3);
+                    if (d.date.includes(m) || d.date.includes(shortM)) {
+                        availableMonths.add(m);
+                    }
+                });
+            });
+
+            const threeMonths = getNextThreeMonths();
+            threeMonths.forEach(mWithYear => {
+                const monthName = mWithYear.split(' ')[0];
+                if (availableMonths.has(monthName)) {
+                    select.innerHTML += `<option value="${mWithYear}">${mWithYear}</option>`;
+                }
+            });
+
+            if (Array.from(select.options).some(opt => opt.value === existingValue)) {
+                select.value = existingValue;
+            } else {
+                select.value = "";
+            }
+
+            const custom = select.parentNode?.querySelector('.custom-dropdown');
+            if (custom) syncCustomDropdownWithSelect(custom, select);
         }
 
         function startSloganRotation() {
@@ -4077,10 +4130,28 @@
 
         function setupEvents() {
             console.log('setupEvents initialized');
-            document.getElementById('searchFrom').addEventListener('change', () => updateToDropdown('searchTo', document.getElementById('searchFrom').value));
 
-            // dealsFrom listener is now handled by the global listener above
+            // Home/Search listeners
+            document.getElementById('searchFrom').addEventListener('change', () => {
+                const city = document.getElementById('searchFrom').value;
+                updateToDropdown('searchTo', city);
+                updateMonthDropdown('searchMonth', city, document.getElementById('searchTo').value);
+            });
+            document.getElementById('searchTo').addEventListener('change', () => {
+                updateMonthDropdown('searchMonth', document.getElementById('searchFrom').value, document.getElementById('searchTo').value);
+            });
 
+            // Deals listeners
+            document.getElementById('dealsFrom').addEventListener('change', () => {
+                const city = document.getElementById('dealsFrom').value;
+                updateToDropdown('dealsTo', city);
+                updateMonthDropdown('dealsMonth', city, document.getElementById('dealsTo').value);
+            });
+            document.getElementById('dealsTo').addEventListener('change', () => {
+                updateMonthDropdown('dealsMonth', document.getElementById('dealsFrom').value, document.getElementById('dealsTo').value);
+            });
+
+            // Popup listener
             document.getElementById('popupFromCity').addEventListener('change', e => {
                 const val = e.target.value;
                 document.getElementById('goToDealsBtn').disabled = !val;
