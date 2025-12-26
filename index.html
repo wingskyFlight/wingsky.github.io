@@ -1931,9 +1931,48 @@
 
 <body class="bg-gray-50 overflow-x-hidden">
 
+    <!-- PAGE TRANSITION LOADER -->
+    <div id="pageLoader"
+        class="fixed inset-0 bg-white/60 backdrop-blur-md z-[800] hidden flex-col items-center justify-center transition-opacity duration-300">
+        <div class="relative scale-75">
+            <div class="w-20 h-20 border-8 border-purple-100 border-t-purple-600 rounded-full animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <i data-lucide="plane" class="w-6 h-6 text-purple-600 animate-bounce"></i>
+            </div>
+        </div>
+        <p class="mt-4 text-purple-600 text-[10px] font-black uppercase tracking-[0.3em]">Updating Skyview...</p>
+    </div>
+
+    <!-- GLOBAL LOADER -->
+    <div id="globalLoader"
+        class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="relative">
+            <div class="w-24 h-24 border-8 border-purple-100 border-t-purple-600 rounded-full animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <i data-lucide="plane" class="w-8 h-8 text-purple-600 animate-pulse"></i>
+            </div>
+        </div>
+        <h1 class="mt-8 text-3xl font-black text-purple-600 tracking-tighter"
+            style="font-family: 'Luckiest Guy', cursive;">Wingsky</h1>
+        <p class="mt-2 text-gray-500 font-medium animate-pulse">Scanning the skies for deals...</p>
+    </div>
+
     <!-- POPUP AU DÉMARRAGE -->
-    <div id="cityPopup" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative">
+    <div id="cityPopup" class="fixed inset-0 bg-black/70 z-[500] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative overflow-hidden">
+            <!-- Popup Loader Overlay (Scanning effect) -->
+            <div id="popupLoader"
+                class="absolute inset-0 bg-white z-30 flex flex-col items-center justify-center transition-opacity duration-500">
+                <div class="relative scale-90">
+                    <div class="w-20 h-20 border-6 border-purple-100 border-t-purple-600 rounded-full animate-spin">
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i data-lucide="search" class="w-6 h-6 text-purple-600 animate-pulse"></i>
+                    </div>
+                </div>
+                <p class="mt-4 text-purple-600 text-xs font-black uppercase tracking-[0.2em] animate-pulse">Configuring
+                    your trip...</p>
+            </div>
             <button id="closePopupBtn" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100"
                 aria-label="Close popup">
                 <i data-lucide="x" class="w-8 h-8 text-gray-600"></i>
@@ -1953,9 +1992,19 @@
                 </div>
             </div>
             <button id="goToDealsBtn"
-                class="w-full h-16 bg-wander-primary hover:bg-wander-primaryDark text-white text-xl font-bold rounded-2xl shadow-xl"
+                class="w-full h-16 bg-wander-primary hover:bg-wander-primaryDark text-white text-xl font-bold rounded-2xl shadow-xl flex items-center justify-center gap-3 transition-all relative overflow-hidden"
                 disabled>
-                Show Me the Deals!
+                <span id="btnText">Show Me the Deals!</span>
+                <div id="btnSpinner" class="hidden">
+                    <svg class="animate-spin h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                </div>
             </button>
         </div>
     </div>
@@ -2194,7 +2243,7 @@
     <main class="max-w-7xl mx-auto px-4 pb-12"> <!-- Pas de padding top, géré par le widget -->
 
         <!-- HOME SECTION -->
-        <section id="home" class="content-section">
+        <section id="home" class="content-section hidden">
             <!-- Slogan maintenant affiché dans le Hero -->
             <div class="home-grid mb-16" id="homeDeals"></div>
 
@@ -2629,15 +2678,15 @@
                             if (!fromCountryCode && fromCity) fromCountryCode = cityToCountryCode[fromCity];
 
                             return {
-                                from: fromCity,
+                                from: fromCity ? fromCity.trim() : "",
                                 fromCountryCode: fromCountryCode,
-                                to: d.city_dest || d.to || d.destination,
-                                countryCode: countryCode,
+                                to: (d.city_dest || d.to || d.destination || "").trim(),
+                                countryCode: countryCode ? countryCode.toLowerCase() : "",
                                 price: parseFloat(d.price_from || d.price),
                                 date: d.date || d.date_depart,
                                 url: d.trip_url || d.url,
                                 iata: iata,
-                                cityDest: d.city_dest || d.to || d.destination,
+                                cityDest: (d.city_dest || d.to || d.destination || "").trim(),
                                 countryDest: countryDest
                             };
                         }).filter(d => d.from && d.to && !isNaN(d.price));
@@ -3405,12 +3454,12 @@
                 }
 
                 return {
-                    from: normalizedFrom,
-                    to: normalizedTo,
+                    from: normalizedFrom.trim(),
+                    to: normalizedTo.trim(),
                     price: price,
                     date: cols[7],
                     url: cols[12],
-                    countryCode: cc || 'un' // default 'un' (unknown) or skip
+                    countryCode: cc ? cc.toLowerCase() : 'un' // default 'un' (unknown) or skip
                 };
             }).filter(Boolean);
 
@@ -3428,6 +3477,7 @@
         function fallbackData() { allDeals = []; }
 
         function initApp() {
+            console.log("🚀 Initializing App...");
             populateDropdowns();
             renderHomeDeals();
             renderDealsPage();
@@ -3435,12 +3485,45 @@
             setupEvents();
             startSloganRotation();
 
-            // Check for URL deep links (e.g., ?page=deals&from=Paris&to=gb)
-            // This must be called AFTER data is loaded
-            handleDealsDeepLink();
+            // Detect current page early
+            const targetPage = window.location.hash.replace('#', '') || getURLParams().page || 'home';
+            console.log(`📍 Target Page decided: ${targetPage}`);
 
-            // Check for deep link parameters from QR code (e.g., #festivals?event=XXX&city=YYY)
+            // 1. First, check if we need to show the popup
+            const popupShownLS = localStorage.getItem('popupShown');
+            const popupShownSS = sessionStorage.getItem('popupShownThisSession');
+
+            if (popupShownLS !== 'true' && popupShownSS !== 'true' && targetPage === 'home') {
+                // Only show popup on Home page if not seen
+                const cityPopup = document.getElementById('cityPopup');
+                const popupOverlay = document.getElementById('popupLoader');
+                if (cityPopup) {
+                    cityPopup.classList.remove('hidden');
+                    cityPopup.classList.add('flex');
+
+                    // Show scanning effect for a moment
+                    if (popupOverlay) {
+                        setTimeout(() => {
+                            popupOverlay.classList.add('opacity-0');
+                            setTimeout(() => popupOverlay.classList.add('hidden'), 500);
+                        }, 1500);
+                    }
+                }
+            }
+
+            // 2. Show the correct page
+            showPage(targetPage);
+
+            // 3. Handle deep links
+            handleDealsDeepLink();
             handleDeepLinkFromQRCode();
+
+            // 4. Finally, hide the global loader with a smooth transition
+            const loader = document.getElementById('globalLoader');
+            if (loader) {
+                loader.classList.add('opacity-0');
+                setTimeout(() => loader.classList.add('hidden'), 700);
+            }
         }
 
         // Handle deep linking from V3 template QR codes
@@ -3811,6 +3894,13 @@
         }
 
         function syncCustomDropdownWithSelect(customDropdown, select) {
+            // Support for single argument call: syncCustomDropdownWithSelect(selectElement)
+            if (!select && customDropdown && customDropdown.parentNode) {
+                select = customDropdown;
+                customDropdown = select.parentNode.querySelector('.custom-dropdown');
+            }
+            if (!customDropdown || !select) return;
+
             const trigger = customDropdown.querySelector('.custom-dropdown-trigger');
             const menu = customDropdown.querySelector('.custom-dropdown-menu');
             if (!trigger || !menu) return;
@@ -4015,27 +4105,46 @@
                 }
             });
 
-            document.getElementById('goToDealsBtn').onclick = () => {
+            document.getElementById('goToDealsBtn').onclick = (e) => {
+                const btn = e.currentTarget;
+                if (btn.hasAttribute('data-loading')) return;
+
+                const btnText = document.getElementById('btnText');
+                const btnSpinner = document.getElementById('btnSpinner');
+
+                btn.setAttribute('data-loading', 'true');
+                btn.classList.add('opacity-80', 'cursor-wait');
+                if (btnText) btnText.classList.add('hidden');
+                if (btnSpinner) btnSpinner.classList.remove('hidden');
+
                 currentCity = document.getElementById('popupFromCity').value;
-                document.getElementById('cityPopup').classList.add('hidden');
-                sessionStorage.setItem('popupShown', 'true'); // Remember popup was shown
-                // Save city to persistent filters so it's restored on deals page
-                persistentFilters.city = currentCity;
-                isSearchFromHome = true;
 
-                // Sync the dealsFrom dropdown with the popup selection
-                const dealsFrom = document.getElementById('dealsFrom');
-                if (dealsFrom && currentCity) {
-                    dealsFrom.value = currentCity;
-                    // Update the custom dropdown display if it exists
-                    if (typeof syncCustomDropdownWithSelect === 'function') {
-                        syncCustomDropdownWithSelect(dealsFrom);
+                // Keep the spinner for a short moment for "loading feel"
+                setTimeout(() => {
+                    closePopupAndRemember();
+
+                    // Save city to persistent filters so it's restored on deals page
+                    persistentFilters.city = currentCity;
+                    isSearchFromHome = true;
+
+                    // Sync the dealsFrom dropdown with the popup selection
+                    const dealsFrom = document.getElementById('dealsFrom');
+                    if (dealsFrom && currentCity) {
+                        dealsFrom.value = currentCity;
+                        if (typeof syncCustomDropdownWithSelect === 'function') {
+                            syncCustomDropdownWithSelect(dealsFrom);
+                        }
+                        dealsFrom.dispatchEvent(new Event('change'));
                     }
-                    // Trigger change event to update destinations
-                    dealsFrom.dispatchEvent(new Event('change'));
-                }
 
-                showPage('deals');
+                    showPage('deals');
+
+                    // Reset button state for next time (even if popup is gone)
+                    btn.removeAttribute('data-loading');
+                    btn.classList.remove('opacity-80', 'cursor-wait');
+                    if (btnText) btnText.classList.remove('hidden');
+                    if (btnSpinner) btnSpinner.classList.add('hidden');
+                }, 800);
             };
 
             document.getElementById('searchFrom').addEventListener('click', () => {
@@ -4098,7 +4207,7 @@
                 }
 
                 showPage('deals');
-                if (typeof applyDealsFilters === 'function') applyDealsFilters();
+                // Removed applyDealsFilters() here as showPage('deals') already handles it via restoreFiltersFromPersistent() when isSearchFromHome is true
 
                 if (typeof updateHeroStyle === 'function') updateHeroStyle('deals');
             };
@@ -4197,7 +4306,12 @@
             const dTo = document.getElementById('dealsTo');
             const dMonth = document.getElementById('dealsMonth');
 
-            if (dFrom) dFrom.value = currentCity || "";
+            if (dFrom) {
+                dFrom.value = currentCity || "";
+                // Populate the "To" dropdown with correct options before setting its value
+                if (currentCity) updateToDropdown('dealsTo', currentCity);
+            }
+
             if (dTo) dTo.value = currentDestinationFilter || "";
             if (dMonth) dMonth.value = currentMonthFilter || "";
 
@@ -4211,7 +4325,6 @@
                 }
             });
 
-            if (currentCity) updateToDropdown('dealsTo', currentCity);
             renderDealsPage();
         }
 
@@ -4315,18 +4428,16 @@
             console.log(`DEBUG: After City Filter: ${filtered.length}`);
 
             if (currentDestinationFilter) {
+                console.log('DEBUG: Applying Destination Filter:', currentDestinationFilter);
                 // If value is 2 chars, assume it is a country code (from new dropdown logic)
-                if (currentDestinationFilter.length === 2 || (currentDestinationFilter.length === 3 && currentDestinationFilter === currentDestinationFilter.toLowerCase())) {
-                    // J'ajoute une protection au cas où c'est 3 lettres mais sans majuscule, ou autre.
-                    // Mais restons sur length === 2 pour les pays ISO.
-                }
-
                 if (currentDestinationFilter.length === 2) {
-                    console.log(`DEBUG: Filtering by Country Code: ${currentDestinationFilter}`);
-                    filtered = filtered.filter(d => d.countryCode && d.countryCode.toLowerCase() === currentDestinationFilter.toLowerCase());
+                    const countryCode = currentDestinationFilter.toLowerCase();
+                    filtered = filtered.filter(d => {
+                        const match = d.countryCode && d.countryCode.toLowerCase() === countryCode;
+                        if (!match && filtered.length < 5) console.log(`DEBUG: No match for deal to ${d.to} (code: ${d.countryCode})`);
+                        return match;
+                    });
                 } else {
-                    console.log(`DEBUG: Filtering by City Name: ${currentDestinationFilter}`);
-                    // Otherwise it is a specific city
                     filtered = filtered.filter(d => d.to === currentDestinationFilter);
                 }
             }
@@ -4442,45 +4553,64 @@
         }
 
         function showPage(id) {
-            document.querySelectorAll('section[id]').forEach(s => s.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-            window.scrollTo(0, 0);
+            const pageLoader = document.getElementById('pageLoader');
 
-            // Update active navigation state
-            document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => link.classList.remove('active'));
-            document.querySelectorAll(`[data-page="${id}"]`).forEach(link => link.classList.add('active'));
-
-            // Update Hero Style
-            if (typeof updateHeroStyle === 'function') {
-                updateHeroStyle(id);
+            // Show page transition loader
+            if (pageLoader) {
+                pageLoader.classList.remove('hidden');
+                pageLoader.classList.add('flex', 'opacity-100');
             }
 
-            // Update URL routing
-            if (id === 'home') {
-                // Clear URL params when going home
-                updateURLParams({});
-            } else if (id === 'deals') {
-                // Update URL with current page (filters will be updated by applyDealsFilters)
-                updateURLParams({ page: 'deals' });
-            } else if (id === 'festivals') {
-                updateURLParams({ page: 'festivals' });
-            }
+            // Small delay to allow loader to appear and feel like a "scan"
+            setTimeout(() => {
+                document.querySelectorAll('section[id]').forEach(s => s.classList.add('hidden'));
+                const target = document.getElementById(id);
+                if (target) target.classList.remove('hidden');
+                window.scrollTo(0, 0);
 
-            if (id === 'deals') {
-                if (isSearchFromHome) {
-                    restoreFiltersFromPersistent();
-                    isSearchFromHome = false;
-                } else {
-                    resetDealsFilters();
-                    renderDealsPage();
+                // Update active navigation state
+                document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => link.classList.remove('active'));
+                document.querySelectorAll(`[data-page="${id}"]`).forEach(link => link.classList.add('active'));
+
+                // Update Hero Style
+                if (typeof updateHeroStyle === 'function') {
+                    updateHeroStyle(id);
                 }
-            }
 
-            if (id === 'festivals') {
-                if (typeof renderFestivalDeals === 'function') {
-                    renderFestivalDeals(allFestivals);
+                // Update URL routing
+                if (id === 'home') {
+                    updateURLParams({});
+                } else if (id === 'deals') {
+                    updateURLParams({ page: 'deals' });
+                } else if (id === 'festivals') {
+                    updateURLParams({ page: 'festivals' });
                 }
-            }
+
+                if (id === 'deals') {
+                    if (isSearchFromHome) {
+                        restoreFiltersFromPersistent();
+                        isSearchFromHome = false;
+                    } else {
+                        resetDealsFilters();
+                        renderDealsPage();
+                    }
+                }
+
+                if (id === 'festivals') {
+                    if (typeof renderFestivalDeals === 'function') {
+                        renderFestivalDeals(allFestivals);
+                    }
+                }
+
+                // Hide page loader
+                if (pageLoader) {
+                    pageLoader.classList.add('opacity-0');
+                    setTimeout(() => {
+                        pageLoader.classList.add('hidden');
+                        pageLoader.classList.remove('flex', 'opacity-0');
+                    }, 300);
+                }
+            }, 600); // 600ms scanning duration
         }
 
         document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(l => l.addEventListener('click', e => {
@@ -4500,19 +4630,15 @@
             }
         }));
 
-        // Popup session management - only show once per session
-        const cityPopup = document.getElementById('cityPopup');
-        const popupShown = sessionStorage.getItem('popupShown');
-
-        if (popupShown === 'true') {
-            // Already shown this session, hide it
-            cityPopup.classList.add('hidden');
-        }
+        // Initial state is now handled inside initApp() after data loads
 
         // Function to close popup and remember
         function closePopupAndRemember() {
+            const cityPopup = document.getElementById('cityPopup');
             cityPopup.classList.add('hidden');
-            sessionStorage.setItem('popupShown', 'true');
+            cityPopup.classList.remove('flex');
+            localStorage.setItem('popupShown', 'true');
+            sessionStorage.setItem('popupShownThisSession', 'true');
         }
 
         document.getElementById('closePopupBtn').onclick = closePopupAndRemember;
