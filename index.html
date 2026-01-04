@@ -995,7 +995,7 @@
             }
 
             .compact-card .text-4xl {
-                font-size: 1.5rem !important;
+                font-size: 1.8rem !important;
             }
 
             .compact-card .text-base {
@@ -1945,7 +1945,7 @@
 
     <!-- GLOBAL LOADER -->
     <div id="globalLoader"
-        class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center transition-opacity duration-700">
+        class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center transition-opacity duration-200">
         <div class="relative">
             <div class="w-24 h-24 border-8 border-purple-100 border-t-purple-600 rounded-full animate-spin"></div>
             <div class="absolute inset-0 flex items-center justify-center">
@@ -1962,7 +1962,7 @@
         <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative overflow-hidden">
             <!-- Popup Loader Overlay (Scanning effect) -->
             <div id="popupLoader"
-                class="absolute inset-0 bg-white z-30 flex flex-col items-center justify-center transition-opacity duration-500">
+                class="absolute inset-0 bg-white z-30 flex flex-col items-center justify-center transition-opacity duration-300">
                 <div class="relative scale-90">
                     <div class="w-20 h-20 border-6 border-purple-100 border-t-purple-600 rounded-full animate-spin">
                     </div>
@@ -2299,7 +2299,7 @@
         </section>
 
         <!-- DEALS PAGE -->
-        <section id="deals" class="hidden relative py-20">
+        <section id="deals" class="hidden relative pt-6 pb-20">
             <!-- Titre supprimé - Maintenant affiché dans le Hero -->
             <div id="dynamicCarousels" class="space-y-16"></div>
         </section>
@@ -2722,7 +2722,7 @@
 
             // 2. CSV FALLBACK (Old Logic)
             // Try last 30 days to find the most recent file
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 7; i++) {
                 const d = new Date();
                 d.setDate(d.getDate() - i);
                 const yyyy = d.getFullYear();
@@ -4557,7 +4557,7 @@
 
                 html += `
             <div class="carousel-container relative group">
-                <div class="flex flex-col gap-4 mb-8">
+                <div class="flex flex-col md:flex-row md:flex-wrap md:items-center md:justify-between gap-4 mb-8">
                     <h3 class="text-3xl font-bold">${month} <span class="block text-xl text-gray-500 mt-1">(${monthDeals.length} deals)</span></h3>
                     <div class="flex gap-4">
                         <select class="sort-price h-12 px-4 rounded-xl border border-gray-300 text-sm" aria-label="Sort by price">
