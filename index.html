@@ -52,6 +52,10 @@
     <script type="text/javascript"
         src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+    <!-- Flatpickr for Date Selection -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <style>
         /* COMPLETELY HIDE Google Translate widget and all its elements */
         .goog-te-banner-frame,
@@ -95,24 +99,75 @@
             z-index: 100;
         }
 
+        /* PREMIUM NAVIGATION LINKS */
+        .nav-link-premium {
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #4b5563;
+            /* Gray-600 */
+            font-weight: 600;
+            /* Semi-bold */
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+            /* Prevents layout shift on hover border */
+        }
+
+        .nav-link-premium i {
+            font-size: 1rem;
+            color: #6b7280;
+            /* Gray-500 */
+            transition: color 0.3s;
+        }
+
+        .nav-link-premium:hover {
+            color: #5d3fd3;
+            /* Primary color */
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(93, 63, 211, 0.1);
+            box-shadow: 0 4px 12px rgba(93, 63, 211, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .nav-link-premium:hover i {
+            color: #5d3fd3;
+        }
+
+        /* Active state style (optional) */
+        .nav-link-premium:active {
+            transform: translateY(0);
+        }
+
         .lang-trigger {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
+            gap: 8px;
+            /* Match nav-link gap */
+            padding: 8px 16px;
+            /* Match nav-link padding */
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
+            /* Match nav-link font size */
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid #e5e7eb;
-            color: #556068;
+            color: #4b5563;
+            /* Gray-600 */
         }
 
         .lang-trigger:hover {
             background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: rgba(93, 63, 211, 0.3);
+            color: #5d3fd3;
+            box-shadow: 0 4px 12px rgba(93, 63, 211, 0.15);
+            transform: translateY(-1px);
         }
 
         .lang-trigger img {
@@ -171,6 +226,159 @@
             border-radius: 2px;
             object-fit: cover;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* MOBILE HERO ADJUSTMENTS */
+        @media (max-width: 768px) {
+
+            .hero-wrapper,
+            #mainHero {
+                border-radius: 28.5px !important;
+                /* Decreased by 1.5px from 30px */
+                overflow: hidden !important;
+                /* We keep original backgrounds visible */
+            }
+        }
+
+        /* ========== KAYAK STYLE DRAWER MENU ========== */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            /* Hidden left */
+            width: 85%;
+            max-width: 300px;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 100;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-drawer.open {
+            left: 0;
+        }
+
+        .drawer-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .drawer-logo {
+            font-family: 'Luckiest Guy', cursive;
+            color: #5d3fd3;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .drawer-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #374151;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+        .drawer-item:hover {
+            background: #f9fafb;
+            color: #5d3fd3;
+        }
+
+        .drawer-item i,
+        .drawer-item svg {
+            width: 20px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .drawer-item:hover i,
+        .drawer-item:hover svg {
+            color: #5d3fd3;
+        }
+
+        .drawer-footer {
+            padding: 24px;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .drawer-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #9ca3af;
+            font-weight: 700;
+            margin-bottom: 4px;
+            padding-left: 24px;
+        }
+
+        .drawer-lang {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            color: #374151;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+
+        .drawer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #374151;
+            transition: all 0.2s;
+        }
+
+        .social-circle:hover {
+            background: #5d3fd3;
+            color: white;
+            transform: translateY(-2px);
         }
 
         /* ========== PREMIUM FOOTER ========== */
@@ -383,6 +591,576 @@
             color: #ef4444;
             animation: pulse 1.5s infinite;
         }
+
+        /* --- SEARCH & DATE PICKER LOGIC STYLES --- */
+        .autocomplete-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .autocomplete-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            color: #2C3E50;
+            font-size: 1rem;
+            outline: none;
+            padding: 2px 0;
+        }
+
+        .autocomplete-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: -12px;
+            right: -12px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            z-index: 100;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .autocomplete-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+
+        .autocomplete-item:hover {
+            background: #f1f5f9;
+        }
+
+        .autocomplete-item .flag {
+            font-size: 1.2rem;
+        }
+
+        .autocomplete-item .city {
+            font-weight: 600;
+            color: #1e2937;
+        }
+
+        .autocomplete-item .iata {
+            margin-left: auto;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #94a3b8;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Date Trigger Button */
+        .date-trigger {
+            background: transparent;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            padding: 2px 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            outline: none;
+        }
+
+        .dates-preview {
+            width: 100%;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #2C3E50;
+        }
+
+        .dates-preview.placeholder {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .date-chip {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 6px;
+            color: #5d3fd3;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Date Picker Modal */
+        .date-picker-modal {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: -2%;
+            width: auto;
+            max-width: 95vw;
+            z-index: 1000;
+        }
+
+        .date-picker-modal.show {
+            display: block;
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .date-picker-popup {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding: 40px;
+            width: 740px;
+            max-width: 95vw;
+        }
+
+        /* Hide the raw flatpickr input */
+        #inlineCalendar {
+            display: none;
+        }
+
+        .flatpickr-calendar {
+            border: none !important;
+            box-shadow: none !important;
+            background: white !important;
+            min-width: 307px;
+        }
+
+        .flatpickr-calendar.multiMonth {
+            min-width: 615px;
+        }
+
+        /* Header & Tabs */
+        .dp-header {
+            background: white;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 24px;
+            margin-bottom: 24px;
+        }
+
+        .trip-type-toggle-modal {
+            display: flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 12px;
+            width: fit-content;
+            margin-bottom: 16px;
+        }
+
+        .trip-type-btn-clean {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .trip-type-btn-clean.active {
+            background: white;
+            color: #5d3fd3;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .dp-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dp-tab {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #64748b;
+            background: #f8fafc;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .dp-tab:hover {
+            background: #f1f5f9;
+        }
+
+        .dp-tab.active {
+            background: white;
+            color: #5d3fd3;
+            border-color: #5d3fd3;
+            box-shadow: 0 4px 12px rgba(93, 63, 211, 0.1);
+        }
+
+        /* Content Areas */
+        .dp-flexible {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .dp-flexible .icon {
+            font-size: 3rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+        }
+
+        .dp-flexible h4 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1e2937;
+            margin-bottom: 8px;
+        }
+
+        .dp-flexible p {
+            color: #64748b;
+        }
+
+        .dp-months {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 20px 0;
+        }
+
+        .month-card {
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .month-card:hover {
+            border-color: #5d3fd3;
+            background: #f5f3ff;
+        }
+
+        .month-card.active {
+            background: #5d3fd3;
+            border-color: #5d3fd3;
+            color: white;
+        }
+
+        .month-card .m-name {
+            font-weight: 700;
+            display: block;
+        }
+
+        .month-card .m-year {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* Calendar Tightening */
+        .dp-calendar-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        /* Force Flatpickr to show months side by side */
+        .dp-calendar-wrapper .flatpickr-calendar {
+            box-shadow: none !important;
+            border: none !important;
+            width: auto !important;
+        }
+
+        /* Container for multiple months */
+        .flatpickr-months {
+            display: flex !important;
+            justify-content: space-between !important;
+        }
+
+        .flatpickr-innerContainer {
+            display: flex !important;
+        }
+
+        .flatpickr-months {
+            display: flex !important;
+        }
+
+        .flatpickr-months .flatpickr-month {
+            flex: 1 !important;
+        }
+
+        /* Month header styling */
+        .flatpickr-current-month {
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: #1e293b !important;
+            padding: 8px 0 !important;
+        }
+
+        /* Each month wrapper - add visual separation */
+        .flatpickr-rContainer {
+            display: inline-block !important;
+            padding: 16px !important;
+            background: #fafafa !important;
+            border-radius: 12px !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+
+        /* Days container */
+        .flatpickr-days {
+            width: auto !important;
+        }
+
+        .dayContainer {
+            width: 252px !important;
+            min-width: 252px !important;
+            max-width: 252px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            /* Remove auto margin since parent has padding */
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-content: flex-start !important;
+        }
+
+        /* Style for days from other months */
+        .flatpickr-day.prevMonthDay,
+        .flatpickr-day.nextMonthDay {
+            color: #d1d5db !important;
+            background: transparent !important;
+            cursor: default !important;
+            pointer-events: none !important;
+            opacity: 0.6;
+        }
+
+        .flatpickr-day {
+            margin: 0 !important;
+            height: 36px !important;
+            line-height: 36px !important;
+            max-width: 36px !important;
+            border-radius: 8px !important;
+            font-size: 0.85rem !important;
+        }
+
+        .flatpickr-day.selected,
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange {
+            background: #5d3fd3 !important;
+            border-color: #5d3fd3 !important;
+            color: white !important;
+        }
+
+        .flatpickr-day.inRange {
+            background: #f5f3ff !important;
+            border-color: #f5f3ff !important;
+            box-shadow: none !important;
+        }
+
+        /* Desktop only - centering adjustment */
+        @media (min-width: 769px) {
+            .flatpickr-months {
+                margin-left: 5% !important;
+            }
+
+            .flatpickr-innerContainer {
+                margin-left: 5% !important;
+            }
+        }
+
+        /* Footer Validate Button */
+        .dp-footer-simple {
+            margin-top: 32px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-confirm-simple {
+            background: #5d3fd3;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-shadow: 0 8px 20px rgba(93, 63, 211, 0.2);
+        }
+
+        .btn-confirm-simple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(93, 63, 211, 0.3);
+        }
+
+        /* ============================================
+           RESPONSIVE MOBILE OPTIMIZATION
+           ============================================ */
+        @media (max-width: 768px) {
+
+            /* Popup adjustments */
+            .date-picker-popup {
+                width: 95vw !important;
+                max-width: 95vw !important;
+                padding: 20px !important;
+                border-radius: 20px !important;
+                margin-left: -5% !important;
+                /* Requested shift */
+            }
+
+            .dp-header {
+                padding-bottom: 16px !important;
+                margin-bottom: 16px !important;
+            }
+
+            /* Trip type toggle */
+            .trip-type-toggle-modal {
+                width: 100% !important;
+                margin-bottom: 12px !important;
+            }
+
+            .trip-type-btn-clean {
+                padding: 8px 12px !important;
+                font-size: 0.8rem !important;
+            }
+
+            /* Date tabs */
+            .dp-tabs {
+                flex-wrap: wrap !important;
+                gap: 6px !important;
+            }
+
+            .dp-tab {
+                padding: 8px 12px !important;
+                font-size: 0.8rem !important;
+                flex: 1 !important;
+                min-width: 80px !important;
+            }
+
+            /* Calendar container */
+            .dp-calendar-wrapper {
+                margin-top: 12px !important;
+            }
+
+            /* Single month on mobile */
+            .flatpickr-calendar {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            /* Month grid for "Monthly" tab */
+            .dp-months {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+            }
+
+            .month-card {
+                padding: 12px 8px !important;
+                font-size: 0.85rem !important;
+            }
+
+            /* Larger touch targets for days */
+            .dayContainer {
+                width: 100% !important;
+                min-width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .flatpickr-day {
+                width: calc(14.28% - 2px) !important;
+                max-width: calc(14.28% - 2px) !important;
+                height: 42px !important;
+                line-height: 42px !important;
+                font-size: 0.9rem !important;
+            }
+
+            /* Footer */
+            .dp-footer-simple {
+                margin-top: 20px !important;
+                padding-top: 16px !important;
+            }
+
+            .btn-confirm-simple {
+                width: 100% !important;
+                padding: 14px 20px !important;
+                font-size: 1rem !important;
+            }
+
+            /* Flexible content */
+            .dp-flexible {
+                padding: 30px 16px !important;
+            }
+
+            .dp-flexible .icon {
+                width: 60px !important;
+                height: 60px !important;
+                font-size: 2rem !important;
+            }
+        }
+
+        /* Extra small mobile */
+        @media (max-width: 480px) {
+            .date-picker-popup {
+                padding: 16px !important;
+            }
+
+            .flatpickr-day {
+                height: 38px !important;
+                line-height: 38px !important;
+                font-size: 0.85rem !important;
+            }
+
+            .dp-tab {
+                font-size: 0.75rem !important;
+                padding: 6px 10px !important;
+            }
+        }
+
+        /* Utility classes removed to allow Tailwind to work */
+
+        .trip-type-toggle {
+            display: flex;
+            background: #EBF2F7;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+
+        .trip-type-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #7F8C8D;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .active-trip-type {
+            background: white;
+            color: #5d3fd3;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
     </style>
     <style>
         /* --- INTEGRATION DES STYLES V2/V3 --- */
@@ -407,7 +1185,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
             transform: translateZ(0);
             overflow: hidden;
-            border: 2px solid hsl(270deg 91.67% 80.3%);
+            border: 5px solid hsl(270deg 91.67% 80.3%);
         }
 
         /* STYLE V2 : SMILE (Convexe) - Par défaut pour HOME */
@@ -465,7 +1243,7 @@
             transition: all 0.5s ease;
             z-index: 50;
             margin-bottom: 0;
-            border: 2px solid hsl(270deg 91.67% 80.3%);
+            border: 4px solid hsl(270deg 91.67% 80.3%);
         }
 
         .glass-header::before {
@@ -481,7 +1259,7 @@
             opacity: 0.55;
             transition: background-image 1s ease-in-out;
             z-index: 0;
-            border-radius: 30px;
+            border-radius: 26px;
         }
 
         /* SEARCH WIDGET */
@@ -1022,13 +1800,19 @@
 
         /* Keep carousel items fixed width to enable scrolling behavior */
         .carousel .compact-card {
-            width: 208px !important;
+            width: 280px !important;
             flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .carousel .compact-card {
+                width: 220px !important;
+            }
         }
 
         @media (max-width: 480px) {
             .carousel .compact-card {
-                width: 160px !important;
+                width: 180px !important;
             }
         }
 
@@ -1087,17 +1871,84 @@
             }
         }
 
+        /* Mobile Grid overrides */
         @media (max-width: 480px) {
             .home-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
+                grid-template-columns: repeat(2, 1fr) !important;
+                /* Revert to 2 columns */
+                gap: 0.5rem;
+                /* Tighter gap for mobile */
+                max-width: 100%;
+                margin: 0 auto;
             }
         }
 
         @media (max-width: 400px) {
             .home-grid {
-                grid-template-columns: repeat(2, 140px);
-                gap: 0.5rem;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.4rem;
+            }
+        }
+
+        /* Tablet Landscape - 5 columns, reduced card height */
+        @media (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) {
+            .home-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 0.6rem;
+            }
+
+            /* Reduce card height for landscape viewing */
+            .home-grid a[style*="aspect-ratio"] {
+                aspect-ratio: 4/5 !important;
+            }
+        }
+
+        /* Fix 550-770px: Enlarge elements inside white card */
+        @media (min-width: 550px) and (max-width: 770px) {
+            .home-grid {
+                gap: 0.75rem;
+            }
+
+            /* Card info section: less top spacing, bigger content */
+            .home-grid a[style*="aspect-ratio"]>div:last-child {
+                top: 35% !important;
+                padding: 0.8rem !important;
+            }
+        }
+
+        /* Deals Carousel Styling */
+        .deals-carousel {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            justify-content: flex-start;
+            /* Force left alignment */
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 0.5rem 0;
+        }
+
+        /* Deals Carousel - EXACT match to Home Grid Card Sizes */
+        .deals-carousel>*,
+        .carousel .compact-card {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            width: 170px !important;
+        }
+
+        @media (min-width: 480px) {
+
+            .deals-carousel>*,
+            .carousel .compact-card {
+                width: 200px !important;
+            }
+        }
+
+        @media (min-width: 900px) {
+
+            .deals-carousel>*,
+            .carousel .compact-card {
+                width: 215px !important;
             }
         }
 
@@ -1926,22 +2777,165 @@
                 padding: 8px;
             }
         }
+
+        /* --- FESTIVAL CARD STYLES (Sophie Bennett Design) --- */
+        .festival-profile-component {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 302/500;
+            /* Increased height by ~1/3 */
+            max-width: 302px;
+            margin: 0 auto;
+            overflow: hidden;
+            /* Ensure glass slides out cleanly */
+        }
+
+        .festival-profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 32px;
+            border: 8px solid #ffffff;
+            box-sizing: border-box;
+        }
+
+        .festival-glass-card {
+            position: absolute;
+            bottom: 7px;
+            left: 4%;
+            width: 92%;
+            height: auto;
+            min-height: 180px;
+            /* Increased default height */
+            max-height: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%);
+            z-index: 10;
+            overflow: hidden;
+
+            /* Flex Layout */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 16px;
+            gap: 6px;
+
+            /* Transition */
+            transition: all 0.4s ease-in-out;
+        }
+
+        /* --- Hover State: Expand --- */
+        .festival-profile-component:hover .festival-glass-card {
+            height: 100%;
+            min-height: 100%;
+            max-height: 100%;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            border-radius: 32px;
+            background-color: rgba(255, 255, 255, 0.3);
+            padding-top: 50px;
+            /* Adjust mask to show bottom button clearly */
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+        }
+
+        /* --- Inner Elements --- */
+        .fest-title {
+            color: #ffffff;
+            font-size: clamp(16px, 1.5vw, 22px);
+            margin-bottom: 2px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .fest-location {
+            width: 100%;
+            margin-bottom: auto;
+            /* Push bottom row down normally */
+            transition: all 0.4s ease;
+        }
+
+        .fest-bottom-row {
+            width: 100%;
+            margin-top: 12px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            transition: all 0.4s ease;
+        }
+
+        .fest-date-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: all 0.4s ease;
+        }
+
+        .fest-deal-btn {
+            transition: all 0.4s ease;
+        }
+
+        /* --- Hover Transforms --- */
+        .festival-profile-component:hover .fest-title {
+            -webkit-line-clamp: unset;
+            display: block;
+            overflow: visible;
+            text-align: center;
+        }
+
+        .festival-profile-component:hover .fest-location {
+            margin-bottom: 5px;
+        }
+
+        .festival-profile-component:hover .fest-bottom-row {
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 5px;
+            margin-bottom: 0;
+            flex-grow: 1;
+        }
+
+        .festival-profile-component:hover .fest-date-group {
+            align-items: center;
+            transform: scale(1.15);
+            margin-top: 10px;
+        }
+
+        .festival-profile-component:hover .fest-deal-btn {
+            width: 100%;
+            background-color: #7c3aed;
+            /* Purple 600 */
+            color: #ffffff;
+            padding: 12px 0;
+            /* Taller */
+            margin-bottom: 5px;
+            /* Lower position */
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.5);
+            border: none;
+        }
+
+        .fest-element {
+            position: relative;
+            /* Changed from absolute to flow */
+        }
     </style>
 </head>
 
 <body class="bg-gray-50 overflow-x-hidden">
 
-    <!-- PAGE TRANSITION LOADER -->
-    <div id="pageLoader"
-        class="fixed inset-0 bg-white/60 backdrop-blur-md z-[800] hidden flex-col items-center justify-center transition-opacity duration-300">
-        <div class="relative scale-75">
-            <div class="w-20 h-20 border-8 border-purple-100 border-t-purple-600 rounded-full animate-spin"></div>
-            <div class="absolute inset-0 flex items-center justify-center">
-                <i data-lucide="plane" class="w-6 h-6 text-purple-600 animate-bounce"></i>
-            </div>
-        </div>
-        <p class="mt-4 text-purple-600 text-[10px] font-black uppercase tracking-[0.3em]">Updating Skyview...</p>
-    </div>
+
 
     <!-- GLOBAL LOADER -->
     <div id="globalLoader"
@@ -2020,17 +3014,14 @@
             </div>
 
             <nav class="hidden md:flex">
-                <ul class="flex gap-8 list-none items-center relative z-10">
+                <ul class="flex gap-4 list-none items-center relative z-10">
                     <!-- Ajout de la classe 'nav-link' pour que le script existant détecte les clics -->
-                    <li><a href="#home"
-                            class="text-[#556068] hover:text-[#2C3E50] font-medium text-sm transition nav-trigger nav-link flex items-center gap-2"
-                            data-page="home"><i class="fa-solid fa-house"></i> Home</a></li>
-                    <li><a href="#deals"
-                            class="text-[#556068] hover:text-[#2C3E50] font-medium text-sm transition nav-trigger nav-link flex items-center gap-2"
-                            data-page="deals"><i class="fa-solid fa-tag"></i> Deals</a></li>
-                    <li><a href="#festivals"
-                            class="text-[#556068] hover:text-[#2C3E50] font-medium text-sm transition nav-trigger nav-link flex items-center gap-2"
-                            data-page="festivals"><i class="fa-solid fa-champagne-glasses"></i> Festivals</a></li>
+                    <li><a href="#home" class="nav-link-premium nav-trigger nav-link" data-page="home"><i
+                                class="fa-solid fa-plane-departure"></i> Flights</a></li>
+                    <li><a href="#deals" class="nav-link-premium nav-trigger nav-link" data-page="deals"><i
+                                class="fa-solid fa-tag"></i> Deals</a></li>
+                    <li><a href="#festivals" class="nav-link-premium nav-trigger nav-link" data-page="festivals"><i
+                                class="fa-solid fa-champagne-glasses"></i> Festivals</a></li>
                     <!-- Custom Language Selector with Flags -->
                     <li class="custom-lang-selector" id="langSelector">
                         <div class="lang-trigger" onclick="this.parentElement.classList.toggle('open')">
@@ -2066,7 +3057,7 @@
             <!-- Mobile Burger -->
             <button
                 class="md:hidden p-3 relative z-10 bg-white/90 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center"
-                onclick="document.getElementById('mobileMenu').classList.toggle('open')">
+                onclick="toggleDrawer()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="text-wander-primary w-6 h-6">
@@ -2077,57 +3068,161 @@
             </button>
         </header>
 
-        <!-- HEADER MOBILE DRAWER -->
-        <div id="mobileMenu"
-            class="mobile-menu bg-white fixed top-0 right-[-100%] w-[80%] max-w-[320px] h-full z-[100] transition-all duration-300 p-8 shadow-2xl">
-            <button class="absolute top-6 right-6 p-2 hover:bg-gray-100 rounded-full transition"
-                onclick="this.parentElement.classList.remove('open')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="text-gray-600 w-6 h-6">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                </svg>
-            </button>
-            <div class="flex flex-col gap-6 mt-16 text-lg font-semibold">
-                <a href="#home"
-                    class="mobile-nav-link nav-trigger flex items-center gap-4 p-3 rounded-xl hover:bg-purple-50 transition"
-                    data-page="home"
-                    onclick="event.preventDefault(); document.getElementById('mobileMenu').classList.remove('open'); if(typeof goHomeAndReset === 'function') goHomeAndReset(); else showPage('home');">
+        <!-- MENU DRAWER OVERLAY -->
+        <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+
+        <!-- HEADER MOBILE DRAWER (KAYAK STYLE) -->
+        <div id="mobileMenu" class="mobile-drawer">
+            <div class="drawer-header">
+                <div class="drawer-logo">Wingsky</div>
+                <button onclick="toggleDrawer()" class="p-2 hover:bg-gray-100 rounded-full text-gray-500">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="text-wander-primary w-6 h-6">
-                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                        <polyline points="9 22 9 12 15 12 15 22" />
-                    </svg> Home
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="drawer-content">
+                <div class="drawer-section-title mt-4">Explore</div>
+                <a href="#home" class="drawer-item"
+                    onclick="toggleDrawer(); if(typeof goHomeAndReset === 'function') goHomeAndReset();">
+                    <i class="fa-solid fa-plane-departure"></i> Flights
                 </a>
-                <a href="#deals"
-                    class="mobile-nav-link nav-trigger flex items-center gap-4 p-3 rounded-xl hover:bg-purple-50 transition"
-                    data-page="deals"
-                    onclick="event.preventDefault(); document.getElementById('mobileMenu').classList.remove('open'); if(typeof goToDealsAndReset === 'function') goToDealsAndReset(); else showPage('deals');">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="text-wander-primary w-6 h-6">
-                        <path
-                            d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l5 5a2 2 0 0 0 2.828 0l7.172-7.172a2 2 0 0 0 0-2.828l-5-5z" />
-                        <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
-                    </svg> Deals
+                <a href="#deals" class="drawer-item"
+                    onclick="toggleDrawer(); if(typeof showPage==='function') showPage('deals');">
+                    <i class="fa-solid fa-tags"></i> Deals
                 </a>
-                <a href="#festivals"
-                    class="mobile-nav-link nav-trigger flex items-center gap-4 p-3 rounded-xl hover:bg-purple-50 transition"
-                    data-page="festivals"
-                    onclick="event.preventDefault(); document.getElementById('mobileMenu').classList.remove('open'); showPage('festivals');">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="text-wander-primary w-6 h-6">
-                        <path d="M8 22h8" />
-                        <path d="M7 10h10" />
-                        <path d="M12 15v7" />
-                        <path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z" />
-                    </svg> Festivals
+                <a href="#festivals" class="drawer-item"
+                    onclick="toggleDrawer(); if(typeof showPage==='function') showPage('festivals');">
+                    <i class="fa-solid fa-champagne-glasses"></i> Festivals
                 </a>
             </div>
+
+            <div class="drawer-footer">
+                <div>
+                    <div class="drawer-section-title" style="padding-left: 0;">Settings</div>
+                    <!-- Trigger pour ouvrir la liste des langues -->
+                    <div class="drawer-lang"
+                        onclick="document.getElementById('mobileLangList').classList.toggle('hidden')">
+                        <img src="https://flagcdn.com/w40/gb.png" width="24" style="border-radius: 2px;"
+                            id="mobileCurrentFlag">
+                        <span id="mobileCurrentName">English</span>
+                        <span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded ml-2">CHANGE <i
+                                class="fa-solid fa-chevron-down ml-1"></i></span>
+                    </div>
+
+                    <!-- Liste des langues (Accordéon) -->
+                    <div id="mobileLangList"
+                        class="hidden flex flex-col gap-2 mt-2 pl-2 border-l-2 border-gray-100 ml-1">
+                        <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                            onclick="selectMobileLang('en', 'gb')">
+                            <img src="https://flagcdn.com/w40/gb.png" width="20"> <span
+                                class="text-sm font-medium">English</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                            onclick="selectMobileLang('fr', 'fr')">
+                            <img src="https://flagcdn.com/w40/fr.png" width="20"> <span
+                                class="text-sm font-medium">Français</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                            onclick="selectMobileLang('de', 'de')">
+                            <img src="https://flagcdn.com/w40/de.png" width="20"> <span
+                                class="text-sm font-medium">Deutsch</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                            onclick="selectMobileLang('es', 'es')">
+                            <img src="https://flagcdn.com/w40/es.png" width="20"> <span
+                                class="text-sm font-medium">Español</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                            onclick="selectMobileLang('it', 'it')">
+                            <img src="https://flagcdn.com/w40/it.png" width="20"> <span
+                                class="text-sm font-medium">Italiano</span>
+                        </div>
+                    </div>
+
+                    <div class="drawer-lang">
+                        <span class="text-lg w-6 text-center text-gray-500">€</span> Euro
+                    </div>
+                </div>
+
+                <div>
+                    <div class="drawer-section-title" style="padding-left: 0;">Follow Us</div>
+                    <div class="drawer-social">
+                        <!-- Instagram -->
+                        <a href="https://instagram.com" target="_blank" class="social-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                            </svg>
+                        </a>
+                        <!-- TikTok -->
+                        <a href="https://tiktok.com" target="_blank" class="social-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                            </svg>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="https://facebook.com" target="_blank" class="social-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                            </svg>
+                        </a>
+                        <!-- Pinterest -->
+                        <a href="https://pinterest.com" target="_blank" class="social-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <!-- Note: Generic 'plus' as fallback or better Pinterest path below -->
+                        </a>
+                        <!-- Corrected Pinterest Path -->
+                        <script>
+                            // Replace last SVG with proper Pinterest path on load (inline fix)
+                            document.currentScript.previousElementSibling.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"/><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/><path d="M12 8v8"/></svg>'; // Temporary placeholder, real path is complex:
+                            // Using a simple "P" representation for clarity if path is too complex for basic svg stroke
+                        </script>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <script>
+            function toggleDrawer() {
+                const menu = document.getElementById('mobileMenu');
+                const overlay = document.getElementById('drawerOverlay');
+                if (menu && overlay) {
+                    menu.classList.toggle('open');
+                    overlay.classList.toggle('open');
+                }
+            }
+
+            function selectMobileLang(lang, flag) {
+                // Update mobile display
+                document.getElementById('mobileCurrentFlag').src = `https://flagcdn.com/w40/${flag}.png`;
+                const names = { en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', it: 'Italiano' };
+                document.getElementById('mobileCurrentName').textContent = names[lang] || 'English';
+
+                // Hide list
+                document.getElementById('mobileLangList').classList.add('hidden');
+
+                // Trigger desktop change if possible (simulate click on desktop item)
+                // Assuming desktop has items with data-lang attributes
+                const desktopItem = document.querySelector(`.lang-option[data-lang="${lang}"]`);
+                if (desktopItem) desktopItem.click();
+            }
+        </script>
 
         <!-- HERO WRAPPER POLYMORPHE -->
         <div class="hero-wrapper style-inverted" id="mainHero">
@@ -2164,33 +3259,52 @@
         </div>
 
         <!-- SEARCH WIDGET HOME (Actif par défaut) -->
-        <div id="searchWidgetHome" class="search-widget-container transition-opacity duration-300">
-            <div class="flex gap-4 mb-5">
-                <span class="bg-[var(--primary-yellow)] rounded-2xl px-3 py-1 text-sm font-semibold text-[#222]">Round
-                    Trip Only</span>
+        <div id="searchWidgetHome" class="search-widget-container transition-opacity duration-300 relative">
+            <div class="trip-type-toggle">
+                <button id="btnRoundTrip" class="trip-type-btn active-trip-type" onclick="setTripType('roundtrip')">
+                    <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+                    Round Trip
+                </button>
+                <button id="btnOneWay" class="trip-type-btn" onclick="setTripType('oneway')">
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    One Way
+                </button>
             </div>
 
             <div class="search-row-flex flex items-center gap-2">
+                <!-- Departure -->
                 <div class="v2-input-group">
                     <span class="v2-label">Leaving from</span>
-                    <select id="searchFrom" class="v2-select">
-                        <option value="">Select departure city</option>
-                    </select>
+                    <div class="autocomplete-wrapper">
+                        <input type="text" id="originInput" class="autocomplete-input" placeholder="City or Airport..."
+                            autocomplete="off">
+                        <div id="originDropdown" class="autocomplete-dropdown"></div>
+                        <input type="hidden" id="originIATA">
+                    </div>
                 </div>
+
+                <!-- Destination -->
                 <div class="v2-input-group">
                     <span class="v2-label">Going to</span>
-                    <select id="searchTo" class="v2-select">
-                        <option value="">All countries</option>
-                    </select>
+                    <div class="autocomplete-wrapper">
+                        <input type="text" id="destInput" class="autocomplete-input" placeholder="Anywhere or City..."
+                            autocomplete="off">
+                        <div id="destDropdown" class="autocomplete-dropdown"></div>
+                        <input type="hidden" id="destIATA">
+                    </div>
                 </div>
-                <div class="v2-input-group">
-                    <span class="v2-label">Date</span>
-                    <select id="searchMonth" class="v2-select">
-                        <option value="">Any month</option>
-                    </select>
+
+                <!-- Date Picker Trigger -->
+                <div class="v2-input-group" id="dateWrapper">
+                    <span class="v2-label">When</span>
+                    <button type="button" class="date-trigger" onclick="openDatePicker()" id="dateTriggerBtn">
+                        <div id="dateDisplayText" class="dates-preview placeholder">Select dates...</div>
+                    </button>
                 </div>
+
                 <!-- BOUTON SEARCH AVEC SVG -->
-                <button id="searchBtn" class="btn-go-v2 shadow-lg hover:shadow-xl flex-shrink-0">
+                <button id="searchBtn" class="btn-go-v2 shadow-lg hover:shadow-xl flex-shrink-0"
+                    onclick="performSearchProject()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
@@ -2198,8 +3312,43 @@
                     </svg>
                 </button>
             </div>
-            <p id="searchError" class="text-red-500 text-sm mt-3 text-center hidden font-bold">⚠️ Please select a
+            <p id="searchHomeError" class="text-red-500 text-sm mt-3 text-center hidden font-bold">⚠️ Please select a
                 departure city first!</p>
+
+            <!-- DATE PICKER MODAL (Injecté ici pour positionnement absolu relatif au wrapper) -->
+            <div id="datePickerModal" class="date-picker-modal">
+                <div class="date-picker-popup">
+                    <div class="dp-header">
+                        <div class="trip-type-toggle-modal">
+                            <button id="modalBtnRoundTrip" class="trip-type-btn-clean active"
+                                onclick="setTripType('roundtrip')">
+                                <i data-lucide="arrow-left-right" class="w-4 h-4"></i> Round Trip
+                            </button>
+                            <button id="modalBtnOneWay" class="trip-type-btn-clean" onclick="setTripType('oneway')">
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i> One Way
+                            </button>
+                        </div>
+                        <div class="dp-tabs">
+                            <button class="dp-tab" data-tab="flexible" onclick="switchDateTab('flexible')">Anytime /
+                                Flexible</button>
+                            <button class="dp-tab" data-tab="month" onclick="switchDateTab('month')">Monthly</button>
+                            <button class="dp-tab active" data-tab="exact" onclick="switchDateTab('exact')">Exact
+                                Dates</button>
+                        </div>
+                    </div>
+                    <div class="dp-content">
+                        <div id="tabMonth" class="dp-months hidden"></div>
+                        <div id="tabExact" class="dp-exact">
+                            <div class="dp-calendar-wrapper">
+                                <input type="text" id="inlineCalendar" placeholder="Select dates">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dp-footer-simple">
+                        <button class="btn-confirm-simple" onclick="confirmDates()">Validate Selection</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- SEARCH WIDGET DEALS (Masqué par défaut) -->
@@ -2240,7 +3389,21 @@
     </div>
 
     <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto px-4 pb-12"> <!-- Pas de padding top, géré par le widget -->
+    <main class="max-w-7xl mx-auto px-4 pb-12 relative"> <!-- Relative for loader positioning -->
+
+        <!-- PAGE TRANSITION LOADER (Overlays content only) -->
+        <div id="pageLoader"
+            class="absolute inset-0 bg-white/60 backdrop-blur-md z-[50] hidden flex flex-col items-center transition-opacity duration-300"
+            style="justify-content: flex-start; padding-top: 150px;">
+            <div class="relative scale-75 sticky top-20">
+                <div class="w-20 h-20 border-8 border-purple-100 border-t-purple-600 rounded-full animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i data-lucide="plane" class="w-6 h-6 text-purple-600 animate-bounce"></i>
+                </div>
+            </div>
+            <p class="mt-4 text-purple-600 text-[10px] font-black uppercase tracking-[0.3em] sticky top-44">Updating
+                Skyview...</p>
+        </div>
 
         <!-- HOME SECTION -->
         <section id="home" class="content-section hidden">
@@ -2464,6 +3627,417 @@
             "Escape the Ordinary"
         ];
         let sloganIndex = 0;
+
+        // ============================================================================
+        // DATE PICKER & SEARCH STATE (Migrated from aviasales-search.html)
+        // ============================================================================
+        const AIRPORTS = [
+            { city: "Paris", country: "France", iata: "PAR", flag: "🇫🇷" },
+            { city: "London", country: "United Kingdom", iata: "LON", flag: "🇬🇧" },
+            { city: "Nice", country: "France", iata: "NCE", flag: "🇫🇷" },
+            { city: "Lyon", country: "France", iata: "LYS", flag: "🇫🇷" },
+            { city: "Marseille", country: "France", iata: "MRS", flag: "🇫🇷" },
+            { city: "Berlin", country: "Germany", iata: "BER", flag: "🇩🇪" },
+            { city: "Munich", country: "Germany", iata: "MUC", flag: "🇩🇪" },
+            { city: "Frankfurt", country: "Germany", iata: "FRA", flag: "🇩🇪" },
+            { city: "Madrid", country: "Spain", iata: "MAD", flag: "🇪🇸" },
+            { city: "Barcelona", country: "Spain", iata: "BCN", flag: "🇪🇸" },
+            { city: "Rome", country: "Italy", iata: "ROM", flag: "🇮🇹" },
+            { city: "Milan", country: "Italy", iata: "MIL", flag: "🇮🇹" },
+            { city: "Amsterdam", country: "Netherlands", iata: "AMS", flag: "🇳🇱" },
+            { city: "Brussels", country: "Belgium", iata: "BRU", flag: "🇧🇪" },
+            { city: "Vienna", country: "Austria", iata: "VIE", flag: "🇦🇹" },
+            { city: "Zurich", country: "Switzerland", iata: "ZRH", flag: "🇨🇭" },
+            { city: "Lisbon", country: "Portugal", iata: "LIS", flag: "🇵🇹" },
+            { city: "Dublin", country: "Ireland", iata: "DUB", flag: "🇮🇪" },
+            { city: "Athens", country: "Greece", iata: "ATH", flag: "🇬🇷" },
+            { city: "Prague", country: "Czech Republic", iata: "PRG", flag: "🇨🇿" },
+            { city: "Warsaw", country: "Poland", iata: "WAW", flag: "🇵🇱" },
+            { city: "Budapest", country: "Hungary", iata: "BUD", flag: "🇭🇺" },
+            { city: "Copenhagen", country: "Denmark", iata: "CPH", flag: "🇩🇰" },
+            { city: "Stockholm", country: "Sweden", iata: "ARN", flag: "🇸🇪" },
+            { city: "Oslo", country: "Norway", iata: "OSL", flag: "🇳🇴" },
+            { city: "Helsinki", country: "Finland", iata: "HEL", flag: "🇫🇮" },
+            { city: "New York", country: "USA", iata: "JFK", flag: "🇺🇸" },
+            { city: "Los Angeles", country: "USA", iata: "LAX", flag: "🇺🇸" }
+        ];
+
+        const searchState = {
+            originIATA: 'PAR',
+            destType: 'anywhere',
+            destIATA: null,
+            dateMode: 'flexible',
+            selectedMonth: null,
+            departureDate: null,
+            returnDate: null,
+            tripType: 'roundtrip'
+        };
+        let inlineCalendar = null;
+
+        // ============================================================================
+        // AUTOCOMPLETE FUNCTIONS
+        // ============================================================================
+        function initSearchAutocomplete(inputId, dropdownId, hiddenId, isOrigin) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+            const hidden = document.getElementById(hiddenId);
+            if (!input || !dropdown) return;
+
+            function showDropdown() {
+                const rawVal = input.value;
+                const query = (rawVal === 'Anywhere') ? '' : rawVal.toLowerCase().trim();
+
+                let matches = AIRPORTS.filter(a =>
+                    a.city.toLowerCase().includes(query) ||
+                    a.iata.toLowerCase().includes(query)
+                ).slice(0, 8);
+
+                if (!isOrigin) {
+                    const anywhereOption = { city: "Anywhere", iata: "ANY", flag: "✈️", type: 'anywhere' };
+                    if (query === '' || 'anywhere'.includes(query)) {
+                        matches.unshift(anywhereOption);
+                    }
+                    if (searchState.originIATA) {
+                        matches = matches.filter(a => a.iata !== searchState.originIATA);
+                    }
+                }
+
+                if (matches.length === 0) {
+                    dropdown.style.display = 'none';
+                    return;
+                }
+
+                dropdown.innerHTML = matches.map(a => `
+                    <div class="autocomplete-item" data-iata="${a.iata}" data-type="${a.type || 'city'}">
+                        <span class="flag">${a.flag}</span>
+                        <span class="city">${a.city}</span>
+                        <span class="iata">${a.iata}</span>
+                    </div>
+                `).join('');
+
+                dropdown.style.display = 'block';
+
+                dropdown.querySelectorAll('.autocomplete-item').forEach(item => {
+                    item.onclick = () => {
+                        const iata = item.dataset.iata;
+                        const type = item.dataset.type;
+                        const cityName = item.querySelector('.city').textContent;
+
+                        input.value = type === 'anywhere' ? 'Anywhere' : `${cityName} (${iata})`;
+                        hidden.value = iata;
+                        dropdown.style.display = 'none';
+
+                        if (isOrigin) {
+                            searchState.originIATA = iata;
+                        } else {
+                            if (type === 'anywhere') {
+                                searchState.destType = 'anywhere';
+                                searchState.destIATA = null;
+                            } else {
+                                searchState.destType = 'city';
+                                searchState.destIATA = iata;
+                            }
+                        }
+                    };
+                });
+            }
+
+            input.addEventListener('input', showDropdown);
+            input.addEventListener('focus', showDropdown);
+            document.addEventListener('click', (e) => {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            if (isOrigin && input.value.trim() === '') {
+                input.value = "Paris (PAR)";
+                hidden.value = "PAR";
+            }
+        }
+
+        // ============================================================================
+        // DATE PICKER FUNCTIONS
+        // ============================================================================
+        function openDatePicker() {
+            const modal = document.getElementById('datePickerModal');
+            if (modal) {
+                // If destination is 'Anywhere', hide Exact Dates tab and switch to Flexible
+                if (searchState.destType === 'anywhere') {
+                    document.querySelector('.dp-tab[data-tab="exact"]')?.classList.add('hidden');
+                    if (searchState.dateMode === 'exact') switchDateTab('flexible');
+                } else {
+                    document.querySelector('.dp-tab[data-tab="exact"]')?.classList.remove('hidden');
+                }
+
+                modal.classList.add('show');
+
+                // Redraw calendar if needed
+                if ((searchState.dateMode === 'exact' || searchState.dateMode === 'flexible') && inlineCalendar) {
+                    setTimeout(() => inlineCalendar.redraw(), 10);
+                }
+            }
+        }
+
+        function closeDatePicker() {
+            const modal = document.getElementById('datePickerModal');
+            if (modal) modal.classList.remove('show');
+        }
+
+        function switchDateTab(tab) {
+            searchState.dateMode = tab;
+            document.querySelectorAll('.dp-tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.tab === tab);
+            });
+
+            // Hide legacy Flexible/Month if they are separate divs
+            document.getElementById('tabMonth')?.classList.add('hidden');
+
+            // Update display text immediately for better UX
+            const displayText = document.getElementById('dateDisplayText');
+            if (displayText) {
+                if (tab === 'flexible') displayText.innerHTML = "Anytime";
+                else if (tab === 'month') displayText.innerHTML = "Select a month...";
+            }
+
+            // Flexible and Exact tabs both use the calendar container (tabExact)
+            const calendarContainer = document.getElementById('tabExact');
+            if (tab === 'flexible' || tab === 'exact') {
+                calendarContainer?.classList.remove('hidden');
+                if (inlineCalendar) {
+                    inlineCalendar.redraw();
+                    setTimeout(() => inlineCalendar.redraw(), 20);
+                }
+            } else {
+                calendarContainer?.classList.add('hidden');
+            }
+
+            if (tab === 'month') {
+                document.getElementById('tabMonth')?.classList.remove('hidden');
+            }
+        }
+
+        function setTripType(type) {
+            searchState.tripType = type;
+            const btnRound = document.getElementById('btnRoundTrip');
+            const btnOne = document.getElementById('btnOneWay');
+            const modalBtnRound = document.getElementById('modalBtnRoundTrip');
+            const modalBtnOne = document.getElementById('modalBtnOneWay');
+
+            if (type === 'roundtrip') {
+                btnRound?.classList.add('active-trip-type');
+                btnOne?.classList.remove('active-trip-type');
+                modalBtnRound?.classList.add('active');
+                modalBtnOne?.classList.remove('active');
+            } else {
+                btnRound?.classList.remove('active-trip-type');
+                btnOne?.classList.add('active-trip-type');
+                modalBtnRound?.classList.remove('active');
+                modalBtnOne?.classList.add('active');
+            }
+
+            if (inlineCalendar) {
+                inlineCalendar.set('mode', type === 'oneway' ? 'single' : 'range');
+                inlineCalendar.clear();
+                searchState.departureDate = null;
+                searchState.returnDate = null;
+            }
+        }
+
+        function populateMonthsGrid() {
+            const container = document.getElementById('tabMonth');
+            if (!container) return;
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const now = new Date();
+            let html = '';
+            for (let i = 0; i < 12; i++) {
+                const date = new Date(now.getFullYear(), now.getMonth() + i, 1);
+                const m = date.getMonth();
+                const y = date.getFullYear();
+                html += `<div class="month-card" data-month="${m + 1}" data-year="${y}" onclick="selectMonth(${m + 1}, ${y}, this)">
+                    <span class="m-name">${months[m]}</span>
+                    <span class="m-year">${y}</span>
+                </div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function selectMonth(month, year, el) {
+            document.querySelectorAll('.month-card').forEach(c => c.classList.remove('active'));
+            el?.classList.add('active');
+            searchState.selectedMonth = { month, year };
+        }
+
+        function initSearchCalendar() {
+            const calendarInput = document.getElementById('inlineCalendar');
+            if (!calendarInput || typeof flatpickr === 'undefined') return;
+
+            const minDate = new Date();
+            minDate.setDate(minDate.getDate() + 1);
+
+            // Responsive: 2 months on desktop, 1 on mobile
+            const isMobile = window.innerWidth <= 768;
+            const monthsToShow = isMobile ? 1 : 2;
+
+            inlineCalendar = flatpickr("#inlineCalendar", {
+                inline: true,
+                mode: searchState.tripType === 'oneway' ? 'single' : 'range',
+                dateFormat: "Y-m-d",
+                minDate: minDate,
+                showMonths: monthsToShow,
+                showOtherMonths: true,
+                onChange: function (selectedDates) {
+                    if (searchState.tripType === 'oneway') {
+                        searchState.departureDate = selectedDates[0] || null;
+                        searchState.returnDate = null;
+                    } else {
+                        searchState.departureDate = selectedDates[0] || null;
+                        searchState.returnDate = selectedDates[1] || null;
+                    }
+                }
+            });
+        }
+
+        // Note: Resize listener removed to prevent constant DOM updates
+        // Calendar uses initial screen size to determine month count
+
+        function formatShortDate(date) {
+            if (!date) return '';
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${date.getDate()} ${months[date.getMonth()]}`;
+        }
+
+        function confirmDates() {
+            const displayText = document.getElementById('dateDisplayText');
+            if (!displayText) return;
+
+            if (searchState.dateMode === 'month' && searchState.selectedMonth) {
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                displayText.innerHTML = `<span class="date-chip">${months[searchState.selectedMonth.month - 1]} ${searchState.selectedMonth.year}</span>`;
+            } else if (searchState.dateMode === 'flexible') {
+                displayText.innerHTML = `<span class="date-chip">Anytime</span>`;
+            } else {
+                if (!searchState.departureDate) {
+                    alert('Please select a departure date');
+                    return;
+                }
+                if (searchState.tripType === 'roundtrip' && !searchState.returnDate) {
+                    alert('Please select a return date');
+                    return;
+                }
+                if (searchState.tripType === 'oneway') {
+                    displayText.innerHTML = `<span class="date-chip">${formatShortDate(searchState.departureDate)}</span> → <span class="date-chip">One-way</span>`;
+                } else {
+                    displayText.innerHTML = `<span class="date-chip">${formatShortDate(searchState.departureDate)}</span> → <span class="date-chip">${formatShortDate(searchState.returnDate)}</span>`;
+                }
+            }
+            displayText.classList.remove('placeholder');
+            closeDatePicker();
+        }
+
+        // ============================================================================
+        // SEARCH EXECUTION (Routes to Trip.com or Aviasales)
+        // ============================================================================
+        function performSearchProject() {
+            const originIATA = searchState.originIATA;
+            if (!originIATA) {
+                document.getElementById('searchHomeError')?.classList.remove('hidden');
+                return;
+            }
+            document.getElementById('searchHomeError')?.classList.add('hidden');
+
+            const destIATA = searchState.destType === 'anywhere' ? null : searchState.destIATA;
+
+            // Determine date range
+            let startDate, endDate;
+            const today = new Date();
+
+            if (searchState.departureDate) {
+                startDate = searchState.departureDate;
+                endDate = searchState.returnDate || new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+            } else if (searchState.dateMode === 'month' && searchState.selectedMonth) {
+                const { month, year } = searchState.selectedMonth;
+                startDate = new Date(year, month - 1, 1);
+                endDate = new Date(year, month, 0);
+            } else {
+                // Flexible Mode: Next 3 months
+                startDate = new Date(today);
+                startDate.setDate(startDate.getDate() + 7);
+                endDate = new Date(today);
+                endDate.setMonth(endDate.getMonth() + 3);
+            }
+
+            // Format: YYYY-MM-DD for Trip.com
+            const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            const ddateStr = (searchState.dateMode === 'exact' && searchState.tripType === 'oneway')
+                ? fmt(startDate)
+                : `${fmt(startDate)},${fmt(endDate)}`; // Use comma separator for Trip.com range
+            const tripTypeParam = (searchState.tripType === 'oneway') ? 'ow' : 'rt';
+
+            // ROUTING LOGIC:
+            // - If Anywhere or Flexible/Monthly date: Trip.com Explore
+            // - If Specific City + Exact Dates: Aviasales
+            if (searchState.destType === 'anywhere' || searchState.dateMode !== 'exact') {
+                // Trip.com Explore
+                let tripUrl = `https://www.trip.com/flights/explore?dcity=${originIATA}&ddate=${ddateStr}&triptype=${tripTypeParam}&class=y&quantity=1&searchboxarg=t&nonstoponly=off&locale=en-XX&curr=EUR`;
+
+                // Add return date only if NOT one-way
+                if (searchState.tripType !== 'oneway') {
+                    tripUrl += `&rdate=${ddateStr}`;
+                }
+
+                // If specific destination city but flexible/month date, append acity
+                if (searchState.destType === 'city' && destIATA) {
+                    tripUrl += `&acity=${destIATA.toLowerCase()}`;
+                }
+
+                const encodedUrl = encodeURIComponent(tripUrl);
+                const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
+                window.open(finalUrl, '_blank');
+            } else if (destIATA && searchState.departureDate) {
+                // Aviasales Specific Route
+                const depStr = `${String(searchState.departureDate.getDate()).padStart(2, '0')}${String(searchState.departureDate.getMonth() + 1).padStart(2, '0')}`;
+                let aviasalesUrl = `https://www.aviasales.com/search/${originIATA}${depStr}${destIATA}`;
+                if (searchState.tripType === 'roundtrip' && searchState.returnDate) {
+                    const retStr = `${String(searchState.returnDate.getDate()).padStart(2, '0')}${String(searchState.returnDate.getMonth() + 1).padStart(2, '0')}`;
+                    aviasalesUrl += retStr;
+                }
+                aviasalesUrl += '1'; // 1 Passenger
+
+                const encodedUrl = encodeURIComponent(aviasalesUrl);
+                const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=4114&u=${encodedUrl}&campaign_id=100`;
+                window.open(finalUrl, '_blank');
+            } else {
+                // Fallback to Trip.com
+                let tripUrl = `https://www.trip.com/flights/explore?dcity=${originIATA}&ddate=${ddateStr}&triptype=${tripTypeParam}&class=y&quantity=1&searchboxarg=t&nonstoponly=off&locale=en-XX&curr=EUR`;
+                const encodedUrl = encodeURIComponent(tripUrl);
+                const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
+                window.open(finalUrl, '_blank');
+            }
+        }
+
+        // ============================================================================
+        // INIT DATE PICKER ON DOM READY
+        // ============================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize search autocomplete & calendar
+            initSearchAutocomplete('originInput', 'originDropdown', 'originIATA', true);
+            initSearchAutocomplete('destInput', 'destDropdown', 'destIATA', false);
+            populateMonthsGrid();
+            initSearchCalendar();
+
+            // Close date picker on outside click
+            document.addEventListener('mousedown', (e) => {
+                const modal = document.getElementById('datePickerModal');
+                const popup = document.querySelector('.date-picker-popup');
+                const trigger = document.getElementById('dateTriggerBtn');
+                if (modal && modal.classList.contains('show')) {
+                    if (e.target === modal || (!popup?.contains(e.target) && !trigger?.contains(e.target))) {
+                        closeDatePicker();
+                    }
+                }
+            });
+        });
 
         let persistentFilters = {
             city: "",
@@ -2927,40 +4501,51 @@
                     imgPath = "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80";
                 }
 
-                const festivalId = `${f.month}_${f.city}`.replace(/\s/g, '_');
+                const countryCode = cityToCountryCode[f.city] || 'fr';
+                const flagUrl = `https://flagcdn.com/w40/${countryCode.toLowerCase()}.png`;
 
                 return `
-            <div class="compact-card group relative cursor-pointer" onclick="showFlightsModal('${f.city.replace(/'/g, "\\'")}', '${f.month}', '${f.title.replace(/'/g, "\\'")}')">
-                    <div class="deal-image h-40 overflow-hidden relative">
-                        <img src="${imgPath}" alt="${f.title}"
-                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            loading="lazy"
-                            onerror="this.src='https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80'">
-                            <div class="absolute top-3 right-3 bg-black/70 text-white px-2 py-1 rounded-md text-xs font-bold backdrop-blur-sm">
-                                ${f.month}
-                            </div>
+                <div class="festival-profile-component group cursor-pointer" onclick="showFlightsModal('${f.city.replace(/'/g, "\\'")}', '${f.month}', '${f.title.replace(/'/g, "\\'")}')">
+                  
+                  <!-- Image -->
+                  <img src="${imgPath}" class="festival-profile-image transition-transform duration-700 group-hover:scale-105" alt="${f.title}" loading="lazy"
+                       onerror="this.src='https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80'">
+
+                  <!-- Glass Card -->
+                  <div class="festival-glass-card">
+                    
+                    <!-- Title -->
+                    <div class="fest-element fest-title font-bold leading-tight" style="color: #ffffff;">
+                      ${f.title}
                     </div>
-                    <div class="p-4 bg-white relative z-10 text-left">
-                        <h3 class="text-lg font-black text-gray-900 leading-tight mb-2" title="${f.title}">${f.title}</h3>
-                        <div class="flex items-center gap-2 text-sm text-gray-600 mb-2">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-wander-primary"></i> ${f.city}
+
+                    <!-- Location -->
+                    <div class="fest-element fest-location font-normal leading-tight drop-shadow-md flex items-center justify-center gap-2"
+                         style="color: #e2e8f0; font-size: clamp(12px, 1.2vw, 15px); opacity: 0.9;">
+                      <span>${f.city}</span>
+                      <img src="${flagUrl}" class="w-5 h-4 rounded-sm shadow-sm opacity-90" alt="flag">
+                    </div>
+
+                    <!-- Bottom Row -->
+                    <div class="fest-bottom-row">
+                        
+                        <!-- Date Group -->
+                        <div class="fest-date-group fest-element font-bold drop-shadow-md text-white" 
+                             style="font-size: clamp(10px, 1.1vw, 13px); line-height: 1.1;">
+                                <span>${f.start}</span>
+                                <span>${f.end || ''}</span>
                         </div>
-                        <div class="flex items-center gap-2 text-sm font-black text-wander-primary mb-3">
-                            <i data-lucide="calendar" class="w-4 h-4"></i> ${f.start} - ${f.end}
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="flex-1 bg-wander-primary hover:bg-wander-primaryDark text-white py-2 rounded-lg font-bold transition text-sm">
-                                View
-                            </button>
-                            <a href="${f.link}" target="_blank" 
-                               class="px-3 py-2 border-2 border-gray-200 hover:border-wander-primary rounded-lg text-gray-600 hover:text-wander-primary transition flex items-center justify-center"
-                               onclick="event.stopPropagation()" title="Visit Festival Website">
-                                <i data-lucide="external-link" class="w-4 h-4"></i>
-                            </a>
+
+                        <!-- Book Button -->
+                        <div class="fest-element fest-deal-btn bg-white text-black font-bold rounded-full shadow-lg flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
+                             style="padding: 9px 20px; font-size: 14px;">
+                          Deals <i class="fa-solid fa-arrow-right ml-1"></i>
                         </div>
                     </div>
-            </div>
-            `;
+
+                  </div>
+                </div>
+                `;
             }).join('');
 
             lucide.createIcons();
@@ -3457,7 +5042,9 @@
                     price: price,
                     date: cols[7],
                     url: cols[12],
-                    countryCode: cc ? cc.toLowerCase() : 'un' // default 'un' (unknown) or skip
+                    countryCode: cc ? cc.toLowerCase() : 'un', // default 'un' (unknown) or skip
+                    iataFrom: depIATA,
+                    iataTo: destIATA
                 };
             }).filter(Boolean);
 
@@ -3939,7 +5526,8 @@
             const cityOptions = generateOptions("All departure cities");
             const searchOptions = generateOptions("Select departure city");
 
-            document.getElementById('searchFrom').innerHTML = searchOptions;
+            const searchFromDropdownLegacy = document.getElementById('searchFrom');
+            if (searchFromDropdownLegacy) searchFromDropdownLegacy.innerHTML = searchOptions;
             document.getElementById('popupFromCity').innerHTML = searchOptions;
             document.getElementById('dealsFrom').innerHTML = cityOptions;
 
@@ -4131,15 +5719,21 @@
         function setupEvents() {
             console.log('setupEvents initialized');
 
-            // Home/Search listeners
-            document.getElementById('searchFrom').addEventListener('change', () => {
-                const city = document.getElementById('searchFrom').value;
-                updateToDropdown('searchTo', city);
-                updateMonthDropdown('searchMonth', city, document.getElementById('searchTo').value);
-            });
-            document.getElementById('searchTo').addEventListener('change', () => {
-                updateMonthDropdown('searchMonth', document.getElementById('searchFrom').value, document.getElementById('searchTo').value);
-            });
+            // Home/Search listeners (Legacy - may not exist if using new autocomplete system)
+            const searchFromEl = document.getElementById('searchFrom');
+            const searchToEl = document.getElementById('searchTo');
+            if (searchFromEl) {
+                searchFromEl.addEventListener('change', () => {
+                    const city = searchFromEl.value;
+                    updateToDropdown('searchTo', city);
+                    updateMonthDropdown('searchMonth', city, searchToEl?.value);
+                });
+            }
+            if (searchToEl) {
+                searchToEl.addEventListener('change', () => {
+                    updateMonthDropdown('searchMonth', searchFromEl?.value, searchToEl.value);
+                });
+            }
 
             // Deals listeners
             document.getElementById('dealsFrom').addEventListener('change', () => {
@@ -4218,70 +5812,86 @@
                 }, 800);
             };
 
-            document.getElementById('searchFrom').addEventListener('click', () => {
-                document.getElementById('searchError').classList.add('hidden');
-            });
-            document.getElementById('searchFrom').addEventListener('change', () => {
-                document.getElementById('searchError').classList.add('hidden');
-            });
+            // Legacy searchFrom handlers (may not exist with new autocomplete system)
+            const legacySearchFrom = document.getElementById('searchFrom');
+            const legacySearchTo = document.getElementById('searchTo');
+            const legacySearchMonth = document.getElementById('searchMonth');
+            const legacySearchBtn = document.getElementById('searchBtn');
+            const legacySearchError = document.getElementById('searchError');
 
-            document.getElementById('searchBtn').onclick = () => {
-                const fromCity = document.getElementById('searchFrom').value;
-                if (!fromCity || fromCity === "") {
-                    const group = document.getElementById('searchFrom').parentElement;
-                    const error = document.getElementById('searchError');
-                    group.classList.add('shake');
-                    error.classList.remove('hidden');
-                    setTimeout(() => {
-                        group.classList.remove('shake');
-                    }, 1500);
-                    return;
-                }
+            if (legacySearchFrom) {
+                legacySearchFrom.addEventListener('click', () => {
+                    legacySearchError?.classList.add('hidden');
+                });
+                legacySearchFrom.addEventListener('change', () => {
+                    legacySearchError?.classList.add('hidden');
+                });
+            }
 
-                currentCity = fromCity;
-                currentDestinationFilter = document.getElementById('searchTo').value;
-                currentMonthFilter = document.getElementById('searchMonth').value;
-                isSearchFromHome = true;
+            if (legacySearchBtn) {
+                legacySearchBtn.onclick = () => {
+                    // If new autocomplete system exists, use performSearchProject
+                    if (typeof performSearchProject === 'function' && document.getElementById('originInput')) {
+                        performSearchProject();
+                        return;
+                    }
 
-                // Sync with Deals page elements
-                const dealsFrom = document.getElementById('dealsFrom');
-                const dealsTo = document.getElementById('dealsTo');
-                const dealsMonth = document.getElementById('dealsMonth');
+                    // Legacy dropdown-based search
+                    const fromCity = legacySearchFrom?.value;
+                    if (!fromCity || fromCity === "") {
+                        const group = legacySearchFrom?.parentElement;
+                        if (group) group.classList.add('shake');
+                        legacySearchError?.classList.remove('hidden');
+                        setTimeout(() => {
+                            if (group) group.classList.remove('shake');
+                        }, 1500);
+                        return;
+                    }
 
-                if (dealsFrom) {
-                    dealsFrom.value = currentCity;
-                    if (typeof updateToDropdown === 'function') updateToDropdown('dealsTo', currentCity);
-                    if (dealsTo) dealsTo.value = currentDestinationFilter;
-                    if (dealsMonth) dealsMonth.value = currentMonthFilter;
+                    currentCity = fromCity;
+                    currentDestinationFilter = legacySearchTo?.value || '';
+                    currentMonthFilter = legacySearchMonth?.value || '';
+                    isSearchFromHome = true;
 
-                    // Sync custom dropdowns
-                    [dealsFrom, dealsTo, dealsMonth].forEach(sel => {
-                        if (sel && sel.parentNode) {
-                            const custom = sel.parentNode.querySelector('.custom-dropdown');
-                            if (custom && typeof syncCustomDropdownWithSelect === 'function') {
-                                syncCustomDropdownWithSelect(custom, sel);
+                    // Sync with Deals page elements
+                    const dealsFrom = document.getElementById('dealsFrom');
+                    const dealsTo = document.getElementById('dealsTo');
+                    const dealsMonth = document.getElementById('dealsMonth');
+
+                    if (dealsFrom) {
+                        dealsFrom.value = currentCity;
+                        if (typeof updateToDropdown === 'function') updateToDropdown('dealsTo', currentCity);
+                        if (dealsTo) dealsTo.value = currentDestinationFilter;
+                        if (dealsMonth) dealsMonth.value = currentMonthFilter;
+
+                        // Sync custom dropdowns
+                        [dealsFrom, dealsTo, dealsMonth].forEach(sel => {
+                            if (sel && sel.parentNode) {
+                                const custom = sel.parentNode.querySelector('.custom-dropdown');
+                                if (custom && typeof syncCustomDropdownWithSelect === 'function') {
+                                    syncCustomDropdownWithSelect(custom, sel);
+                                }
                             }
-                        }
-                    });
-                }
+                        });
+                    }
 
-                saveFiltersToPersistent();
+                    saveFiltersToPersistent();
 
-                // Update URL
-                if (typeof updateURLParams === 'function') {
-                    updateURLParams({
-                        page: 'deals',
-                        from: currentCity || '',
-                        to: currentDestinationFilter || '',
-                        month: currentMonthFilter || ''
-                    });
-                }
+                    // Update URL
+                    if (typeof updateURLParams === 'function') {
+                        updateURLParams({
+                            page: 'deals',
+                            from: currentCity || '',
+                            to: currentDestinationFilter || '',
+                            month: currentMonthFilter || ''
+                        });
+                    }
 
-                showPage('deals');
-                // Removed applyDealsFilters() here as showPage('deals') already handles it via restoreFiltersFromPersistent() when isSearchFromHome is true
+                    showPage('deals');
 
-                if (typeof updateHeroStyle === 'function') updateHeroStyle('deals');
-            };
+                    if (typeof updateHeroStyle === 'function') updateHeroStyle('deals');
+                };
+            }
 
 
             // Deals Search Button - triggers filter application
@@ -4453,34 +6063,93 @@
 
         const compactCardTemplate = (d) => {
             // Get departure country code for flag
-            const depCountryCode = cityToCountryCode[d.from] || 'eu';
-            const depFlagUrl = `https://flagcdn.com/w40/${depCountryCode.toLowerCase()}.png`;
+            const depCountryCode = cityToCountryCode[d.from] || 'fr';
+
+            // Main image (destination country flag/image)
+            const mainImgSrc = flagStore[d.countryCode?.toLowerCase()] || `https://flagcdn.com/w320/${d.countryCode?.toLowerCase()}.png`;
+
+            // IATA Codes (always 3 chars, no truncation)
+            const iataFrom = d.iataFrom || (d.from ? d.from.substring(0, 3).toUpperCase() : 'DEP');
+            const iataTo = d.iataTo || (d.to ? d.to.substring(0, 3).toUpperCase() : 'ARR');
 
             return `
-            <a href="${d.url}" target="_blank" rel="noopener noreferrer" class="compact-card group">
-                <div class="deal-image relative overflow-hidden rounded-t-xl">
-                    <img src="${flagStore[d.countryCode?.toLowerCase()] || `https://flagcdn.com/w320/${d.countryCode?.toLowerCase()}.png`}" 
-                         alt="${d.to}" class="w-full h-full object-cover transition-all duration-500 shadow-sm" style="transform: scale(1.25);"
-                         onerror="this.src='https://picsum.photos/800/600?random=${d.to}'">
-                    <div class="absolute inset-0 bg-black/10 pointer-events-none"></div>
+            <a href="${d.url}" target="_blank" rel="noopener noreferrer"
+               class="compact-card relative group block transform transition-transform duration-300 hover:scale-105 flex-shrink-0"
+               style="width: 100%; aspect-ratio: 17/20; max-width: 340px; margin: 0 auto; min-width: 160px;">
+
+                <!-- Background Image Container -->
+                <div class="absolute inset-0 overflow-hidden shadow-2xl z-0"
+                     style="background: white; border: 4px solid #ffffff; border-radius: 1.5rem;">
+                    <img src="${mainImgSrc}"
+                         class="w-full h-full object-fill transition-transform duration-700 scale-125 group-hover:scale-150"
+                         onerror="this.src='https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop'">
+                    <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300"></div>
                 </div>
-                <div class="p-4 text-center">
-                    <h4 class="text-3xl font-black text-gray-900 mb-1 truncate">${d.to}</h4>
-                    <div class="flex flex-col items-center gap-1 mb-3">
-                        <span class="flex items-center gap-2 text-sm font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
-                            <span class="text-gray-400 text-xs uppercase">from</span>
-                            <img src="${depFlagUrl}" alt="${d.from}" class="w-5 h-4 object-cover rounded-sm shadow-sm" onerror="this.style.display='none'">
-                            <span class="font-bold">${d.from}</span>
-                        </span>
-                        <span class="text-sm font-black text-wander-primary uppercase tracking-widest bg-wander-light px-2 py-1 rounded-md border border-wander-primary/20">${d.date}</span>
+
+                <!-- Floating Info Card -->
+                <div class="absolute bg-white shadow-xl z-10"
+                     style="width: 92%; left: 4%; top: 40%; bottom: 4%; border-radius: 1rem; padding: 0.6rem 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
+
+                  <!-- Top Row: Origin - Plane - Dest (Using Grid for perfect centering) -->
+                  <div class="grid items-center relative" style="flex: 1; grid-template-columns: 1fr 22% 1fr;">
+
+                    <!-- Origin (Left) -->
+                    <div class="flex flex-col items-start z-10" style="min-width: 0;">
+                        <span class="text-gray-400 font-semibold uppercase tracking-wide"
+                              style="font-size: clamp(7px, 1.8vw, 11px); line-height: 1;">DEPART</span>
+                        <span class="text-wander-primary font-black w-full"
+                              style="font-size: clamp(1rem, 5vw, 1.8rem); line-height: 1.1;">${iataFrom}</span>
+                        <span class="text-gray-500 font-normal truncate w-full"
+                              style="font-size: clamp(8px, 1.8vw, 11px); line-height: 1.2;">${d.from}</span>
                     </div>
-                    <div class="flex flex-col items-center">
-                        <span class="text-sm font-bold text-gray-400 uppercase tracking-tighter mb-1">From only</span>
-                        <span class="text-4xl font-black text-wander-primary tracking-tighter">€${d.price}</span>
+
+                    <!-- Plane Icon (Center - Grid Cell) -->
+                    <div class="flex flex-col items-center justify-center relative z-0">
+                        <!-- Dashed line -->
+                        <div class="w-full border-t-2 border-dashed border-gray-300 opacity-60"></div>
+                        <!-- Plane circle -->
+                        <div class="absolute bg-wander-primary rounded-full flex items-center justify-center shadow-md border-2 border-white"
+                             style="width: clamp(16px, 3.5vw, 26px); height: clamp(16px, 3.5vw, 26px);">
+                            <svg class="text-white transform rotate-45"
+                                 style="width: clamp(8px, 2vw, 14px); height: clamp(8px, 2vw, 14px);"
+                                 viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="mt-4 bg-gray-50 group-hover:bg-wander-primary group-hover:text-white transition-all py-3 rounded-2xl text-sm font-black text-wander-primary uppercase tracking-widest border border-gray-100">
-                        View Deal
+
+                    <!-- Destination (Right) -->
+                    <div class="flex flex-col items-end z-10" style="min-width: 0;">
+                        <span class="text-gray-400 font-semibold uppercase tracking-wide"
+                              style="font-size: clamp(7px, 1.8vw, 11px); line-height: 1;">ARRIVE</span>
+                        <span class="text-wander-primary font-black text-right w-full"
+                              style="font-size: clamp(1rem, 5vw, 1.8rem); line-height: 1.1;">${iataTo}</span>
+                        <span class="text-gray-500 font-normal truncate w-full text-right"
+                              style="font-size: clamp(8px, 1.8vw, 11px); line-height: 1.2;">${d.to}</span>
                     </div>
+                  </div>
+
+                  <!-- Details Box -->
+                  <div class="bg-gray-50 border border-gray-200 rounded-lg flex justify-between items-center mt-auto"
+                       style="padding: 0.4rem 0.6rem; height: 38%;">
+
+                      <!-- Date -->
+                      <div class="flex flex-col items-start overflow-hidden" style="flex: 1; margin-right: 0.5rem;">
+                        <span class="text-gray-400 font-bold uppercase tracking-widest"
+                              style="font-size: clamp(7px, 1.5vw, 9px); line-height: 1; margin-bottom: 2px;">Dates</span>
+                        <span class="text-gray-800 font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full"
+                              style="font-size: clamp(7px, 1.5vw, 11px); line-height: 1.2;">${d.date}</span>
+                      </div>
+
+                      <!-- Price -->
+                      <div class="flex flex-col items-end">
+                        <span class="text-gray-400 font-bold uppercase tracking-widest"
+                              style="font-size: clamp(7px, 1.5vw, 9px); line-height: 1; margin-bottom: 2px;">Price</span>
+                        <span class="text-wander-primary font-black"
+                              style="font-size: clamp(1rem, 4vw, 1.5rem); line-height: 1;">€${d.price}</span>
+                      </div>
+
+                  </div>
                 </div>
             </a>
             `;
@@ -5055,6 +6724,17 @@
                 renderFestivalDeals(filtered);
             });
         }
+
+        // FORCE GLOBAL LOADER HIDING (Max 3s)
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('globalLoader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 500);
+                }, 2500);
+            }
+        });
     </script>
 
     <!-- ========== PREMIUM FOOTER ========== -->
