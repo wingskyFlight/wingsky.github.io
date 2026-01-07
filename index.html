@@ -1848,7 +1848,7 @@
             display: grid;
             gap: 1rem;
             justify-content: center;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             max-width: 1150px;
             margin: 0 auto;
         }
@@ -1890,10 +1890,10 @@
             }
         }
 
-        /* Tablet Landscape - 5 columns, reduced card height */
+        /* Tablet Landscape - 4 columns, reduced card height */
         @media (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) {
             .home-grid {
-                grid-template-columns: repeat(5, 1fr);
+                grid-template-columns: repeat(4, 1fr);
                 gap: 0.6rem;
             }
 
@@ -1948,7 +1948,17 @@
 
             .deals-carousel>*,
             .carousel .compact-card {
-                width: 215px !important;
+                width: 240px !important;
+            }
+        }
+
+        /* Force exactly 4 cards per row on large desktop */
+        @media (min-width: 1200px) {
+
+            .deals-carousel>*,
+            .carousel .compact-card {
+                width: calc(25% - 12px) !important;
+                max-width: 280px;
             }
         }
 
@@ -2612,8 +2622,7 @@
         }
 
         .ticket-date-val {
-            /* Increased ~50% for better readability on cards */
-            font-size: 15px;
+            font-size: 10px;
             font-weight: 800;
             color: #374151;
         }
@@ -2748,8 +2757,7 @@
             }
 
             .ticket-date-val {
-                /* Increased ~50% on small screens as well */
-                font-size: 16.5px;
+                font-size: 11px;
             }
 
             .ticket-price-container {
@@ -2784,8 +2792,8 @@
         .festival-profile-component {
             position: relative;
             width: 100%;
-            aspect-ratio: 302/500;
-            /* Increased height by ~1/3 */
+            aspect-ratio: 302/575;
+            /* Increased height by 15% for mobile readability */
             max-width: 302px;
             margin: 0 auto;
             overflow: hidden;
@@ -2803,13 +2811,12 @@
 
         .festival-glass-card {
             position: absolute;
-            bottom: 7px;
+            top: 50%;
+            bottom: 8px;
             left: 4%;
             width: 92%;
             height: auto;
-            min-height: 180px;
-            /* Increased default height */
-            max-height: 50%;
+            /* Glass starts at 50% of image height (desktop/tablet) */
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
@@ -2832,8 +2839,28 @@
             transition: all 0.4s ease-in-out;
         }
 
+        /* Mobile: Glass 15% higher (at 35%) and text -10% */
+        @media (max-width: 768px) {
+            .festival-glass-card {
+                top: 35%;
+            }
+
+            .fest-title {
+                font-size: 112% !important;
+            }
+
+            .fest-location {
+                font-size: clamp(12px, 1.2vw, 15px);
+            }
+
+            .fest-date-group {
+                font-size: clamp(12px, 1.5vw, 17px);
+            }
+        }
+
         /* --- Hover State: Expand --- */
         .festival-profile-component:hover .festival-glass-card {
+            top: 0;
             height: 100%;
             min-height: 100%;
             max-height: 100%;
@@ -2851,10 +2878,11 @@
         /* --- Inner Elements --- */
         .fest-title {
             color: #ffffff;
-            font-size: clamp(16px, 1.5vw, 22px);
+            font-size: clamp(12px, 1.2vw, 18px);
             margin-bottom: 2px;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
             transition: all 0.4s ease;
@@ -2881,6 +2909,25 @@
             flex-direction: column;
             align-items: flex-start;
             transition: all 0.4s ease;
+        }
+
+        /* Mobile: Center dates and stack layout */
+        @media (max-width: 768px) {
+            .fest-bottom-row {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .fest-date-group {
+                align-items: center;
+                text-align: center;
+            }
+
+            .fest-deal-btn {
+                width: 100%;
+            }
         }
 
         .fest-deal-btn {
@@ -2937,17 +2984,7 @@
 
 <body class="bg-gray-50 overflow-x-hidden">
 
-    <!-- PAGE TRANSITION LOADER -->
-    <div id="pageLoader"
-        class="fixed inset-0 bg-white/60 backdrop-blur-md z-[800] hidden flex-col items-center justify-center transition-opacity duration-300">
-        <div class="relative scale-75">
-            <div class="w-20 h-20 border-8 border-purple-100 border-t-purple-600 rounded-full animate-spin"></div>
-            <div class="absolute inset-0 flex items-center justify-center">
-                <i data-lucide="plane" class="w-6 h-6 text-purple-600 animate-bounce"></i>
-            </div>
-        </div>
-        <p class="mt-4 text-purple-600 text-[10px] font-black uppercase tracking-[0.3em]">Updating Skyview...</p>
-    </div>
+
 
     <!-- GLOBAL LOADER -->
     <div id="globalLoader"
@@ -2965,7 +3002,7 @@
 
     <!-- POPUP AU DÉMARRAGE -->
     <div id="cityPopup" class="fixed inset-0 bg-black/70 z-[500] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative overflow-visible z-[510]">
+        <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative overflow-hidden">
             <!-- Popup Loader Overlay (Scanning effect) -->
             <div id="popupLoader"
                 class="absolute inset-0 bg-white z-30 flex flex-col items-center justify-center transition-opacity duration-300">
@@ -3427,7 +3464,6 @@
                     class="inline-block px-16 py-6 bg-wander-primary hover:bg-wander-primaryDark text-white text-2xl font-bold rounded-3xl shadow-2xl transition-all">
                     More
                 </button>
-            </div>
             </div>
 
             <!-- FEATURES SECTION -->
@@ -4526,34 +4562,34 @@
                   <!-- Glass Card -->
                   <div class="festival-glass-card">
                     
-                    <!-- Title -->
-                    <div class="fest-element fest-title font-bold leading-tight" style="color: #ffffff;">
-                      ${f.title}
-                    </div>
+            <!-- Title -->
+            <div class="fest-element fest-title font-bold leading-tight" style="color: #ffffff; font-size: 132%;">
+              ${f.title}
+            </div>
 
-                    <!-- Location -->
-                    <div class="fest-element fest-location font-normal leading-tight drop-shadow-md flex items-center justify-center gap-2"
-                         style="color: #e2e8f0; font-size: clamp(12px, 1.2vw, 15px); opacity: 0.9;">
-                      <span>${f.city}</span>
-                      <img src="${flagUrl}" class="w-5 h-4 rounded-sm shadow-sm opacity-90" alt="flag">
-                    </div>
+            <!-- Location -->
+            <div class="fest-element fest-location font-normal leading-tight drop-shadow-md flex items-center justify-center gap-2"
+                 style="color: #e2e8f0; font-size: clamp(16px, 1.6vw, 20px); opacity: 0.9;">
+              <span>${f.city}</span>
+              <img src="${flagUrl}" class="w-5 h-4 rounded-sm shadow-sm opacity-90" alt="flag">
+            </div>
 
-                    <!-- Bottom Row -->
-                    <div class="fest-bottom-row">
-                        
-                        <!-- Date Group -->
-                        <div class="fest-date-group fest-element font-bold drop-shadow-md text-white" 
-                             style="font-size: clamp(10px, 1.1vw, 13px); line-height: 1.1;">
-                                <span>${f.start}</span>
-                                <span>${f.end || ''}</span>
-                        </div>
+            <!-- Bottom Row: Vertical on Mobile, Horizontal on Desktop -->
+            <div class="fest-bottom-row flex flex-col md:flex-row md:items-end md:justify-between w-full gap-3 mt-auto">
+                
+                <!-- Date Group: Stacked dates -->
+                <div class="fest-date-group fest-element font-bold drop-shadow-md text-white flex flex-col items-center md:items-start gap-1" 
+                     style="font-size: clamp(14px, 1.7vw, 19px); line-height: 1.1;">
+                        <span>${f.start}</span>
+                        <span>${f.end || ''}</span>
+                </div>
 
-                        <!-- Book Button -->
-                        <div class="fest-element fest-deal-btn bg-white text-black font-bold rounded-full shadow-lg flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
-                             style="padding: 9px 20px; font-size: 14px;">
-                          Deals <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </div>
-                    </div>
+                <!-- Book Button: Full Width Mobile, Auto Desktop -->
+                <div class="fest-element fest-deal-btn bg-white text-black font-bold rounded-full shadow-lg flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer w-full md:w-auto"
+                     style="padding: 10px 24px; font-size: 14px;">
+                  Deals <i class="fa-solid fa-arrow-right ml-1"></i>
+                </div>
+            </div>
 
                   </div>
                 </div>
@@ -5814,21 +5850,7 @@
                         dealsFrom.dispatchEvent(new Event('change'));
                     }
 
-                    // Show deals and update URL + hero style
                     showPage('deals');
-
-                    // Update URL
-                    if (typeof updateURLParams === 'function') {
-                        updateURLParams({
-                            page: 'deals',
-                            from: currentCity || '',
-                            to: currentDestinationFilter || '',
-                            month: currentMonthFilter || ''
-                        });
-                    }
-
-                    // Adjust hero if available
-                    if (typeof updateHeroStyle === 'function') updateHeroStyle('deals');
 
                     // Reset button state for next time (even if popup is gone)
                     btn.removeAttribute('data-loading');
@@ -5836,9 +5858,6 @@
                     if (btnText) btnText.classList.remove('hidden');
                     if (btnSpinner) btnSpinner.classList.add('hidden');
                 }, 800);
-            };
-
-
             };
 
             // Legacy searchFrom handlers (may not exist with new autocomplete system)
@@ -5999,7 +6018,7 @@
                     renderFestivalDeals(filtered);
                 };
             }
-        
+        }
 
         function saveFiltersToPersistent() {
             persistentFilters.city = currentCity;
@@ -6103,8 +6122,8 @@
 
             return `
             <a href="${d.url}" target="_blank" rel="noopener noreferrer"
-               class="compact-card relative group block transform transition-transform duration-300 hover:scale-105 flex-shrink-0"
-               style="width: 100%; aspect-ratio: 17/20; max-width: 340px; margin: 0 auto; min-width: 160px;">
+               class="compact-card relative group block transform transition-transform duration-300 hover:scale-105 flex-shrink-0 min-w-[160px] md:min-w-[290px]"
+               style="width: 100%; aspect-ratio: 17/20; max-width: 425px; margin: 0 auto;">
 
                 <!-- Background Image Container -->
                 <div class="absolute inset-0 overflow-hidden shadow-2xl z-0"
@@ -6138,9 +6157,9 @@
                         <div class="w-full border-t-2 border-dashed border-gray-300 opacity-60"></div>
                         <!-- Plane circle -->
                         <div class="absolute bg-wander-primary rounded-full flex items-center justify-center shadow-md border-2 border-white"
-                             style="width: clamp(16px, 3.5vw, 26px); height: clamp(16px, 3.5vw, 26px);">
+                             style="width: clamp(25px, 5.5vw, 40px); height: clamp(25px, 5.5vw, 40px);">
                             <svg class="text-white transform rotate-45"
-                                 style="width: clamp(8px, 2vw, 14px); height: clamp(8px, 2vw, 14px);"
+                                 style="width: clamp(12px, 3.1vw, 22px); height: clamp(12px, 3.1vw, 22px);"
                                  viewBox="0 0 24 24" fill="currentColor">
                               <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
                             </svg>
@@ -6160,22 +6179,28 @@
 
                   <!-- Details Box -->
                   <div class="bg-gray-50 border border-gray-200 rounded-lg flex justify-between items-center mt-auto"
-                       style="padding: 0.4rem 0.6rem; height: 38%;">
+                       style="padding: 0.4rem 0.6rem; height: 40%;">
 
                       <!-- Date -->
-                      <div class="flex flex-col items-start overflow-hidden" style="flex: 1; margin-right: 0.5rem;">
-                        <span class="text-gray-400 font-bold uppercase tracking-widest"
+                      <div class="flex flex-col items-start justify-center overflow-hidden" style="flex: 1; margin-right: 0.5rem;">
+                        <span class="text-gray-400 font-bold uppercase tracking-widest hidden sm:block"
                               style="font-size: clamp(7px, 1.5vw, 9px); line-height: 1; margin-bottom: 2px;">Dates</span>
-                        <span class="text-gray-800 font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full"
-                              style="font-size: clamp(7px, 1.5vw, 11px); line-height: 1.2;">${d.date}</span>
+                        <!-- Desktop: single line -->
+                        <span class="hidden sm:block text-gray-800 font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full"
+                              style="font-size: clamp(10px, 2.2vw, 16px); line-height: 1.2;">${d.date}</span>
+                        <!-- Mobile: stacked dates -->
+                        <div class="sm:hidden flex flex-col gap-0.5">
+                          <span class="text-gray-800 font-black" style="font-size: 15.2px; line-height: 1.1;">${d.date.split('-')[0].trim()}</span>
+                          <span class="text-gray-800 font-black" style="font-size: 15.2px; line-height: 1.1;">${(d.date.split('-')[1] || '').trim()}</span>
+                        </div>
                       </div>
 
                       <!-- Price -->
-                      <div class="flex flex-col items-end">
-                        <span class="text-gray-400 font-bold uppercase tracking-widest"
+                      <div class="flex flex-col items-end justify-center">
+                        <span class="text-gray-400 font-bold uppercase tracking-widest hidden sm:block"
                               style="font-size: clamp(7px, 1.5vw, 9px); line-height: 1; margin-bottom: 2px;">Price</span>
                         <span class="text-wander-primary font-black"
-                              style="font-size: clamp(1rem, 4vw, 1.5rem); line-height: 1;">€${d.price}</span>
+                              style="font-size: clamp(1.2rem, 5vw, 1.8rem); line-height: 1;">€${d.price}</span>
                       </div>
 
                   </div>
