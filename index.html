@@ -2963,7 +2963,7 @@
 
     <!-- POPUP AU DÉMARRAGE -->
     <div id="cityPopup" class="fixed inset-0 bg-black/70 z-[500] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative overflow-hidden">
+        <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative overflow-visible z-[510]">
             <!-- Popup Loader Overlay (Scanning effect) -->
             <div id="popupLoader"
                 class="absolute inset-0 bg-white z-30 flex flex-col items-center justify-center transition-opacity duration-300">
@@ -5997,7 +5997,7 @@
                     renderFestivalDeals(filtered);
                 };
             }
-        }
+        
 
         function saveFiltersToPersistent() {
             persistentFilters.city = currentCity;
