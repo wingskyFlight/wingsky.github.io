@@ -1,0 +1,17 @@
+[
+  {
+    "selector": "button#mat-mdc-slide-toggle-0-button > span:nth-of-type(2) > span > span:nth-of-type(2)",
+    "timestamp": "01:11:10",
+    "url": "https://www.zefix.ch/en/search/entity/list/firm/387115"
+  },
+  {
+    "selector": "input#mat-mdc-checkbox-1-input",
+    "timestamp": "01:11:13",
+    "url": "https://www.zefix.ch/en/search/entity/list/firm/387115"
+  },
+  {
+    "selector": "input#mat-mdc-checkbox-2-input",
+    "timestamp": "01:11:14",
+    "url": "https://www.zefix.ch/en/search/entity/list/firm/387115"
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "selector": "div#Titel > div:nth-of-type(2) > p > span",
+    "type": "simple",
+    "tagName": "span",
+    "timestamp": "03:48:54",
+    "url": "https://zh.chregister.ch/cr-portal/auszug/auszug.xhtml;jsessionid=uajOJfA85iYnRV62UqKrjBuBbQ7cV453GmjAJwYt.server-1e3ee3268efa?loeschung=20200317&uid=CHE-100.102.055#"
+  },
+  {
+    "selector": "div#Titel > div:nth-of-type(3) > p > span",
+    "type": "simple",
+    "tagName": "span",
+    "timestamp": "03:48:55",
+    "url": "https://zh.chregister.ch/cr-portal/auszug/auszug.xhtml;jsessionid=uajOJfA85iYnRV62UqKrjBuBbQ7cV453GmjAJwYt.server-1e3ee3268efa?loeschung=20200317&uid=CHE-100.102.055#"
+  },
+  {
+    "selector": "div#Titel > div:nth-of-type(2) > p:nth-of-type(2)",
+    "type": "simple",
+    "tagName": "p",
+    "timestamp": "03:48:57",
+    "url": "https://zh.chregister.ch/cr-portal/auszug/auszug.xhtml;jsessionid=uajOJfA85iYnRV62UqKrjBuBbQ7cV453GmjAJwYt.server-1e3ee3268efa?loeschung=20200317&uid=CHE-100.102.055#"
+  },
+  {
+    "selector": "div#Titel > div:nth-of-type(3) > p:nth-of-type(2) > span:nth-of-type(2)",
+    "type": "simple",
+    "tagName": "span",
+    "timestamp": "03:49:02",
+    "url": "https://zh.chregister.ch/cr-portal/auszug/auszug.xhtml;jsessionid=uajOJfA85iYnRV62UqKrjBuBbQ7cV453GmjAJwYt.server-1e3ee3268efa?loeschung=20200317&uid=CHE-100.102.055#"
+  },
+  {
+    "selector": "div#Titel > div:nth-of-type(4) > p > span:nth-of-type(2)",
+    "type": "simple",
+    "tagName": "span",
+    "timestamp": "03:49:03",
+    "url": "https://zh.chregister.ch/cr-portal/auszug/auszug.xhtml;jsessionid=uajOJfA85iYnRV62UqKrjBuBbQ7cV453GmjAJwYt.server-1e3ee3268efa?loeschung=20200317&uid=CHE-100.102.055#"
+  },
+  {
+    "selector": "form#idAuszugForm > div:nth-of-type(2) > span > div:nth-of-type(6) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(3) > td:nth-of-type(2)",
+    "type": "simple",
+    "tagName": "td",
+    "timestamp": "03:50:38",
+    "url": "https://zh.chregister.ch/cr-portal/auszug/auszug.xhtml;jsessionid=uajOJfA85iYnRV62UqKrjBuBbQ7cV453GmjAJwYt.server-1e3ee3268efa?loeschung=20200317&uid=CHE-100.102.055#"
+  },
+  {
+    "selector": "form#idAuszugForm > div:nth-of-type(2) > span > div:nth-of-type(8) > div:nth-of-type(2) > table > tbody > tr:nth-of-type(6) > td:nth-of-type(5)",
+    "type": "simple",
+    "tagName": "td",
+    "timestamp": "03:51:12",
+    "url": "https://zh.chregister.ch/cr-portal/auszug/auszug.xhtml;jsessionid=uajOJfA85iYnRV62UqKrjBuBbQ7cV453GmjAJwYt.server-1e3ee3268efa?loeschung=20200317&uid=CHE-100.102.055#"
+  },
+  {
+    "selector": "form#idAuszugForm > div:nth-of-type(2) > span > div:nth-of-type(3) > div > table > tbody",
+    "type": "block",
+    "tagName": "tbody",
+    "timestamp": "03:52:40",
+    "url": "https://zh.chregister.ch/cr-portal/auszug/auszug.xhtml;jsessionid=uajOJfA85iYnRV62UqKrjBuBbQ7cV453GmjAJwYt.server-1e3ee3268efa?loeschung=20200317&uid=CHE-100.102.055#"
+  },
+  {
+    "selector": "form#idAuszugForm > div:nth-of-type(2) > span > div:nth-of-type(9) > div > table",
+    "type": "block",
+    "tagName": "table",
+    "timestamp": "03:53:57",
+    "url": "https://zh.chregister.ch/cr-portal/auszug/auszug.xhtml;jsessionid=uajOJfA85iYnRV62UqKrjBuBbQ7cV453GmjAJwYt.server-1e3ee3268efa?loeschung=20200317&uid=CHE-100.102.055#"
+  }
+]
