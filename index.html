@@ -56,6 +56,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
         /* COMPLETELY HIDE Google Translate widget and all its elements */
@@ -1320,6 +1321,21 @@
             border: 3px solid var(--wander-primary);
         }
 
+        /* Responsive header: burger menu from 930px and below */
+        @media (max-width: 930px) {
+            .glass-header nav {
+                display: none !important;
+            }
+
+            .glass-header .md\:hidden {
+                display: flex !important;
+            }
+
+            .glass-header {
+                padding: 12px 20px;
+            }
+        }
+
         .glass-header::before {
             content: '';
             position: absolute;
@@ -1910,6 +1926,15 @@
 
 
         /* Responsive Scaling for Grid & Widgets */
+        /* CRITICAL: 770px to 970px - Force 3 columns for tickets */
+        @media (min-width: 770px) and (max-width: 970px) {
+            .home-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 0.75rem !important;
+                padding: 0 0.75rem !important;
+            }
+        }
+
         @media (max-width: 1366px) {
             .home-grid {
                 grid-template-columns: repeat(3, 1fr) !important;
@@ -2507,6 +2532,126 @@
             max-width: 408px;
         }
 
+        /* Responsive cards: 770px to 970px - Scale internal elements (Grid handles width) */
+        @media (min-width: 770px) and (max-width: 970px) {
+
+            /* Grid already handles 3 columns, just scale internal elements */
+            .city-flight-box {
+                padding: 10px !important;
+            }
+
+            .city-box-header {
+                margin-bottom: 8px;
+                padding-bottom: 6px;
+            }
+
+            .city-box-flag {
+                font-size: 1.1rem;
+            }
+
+            .city-box-title {
+                font-size: 0.8rem;
+            }
+
+            .city-box-subtitle {
+                font-size: 0.6rem;
+            }
+
+            .city-tickets-row {
+                gap: 6px;
+            }
+
+            .flight-ticket {
+                width: 100% !important;
+                height: auto;
+                min-height: 240px;
+            }
+
+            .ticket-top {
+                padding: 6px 5px;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .ticket-logo {
+                font-size: 11px;
+            }
+
+            .route-iata {
+                font-size: 10px;
+                /* Reduced by 15%+ from 12px */
+            }
+
+            .route-city-label {
+                font-size: 6px;
+            }
+
+            .route-flag {
+                font-size: 9px;
+            }
+
+            .route-arrow-row {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
+            }
+
+            .route-arrow-icon {
+                width: 12px;
+                height: 12px;
+                margin: 0;
+            }
+
+            .ticket-dates {
+                padding: 4px 5px;
+                margin: 4px 0;
+                display: flex;
+                flex-direction: column;
+                /* Stack dates */
+                align-items: center;
+                gap: 1px;
+                width: 100%;
+            }
+
+            .ticket-date-val {
+                font-size: 8px;
+                font-weight: 800;
+            }
+
+            .ticket-arrow-icon {
+                display: none;
+                /* Hide arrow for cleaner stacked look */
+            }
+
+            .ticket-price-label {
+                font-size: 5px;
+            }
+
+            .ticket-price-value {
+                font-size: 15px;
+            }
+
+            .ticket-bottom {
+                min-height: 55px;
+                padding: 5px;
+            }
+
+            .ticket-qr {
+                width: 38px;
+                height: 38px;
+            }
+
+            .ticket-early-badge {
+                font-size: 5px;
+                padding: 1px 4px;
+                left: 6px;
+                top: 6px;
+            }
+        }
+
         .city-flight-box:hover {
             border-color: var(--wander-primary);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
@@ -2846,6 +2991,134 @@
             }
         }
 
+        /* --- QR SCANNER MODAL STYLES --- */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .qr-preview-canvas {
+            width: 100%;
+            height: 300px;
+            border: 3px dashed #cbd5e1;
+            border-radius: 16px;
+            cursor: move;
+            background: #f8fafc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qr-controls {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .qr-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #5d3fd3;
+            background: white;
+            color: #5d3fd3;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .qr-btn:hover {
+            background: #5d3fd3;
+            color: white;
+        }
+
+        .qr-modal.show {
+            display: flex;
+        }
+
+        .qr-modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 4px solid #5d3fd3;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .qr-modal.show .qr-modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .qr-modal-header {
+            background: #5d3fd3;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .qr-modal-title {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .qr-modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .qr-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .btn-scan-trigger {
+            background: #fdf2f2;
+            color: #ef4444;
+            border: 2px solid #fee2e2;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-scan-trigger:hover {
+            background: white;
+            border-color: #5d3fd3;
+            color: #5d3fd3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(93, 63, 211, 0.1);
+        }
+
         /* --- FESTIVAL CARD STYLES (Sophie Bennett Design) --- */
         .festival-profile-component {
             position: relative;
@@ -3157,6 +3430,14 @@
                     <li><a href="#deals" class="nav-link-premium nav-trigger nav-link" data-page="deals">Deals</a></li>
                     <li><a href="#festivals" class="nav-link-premium nav-trigger nav-link"
                             data-page="festivals">Festivals</a></li>
+                    <li>
+                        <button onclick="openQRScanner()"
+                            class="nav-link-premium group !min-width-0 hover:!bg-[#5d3fd3] hover:!text-white hover:!border-white"
+                            style="min-width: unset; padding: 0.5rem 1.2rem; border-color: #9144ef; color: #6f0487;">
+                            <i class="fa-solid fa-qrcode transition-transform group-hover:scale-110 mr-2"></i>
+                            SCAN
+                        </button>
+                    </li>
                     <!-- Custom Language Selector with Flags -->
                     <li class="custom-lang-selector" id="langSelector">
                         <div class="lang-trigger" onclick="this.parentElement.classList.toggle('open')">
@@ -3189,16 +3470,16 @@
                 </ul>
             </nav>
 
-            <!-- Mobile Burger -->
+            <!-- Mobile Burger - Clean icon only -->
             <button
-                class="md:hidden p-3 relative z-10 bg-white/90 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center"
-                onclick="toggleDrawer()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="text-wander-primary w-6 h-6">
-                    <line x1="4" x2="20" y1="12" y2="12" />
-                    <line x1="4" x2="20" y1="6" y2="6" />
-                    <line x1="4" x2="20" y1="18" y2="18" />
+                class="md:hidden p-2 relative z-10 bg-white/90 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center"
+                onclick="toggleDrawer()" aria-label="Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-wander-primary">
+                    <line x1="3" x2="21" y1="6" y2="6" />
+                    <line x1="3" x2="21" y1="12" y2="12" />
+                    <line x1="3" x2="21" y1="18" y2="18" />
                 </svg>
             </button>
         </header>
@@ -3232,6 +3513,11 @@
                 <a href="#festivals" class="drawer-item"
                     onclick="toggleDrawer(); if(typeof showPage==='function') showPage('festivals');">
                     <i class="fa-solid fa-champagne-glasses"></i> Festivals
+                </a>
+                <div class="h-px bg-gray-100 my-2 mx-6"></div>
+                <a href="javascript:void(0)" class="drawer-item" onclick="toggleDrawer(); openQRScanner();">
+                    <i class="fa-solid fa-qrcode text-indigo-500"></i> <span class="font-black text-indigo-600">SCAN
+                        VIDEO TICKET</span>
                 </a>
             </div>
 
@@ -7206,89 +7492,153 @@
             }
         });
     </script>
-    <section id="qrScannerSection" class="max-w-4xl mx-auto px-6 py-20">
-        <div class="bg-white rounded-[40px] shadow-2xl overflow-hidden border-4 border-[#5d3fd3]">
-            <div class="bg-[#5d3fd3] px-10 py-6 flex items-center justify-between">
-                <h2 class="text-3xl font-black text-white uppercase tracking-tighter"
-                    style="font-family:'Luckiest Guy', cursive;">Scan a Ticket</h2>
-                <div
-                    class="bg-white/20 px-4 py-1.5 rounded-full text-xs font-black text-white uppercase tracking-widest">
-                    VIDEO TOOL</div>
+    <!-- QR SCANNER MODAL -->
+    <div id="qrScannerModal" class="qr-modal" onclick="if(event.target === this) closeQRScanner()">
+        <div class="qr-modal-content">
+            <div class="qr-modal-header">
+                <span class="qr-modal-title">Scan Video Ticket</span>
+                <div class="qr-modal-close" onclick="closeQRScanner()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </div>
             </div>
-            <div class="p-10 flex flex-col md:flex-row gap-10 items-center">
-                <div class="flex-1 text-center md:text-left">
-                    <h3 class="text-2xl font-black text-slate-800 mb-4 uppercase tracking-tight">Saw a flight in our
-                        video?</h3>
-                    <p class="text-slate-500 mb-8 font-medium text-lg leading-relaxed">Upload a screenshot of any ticket
-                        from our 360 rotation to instantly unlock the booking link.</p>
-                    <label for="qrFileInput"
-                        class="inline-flex items-center gap-3 bg-[#5d3fd3] hover:bg-[#4b32b0] text-white font-black px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-xl shadow-indigo-100 hover:scale-105 active:scale-95 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                            class="transition-transform group-hover:-translate-y-1">
+            <div class="p-8">
+                <div class="text-center mb-6">
+                    <p class="text-slate-500 font-bold mb-4">Upload a screenshot and zoom/pan to isolate the QR code you
+                        want to scan.</p>
+
+                    <label for="qrFileInputModal"
+                        class="inline-flex items-center gap-3 bg-[#5d3fd3] hover:bg-[#4b32b0] text-white font-black px-6 py-3 rounded-xl transition-all cursor-pointer shadow-lg hover:scale-105 active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                             <polyline points="17 8 12 3 7 8" />
                             <line x1="12" x2="12" y1="3" y2="15" />
                         </svg>
-                        UPLOAD SCREENSHOT
+                        UPLOAD IMAGE
                     </label>
-                    <input type="file" id="qrFileInput" accept="image/*" class="hidden">
+                    <input type="file" id="qrFileInputModal" accept="image/*" class="hidden">
                 </div>
-                <div class="w-60 h-60 bg-slate-50 border-4 border-dashed border-slate-200 rounded-[32px] flex items-center justify-center relative overflow-hidden"
-                    id="qrPreview">
-                    <div class="flex flex-col items-center gap-3 text-slate-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                            <circle cx="9" cy="9" r="2" />
-                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                        </svg>
-                        <span class="text-xs font-black uppercase tracking-widest">No Image</span>
+
+                <div id="qrCanvasContainer" class="hidden">
+                    <canvas id="qrPreviewCanvas" class="qr-preview-canvas"></canvas>
+                    <div class="qr-controls">
+                        <button class="qr-btn" onclick="qrZoomIn()">🔍 Zoom +</button>
+                        <button class="qr-btn" onclick="qrZoomOut()">🔍 Zoom -</button>
+                        <button class="qr-btn" onclick="qrReset()">↺ Reset</button>
+                        <button class="qr-btn" style="background: #5d3fd3; color: white;" onclick="qrScan()">✓ Scan
+                            QR</button>
                     </div>
-                    <canvas id="qrCanvas" class="hidden"></canvas>
                 </div>
-            </div>
-            <div id="qrResult"
-                class="hidden bg-indigo-50 border-t-2 border-indigo-100 p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div class="flex items-center gap-6">
-                    <div
-                        class="w-16 h-16 bg-white text-[#5d3fd3] rounded-2xl flex items-center justify-center shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                            <polyline points="22 4 12 14.01 9 11.01" />
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-sm font-black text-[#5d3fd3]/60 uppercase tracking-[0.2em] mb-1">Deal Link Found
-                        </p>
-                        <a id="qrLink" href="#" target="_blank"
-                            class="text-[#5d3fd3] font-black text-2xl flex items-center gap-3 hover:underline group">
-                            Go to Booking Site
+
+                <div id="qrModalResult" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500 mt-6">
+                    <div class="bg-indigo-50 rounded-2xl p-6 border-2 border-indigo-100 flex items-center gap-5">
+                        <div
+                            class="w-12 h-12 bg-white text-[#5d3fd3] rounded-xl flex items-center justify-center shadow-md">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
-                                <line x1="7" x2="17" y1="17" y2="7" />
-                                <polyline points="7 7 17 7 17 17" />
+                                stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
                             </svg>
-                        </a>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-[10px] font-black text-[#5d3fd3]/60 uppercase tracking-widest mb-0.5">Ticket
+                                Found!</p>
+                            <a id="qrModalLink" href="#" target="_blank"
+                                class="text-[#5d3fd3] font-black text-lg hover:underline flex items-center gap-2">
+                                Open Booking Link
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="7" x2="17" y1="17" y2="7" />
+                                    <polyline points="7 7 17 7 17 17" />
+                                </svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <script>
-        (function () {
-            const fileInput = document.getElementById('qrFileInput');
-            const preview = document.getElementById('qrPreview');
-            const result = document.getElementById('qrResult');
-            const qrLink = document.getElementById('qrLink');
-            const canvas = document.getElementById('qrCanvas');
+    <script id="qrScannerScript">
+        let qrImage = null;
+        let qrScale = 1;
+        let qrOffsetX = 0;
+        let qrOffsetY = 0;
+        let qrDragging = false;
+        let qrStartX = 0;
+        let qrStartY = 0;
+
+        window.openQRScanner = function () {
+            document.getElementById('qrScannerModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('qrModalResult').classList.add('hidden');
+            document.getElementById('qrCanvasContainer').classList.add('hidden');
+            qrReset();
+        };
+
+        window.closeQRScanner = function () {
+            document.getElementById('qrScannerModal').classList.remove('show');
+            document.body.style.overflow = '';
+        };
+
+        window.qrZoomIn = function () {
+            qrScale *= 1.2;
+            qrDrawCanvas();
+        };
+
+        window.qrZoomOut = function () {
+            qrScale /= 1.2;
+            if (qrScale < 0.5) qrScale = 0.5;
+            qrDrawCanvas();
+        };
+
+        window.qrReset = function () {
+            qrScale = 1;
+            qrOffsetX = 0;
+            qrOffsetY = 0;
+            qrDrawCanvas();
+        };
+
+        window.qrScan = function () {
+            const canvas = document.getElementById('qrPreviewCanvas');
+            const imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (code) {
+                document.getElementById('qrModalLink').href = code.data;
+                document.getElementById('qrModalResult').classList.remove('hidden');
+            } else {
+                alert("❌ No QR code found in the current view. Try zooming or repositioning the image.");
+            }
+        };
+
+        function qrDrawCanvas() {
+            if (!qrImage) return;
+            const canvas = document.getElementById('qrPreviewCanvas');
             const ctx = canvas.getContext('2d');
 
-            fileInput.addEventListener('change', e => {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.translate(canvas.width / 2 + qrOffsetX, canvas.height / 2 + qrOffsetY);
+            ctx.scale(qrScale, qrScale);
+            ctx.drawImage(qrImage, -qrImage.width / 2, -qrImage.height / 2);
+            ctx.restore();
+        }
+
+        (function () {
+            const input = document.getElementById('qrFileInputModal');
+            const canvas = document.getElementById('qrPreviewCanvas');
+
+            input.addEventListener('change', e => {
                 const file = e.target.files[0];
                 if (!file) return;
 
@@ -7296,26 +7646,58 @@
                 reader.onload = event => {
                     const img = new Image();
                     img.onload = () => {
-                        canvas.width = img.width;
-                        canvas.height = img.height;
-                        ctx.drawImage(img, 0, 0);
-                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                        const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-                        if (code) {
-                            qrLink.href = code.data;
-                            result.classList.remove('hidden');
-                            preview.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-cover">`;
-                            window.scrollBy({ top: 300, behavior: 'smooth' });
-                        } else {
-                            alert("❌ No QR code found. Please ensure the screenshot clearly shows the ticket's QR code.");
-                            preview.innerHTML = `<div class="flex flex-col items-center gap-3 text-red-300"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span class="text-[10px] font-black uppercase tracking-widest">Invalid Screenshot</span></div>`;
-                            result.classList.add('hidden');
-                        }
+                        qrImage = img;
+                        qrReset();
+                        document.getElementById('qrCanvasContainer').classList.remove('hidden');
+                        qrDrawCanvas();
                     };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
+            });
+
+            // Pan functionality
+            canvas.addEventListener('mousedown', e => {
+                qrDragging = true;
+                qrStartX = e.clientX - qrOffsetX;
+                qrStartY = e.clientY - qrOffsetY;
+            });
+
+            canvas.addEventListener('mousemove', e => {
+                if (!qrDragging) return;
+                qrOffsetX = e.clientX - qrStartX;
+                qrOffsetY = e.clientY - qrStartY;
+                qrDrawCanvas();
+            });
+
+            canvas.addEventListener('mouseup', () => {
+                qrDragging = false;
+            });
+
+            canvas.addEventListener('mouseleave', () => {
+                qrDragging = false;
+            });
+
+            // Touch support
+            canvas.addEventListener('touchstart', e => {
+                qrDragging = true;
+                const touch = e.touches[0];
+                qrStartX = touch.clientX - qrOffsetX;
+                qrStartY = touch.clientY - qrOffsetY;
+                e.preventDefault();
+            });
+
+            canvas.addEventListener('touchmove', e => {
+                if (!qrDragging) return;
+                const touch = e.touches[0];
+                qrOffsetX = touch.clientX - qrStartX;
+                qrOffsetY = touch.clientY - qrStartY;
+                qrDrawCanvas();
+                e.preventDefault();
+            });
+
+            canvas.addEventListener('touchend', () => {
+                qrDragging = false;
             });
         })();
     </script>
