@@ -52,6 +52,11 @@
     <script type="text/javascript"
         src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+    <!-- Flatpickr for Date Selection -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+
     <style>
         /* COMPLETELY HIDE Google Translate widget and all its elements */
         .goog-te-banner-frame,
@@ -95,24 +100,119 @@
             z-index: 100;
         }
 
+        /* Card Styling refinements (Round 20) */
+        .compact-card-root {
+            width: 100%;
+            max-width: 425px;
+            margin: 0 auto;
+        }
+
+        .compact-card-aspect {
+            aspect-ratio: 17/16;
+            /* 20% shorter on desktop/tablet */
+        }
+
+        /* Original height on mobile */
+        @media (max-width: 768px) {
+            .compact-card-aspect {
+                aspect-ratio: 17/20;
+            }
+        }
+
+        /* Carousel specific card optimization */
+        .carousel .compact-card-root {
+            width: 290px !important;
+            flex: 0 0 290px !important;
+            margin: 0 !important;
+        }
+
+        .carousel {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @media (max-width: 768px) {
+            .carousel .compact-card-root {
+                width: 220px !important;
+                flex: 0 0 220px !important;
+            }
+        }
+
+
+
+
+        /* PREMIUM NAVIGATION LINKS */
+        .nav-link-premium {
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #c5c5c5;
+            /* Gray-600 */
+            font-weight: 600;
+            /* Semi-bold */
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+            /* Prevents layout shift on hover border */
+        }
+
+        .nav-link-premium i {
+            font-size: 1rem;
+            color: #6b7280;
+            /* Gray-500 */
+            transition: color 0.3s;
+        }
+
+        .nav-link-premium:hover {
+            color: #5d3fd3;
+            /* Primary color */
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(93, 63, 211, 0.1);
+            box-shadow: 0 4px 12px rgba(93, 63, 211, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .nav-link-premium:hover i {
+            color: #5d3fd3;
+        }
+
+        /* Active state style (optional) */
+        .nav-link-premium:active {
+            transform: translateY(0);
+        }
+
         .lang-trigger {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
+            gap: 8px;
+            /* Match nav-link gap */
+            padding: 8px 16px;
+            /* Match nav-link padding */
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
+            /* Match nav-link font size */
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid #e5e7eb;
-            color: #556068;
+            color: #c5c5c5
+                /* Gray-600 */
         }
 
         .lang-trigger:hover {
             background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: rgba(93, 63, 211, 0.3);
+            color: #5d3fd3;
+            box-shadow: 0 4px 12px rgba(93, 63, 211, 0.15);
+            transform: translateY(-1px);
         }
 
         .lang-trigger img {
@@ -173,6 +273,168 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
+        /* MOBILE HERO ADJUSTMENTS */
+        @media (max-width: 768px) {
+
+            .hero-wrapper,
+            #mainHero {
+                border-radius: 28.5px !important;
+                /* Decreased by 1.5px from 30px */
+                overflow: hidden !important;
+                /* We keep original backgrounds visible */
+            }
+        }
+
+        /* Wingsky Style Navigation */
+        .nav-link,
+        .mobile-nav-link {
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            transition: all 0.3s ease;
+        }
+
+        /* ========== KAYAK STYLE DRAWER MENU ========== */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            /* Hidden left */
+            width: 85%;
+            max-width: 300px;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 100;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-drawer.open {
+            left: 0;
+        }
+
+        .drawer-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .drawer-logo {
+            font-family: 'Luckiest Guy', cursive;
+            color: #5d3fd3;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .drawer-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #374151;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+        .drawer-item:hover {
+            background: #f9fafb;
+            color: #5d3fd3;
+        }
+
+        .drawer-item i,
+        .drawer-item svg {
+            width: 20px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .drawer-item:hover i,
+        .drawer-item:hover svg {
+            color: #5d3fd3;
+        }
+
+        .drawer-footer {
+            padding: 24px;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .drawer-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #9ca3af;
+            font-weight: 700;
+            margin-bottom: 4px;
+            padding-left: 24px;
+        }
+
+        .drawer-lang {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            color: #374151;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+
+        .drawer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #374151;
+            transition: all 0.2s;
+        }
+
+        .social-circle:hover {
+            background: #5d3fd3;
+            color: white;
+            transform: translateY(-2px);
+        }
+
         /* ========== PREMIUM FOOTER ========== */
         .premium-footer {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
@@ -197,9 +459,10 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr 1fr;
             gap: 40px;
         }
+
 
         @media (max-width: 900px) {
             .footer-container {
@@ -235,6 +498,13 @@
             font-size: 0.95rem;
             line-height: 1.6;
         }
+
+        .footer-legal-text {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
 
         .footer-section h4 {
             font-size: 1.1rem;
@@ -383,6 +653,588 @@
             color: #ef4444;
             animation: pulse 1.5s infinite;
         }
+
+        /* --- SEARCH & DATE PICKER LOGIC STYLES --- */
+        .autocomplete-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .autocomplete-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            color: #2C3E50;
+            font-size: 1rem;
+            outline: none;
+            padding: 2px 0;
+        }
+
+        .autocomplete-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: -12px;
+            right: -12px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            z-index: 100;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .autocomplete-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+
+        .autocomplete-item:hover {
+            background: #f1f5f9;
+        }
+
+        .autocomplete-item .flag {
+            font-size: 1.2rem;
+        }
+
+        .autocomplete-item .city {
+            font-weight: 600;
+            color: #1e2937;
+        }
+
+        .autocomplete-item .iata {
+            margin-left: auto;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #94a3b8;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Date Trigger Button */
+        .date-trigger {
+            background: transparent;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            padding: 2px 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            outline: none;
+        }
+
+        .dates-preview {
+            width: 100%;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #2C3E50;
+        }
+
+        .dates-preview.placeholder {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .date-chip {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 6px;
+            color: #5d3fd3;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Date Picker Modal */
+        .date-picker-modal {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: -2%;
+            width: auto;
+            max-width: 95vw;
+            z-index: 1000;
+        }
+
+        .date-picker-modal.show {
+            display: block;
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .date-picker-popup {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding: 40px;
+            width: 740px;
+            max-width: 95vw;
+        }
+
+        /* Hide the raw flatpickr input */
+        #inlineCalendar {
+            display: none;
+        }
+
+        .flatpickr-calendar {
+            border: none !important;
+            box-shadow: none !important;
+            background: white !important;
+            min-width: 307px;
+        }
+
+        .flatpickr-calendar.multiMonth {
+            min-width: 615px;
+        }
+
+        /* Header & Tabs */
+        .dp-header {
+            background: white;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 24px;
+            margin-bottom: 24px;
+        }
+
+        .trip-type-toggle-modal {
+            display: flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 12px;
+            width: fit-content;
+            margin-bottom: 16px;
+        }
+
+        .trip-type-btn-clean {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .trip-type-btn-clean.active {
+            background: white;
+            color: #5d3fd3;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .dp-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dp-tab {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #64748b;
+            background: #f8fafc;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .dp-tab:hover {
+            background: #f1f5f9;
+        }
+
+        .dp-tab.active {
+            background: white;
+            color: #5d3fd3;
+            border-color: #5d3fd3;
+            box-shadow: 0 4px 12px rgba(93, 63, 211, 0.1);
+        }
+
+        /* Content Areas */
+        .dp-flexible {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .dp-flexible .icon {
+            font-size: 3rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+        }
+
+        .dp-flexible h4 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1e2937;
+            margin-bottom: 8px;
+        }
+
+        .dp-flexible p {
+            color: #64748b;
+        }
+
+        .dp-months {
+            padding: 20px 0;
+        }
+
+        .months-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+
+        .month-card {
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .month-card:hover {
+            border-color: #5d3fd3;
+            background: #f5f3ff;
+        }
+
+        .month-card.active {
+            background: #5d3fd3;
+            border-color: #5d3fd3;
+            color: white;
+        }
+
+        .month-card.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+            background: #f1f5f9;
+        }
+
+
+        .month-card .m-name {
+            font-weight: 700;
+            display: block;
+        }
+
+        .month-card .m-year {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* Calendar Tightening */
+        .dp-calendar-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+
+        /* Force Flatpickr to show months side by side */
+        .dp-calendar-wrapper .flatpickr-calendar {
+            box-shadow: none !important;
+            border: none !important;
+            width: auto !important;
+        }
+
+        /* Container for multiple months */
+        .flatpickr-months {
+            display: flex !important;
+            justify-content: space-between !important;
+        }
+
+        .flatpickr-innerContainer {
+            display: flex !important;
+        }
+
+        .flatpickr-months {
+            display: flex !important;
+        }
+
+        .flatpickr-months .flatpickr-month {
+            flex: 1 !important;
+        }
+
+        /* Month header styling */
+        .flatpickr-current-month {
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: #1e293b !important;
+            padding: 8px 0 !important;
+        }
+
+        /* Each month wrapper - add visual separation */
+        .flatpickr-rContainer {
+            display: inline-block !important;
+            padding: 16px !important;
+            background: #fafafa !important;
+            border-radius: 12px !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+
+        /* Days container */
+        .flatpickr-days {
+            width: auto !important;
+        }
+
+        .dayContainer {
+            width: 252px !important;
+            min-width: 252px !important;
+            max-width: 252px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            /* Remove auto margin since parent has padding */
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-content: flex-start !important;
+        }
+
+        /* Style for days from other months */
+        .flatpickr-day.prevMonthDay,
+        .flatpickr-day.nextMonthDay {
+            color: #d1d5db !important;
+            background: transparent !important;
+            cursor: default !important;
+            pointer-events: none !important;
+            opacity: 0.6;
+        }
+
+        .flatpickr-day {
+            margin: 0 !important;
+            height: 36px !important;
+            line-height: 36px !important;
+            max-width: 36px !important;
+            border-radius: 8px !important;
+            font-size: 0.85rem !important;
+        }
+
+        .flatpickr-day.selected,
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange {
+            background: #5d3fd3 !important;
+            border-color: #5d3fd3 !important;
+            color: white !important;
+        }
+
+        .flatpickr-day.inRange {
+            background: #f5f3ff !important;
+            border-color: #f5f3ff !important;
+            box-shadow: none !important;
+        }
+
+        /* Desktop only - centering adjustment */
+        @media (min-width: 769px) {
+            .flatpickr-months {
+                margin-left: 5% !important;
+            }
+
+            .flatpickr-innerContainer {
+                margin-left: 5% !important;
+            }
+        }
+
+        /* Footer Validate Button */
+        .dp-footer-simple {
+            margin-top: 32px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-confirm-simple {
+            background: #5d3fd3;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-shadow: 0 8px 20px rgba(93, 63, 211, 0.2);
+        }
+
+        .btn-confirm-simple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(93, 63, 211, 0.3);
+        }
+
+        /* ============================================
+           RESPONSIVE MOBILE OPTIMIZATION
+           ============================================ */
+        @media (max-width: 768px) {
+
+            /* Popup adjustments */
+            .date-picker-popup {
+                width: 95vw !important;
+                max-width: 95vw !important;
+                padding: 20px !important;
+                border-radius: 20px !important;
+                margin-left: -5% !important;
+                /* Requested shift */
+            }
+
+            .dp-header {
+                padding-bottom: 16px !important;
+                margin-bottom: 16px !important;
+            }
+
+            /* Trip type toggle */
+            .trip-type-toggle-modal {
+                width: 100% !important;
+                margin-bottom: 12px !important;
+            }
+
+            .trip-type-btn-clean {
+                padding: 8px 12px !important;
+                font-size: 0.8rem !important;
+            }
+
+            /* Date tabs */
+            .dp-tabs {
+                flex-wrap: wrap !important;
+                gap: 6px !important;
+            }
+
+            .dp-tab {
+                padding: 8px 12px !important;
+                font-size: 0.8rem !important;
+                flex: 1 !important;
+                min-width: 80px !important;
+            }
+
+            /* Calendar container */
+            .dp-calendar-wrapper {
+                margin-top: 12px !important;
+            }
+
+            /* Single month on mobile */
+            .flatpickr-calendar {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            /* Month grid for "Monthly" tab */
+            .dp-months {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+            }
+
+            .month-card {
+                padding: 12px 8px !important;
+                font-size: 0.85rem !important;
+            }
+
+            /* Larger touch targets for days */
+            .dayContainer {
+                width: 100% !important;
+                min-width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .flatpickr-day {
+                width: calc(14.28% - 2px) !important;
+                max-width: calc(14.28% - 2px) !important;
+                height: 42px !important;
+                line-height: 42px !important;
+                font-size: 0.9rem !important;
+            }
+
+            /* Footer */
+            .dp-footer-simple {
+                margin-top: 20px !important;
+                padding-top: 16px !important;
+            }
+
+            .btn-confirm-simple {
+                width: 100% !important;
+                padding: 14px 20px !important;
+                font-size: 1rem !important;
+            }
+
+            /* Flexible content */
+            .dp-flexible {
+                padding: 30px 16px !important;
+            }
+
+            .dp-flexible .icon {
+                width: 60px !important;
+                height: 60px !important;
+                font-size: 2rem !important;
+            }
+        }
+
+        /* Extra small mobile */
+        @media (max-width: 480px) {
+            .date-picker-popup {
+                padding: 16px !important;
+            }
+
+            .flatpickr-day {
+                height: 38px !important;
+                line-height: 38px !important;
+                font-size: 0.85rem !important;
+            }
+
+            .dp-tab {
+                font-size: 0.75rem !important;
+                padding: 6px 10px !important;
+            }
+        }
+
+        /* Utility classes removed to allow Tailwind to work */
+
+        .trip-type-toggle {
+            display: flex;
+            background: #EBF2F7;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+
+        .trip-type-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #7F8C8D;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .active-trip-type {
+            background: white;
+            color: #5d3fd3;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
     </style>
     <style>
         /* --- INTEGRATION DES STYLES V2/V3 --- */
@@ -400,14 +1252,14 @@
             width: 100%;
             height: 360px;
             /* HAUTEUR V2/V3 */
-            margin-top: 10px;
+            margin-top: 20px;
             margin-bottom: 0;
             z-index: 5;
             transition: all 0.5s ease;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
             transform: translateZ(0);
             overflow: hidden;
-            border: 2px solid hsl(270deg 91.67% 80.3%);
+            border: 3px solid var(--wander-primary);
         }
 
         /* STYLE V2 : SMILE (Convexe) - Par défaut pour HOME */
@@ -465,7 +1317,7 @@
             transition: all 0.5s ease;
             z-index: 50;
             margin-bottom: 0;
-            border: 2px solid hsl(270deg 91.67% 80.3%);
+            border: 3px solid var(--wander-primary);
         }
 
         .glass-header::before {
@@ -481,7 +1333,7 @@
             opacity: 0.55;
             transition: background-image 1s ease-in-out;
             z-index: 0;
-            border-radius: 30px;
+            border-radius: 26px;
         }
 
         /* SEARCH WIDGET */
@@ -490,14 +1342,15 @@
             background: white;
             padding: 25px;
             border-radius: 26px;
-            width: 900px;
-            max-width: calc(100% - 20px);
-            margin: -100px auto 50px auto;
+            width: 100%;
+            max-width: 1100px;
+            margin: 50px auto;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
             z-index: 20;
             border: 3px solid var(--wander-primary);
             box-sizing: border-box;
             overflow: visible;
+            margin-top: -5em;
         }
 
         /* Custom Inputs style mimics */
@@ -521,10 +1374,13 @@
         }
 
         .v2-label {
-            font-size: 0.7rem;
-            color: #BDC3C7;
-            font-weight: 700;
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            font-weight: 900;
+            /* black */
             text-transform: uppercase;
+            letter-spacing: -0.05em;
+            /* tracking-tighter */
             margin-bottom: 4px;
         }
 
@@ -584,11 +1440,12 @@
         }
 
         .hero-centered-text h2 {
-            font-size: clamp(1.5rem, 4vw, 3rem);
-            font-weight: 800;
-            line-height: 1.2;
-            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
-            letter-spacing: -0.02em;
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            font-weight: 900;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         .hero-centered-text .text-gradient {
@@ -601,7 +1458,11 @@
         .hero-centered-text .subtext {
             color: white;
             text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
-            font-size: 0.85em;
+            font-size: 0.7em;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.9;
         }
 
         /* AR TAGS */
@@ -613,8 +1474,10 @@
             padding: 8px 18px;
             border-radius: 30px;
             color: #FFFFFF;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 0.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -713,7 +1576,10 @@
                 width: calc(100% - 24px);
                 max-width: none;
                 padding: 16px;
-                margin: -50px 12px 30px 12px;
+                margin-top: -5em !important;
+                margin-left: 12px;
+                margin-right: 12px;
+                margin-bottom: 30px;
                 box-sizing: border-box;
             }
 
@@ -757,8 +1623,8 @@
             /* Bouton Search pleine largeur */
             .search-row-flex .btn-go-v2 {
                 width: 100%;
-                height: 48px;
-                font-size: 1rem;
+                height: 40px;
+                font-size: 0.95rem;
                 border-radius: 10px;
                 flex-shrink: 0;
                 margin-top: 4px;
@@ -853,59 +1719,12 @@
         }
 
         /* Tablet Adjustments - 768px to 1024px */
-        @media (min-width: 768px) and (max-width: 1024px) {
-            .search-widget-container {
-                width: 95%;
-                padding: 20px;
-                margin-top: -80px;
-            }
-
-            .search-row-flex {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-
-            .v2-input-group {
-                flex: 1 1 calc(50% - 12px);
-                min-width: 150px;
-                border-right: none;
-                border-bottom: 1px solid #eee;
-                padding: 10px 12px;
-            }
-
-            .v2-input-group:nth-child(2n) {
-                border-right: none;
-            }
-
-            /* Bouton search sur la dernière ligne centré */
-            .search-row-flex .btn-go-v2 {
-                flex: 0 0 auto;
-                width: 56px;
-                height: 56px;
-                margin-left: auto;
-            }
-
-            .hero-wrapper {
-                height: 320px;
-            }
-
-            .hero-centered-text h2 {
-                font-size: clamp(2.5rem, 5vw, 3.5rem);
-            }
-
-            .hero-centered-text .subtext {
-                font-size: 1.2rem;
-            }
-
-            .home-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-            }
-        }
+        /* Tablet Portrait - 3 columns centered (requested 700px+) */
+        /* Main responsive container behavior is now handled by the unified adaptive grid logic */
 
         :root {
-            --wander-primary: hsl(270, 80%, 60%);
-            --wander-primary-dark: hsl(270, 80%, 45%);
+            --wander-primary: #8e6bc2;
+            --wander-primary-dark: #6e4ca0;
             --wander-accent: hsl(300, 100%, 70%);
             --wander-light: hsl(270, 50%, 96%);
         }
@@ -1022,82 +1841,153 @@
 
         /* Keep carousel items fixed width to enable scrolling behavior */
         .carousel .compact-card {
-            width: 208px !important;
+            width: 280px !important;
             flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .carousel .compact-card {
+                width: 220px !important;
+            }
         }
 
         @media (max-width: 480px) {
             .carousel .compact-card {
-                width: 160px !important;
+                width: 180px !important;
             }
         }
 
-        /* Custom Scrollbar for Carousel */
+        /* Custom Scrollbar for Carousel - High Visibility */
         .carousel::-webkit-scrollbar {
-            height: 8px;
+            height: 12px;
             display: block;
         }
 
         .carousel::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-            margin: 0 20px;
+            background: #e5e7eb;
+            border-radius: 6px;
+            margin: 0 40px;
         }
 
         .carousel::-webkit-scrollbar-thumb {
             background: var(--wander-primary);
-            border-radius: 4px;
+            border-radius: 6px;
+            border: 2px solid #e5e7eb;
         }
 
         .carousel::-webkit-scrollbar-thumb:hover {
             background: var(--wander-primary-dark);
         }
 
+        /* Adaptive Centered Carousel */
         .carousel {
-            scrollbar-width: thin;
-            scrollbar-color: var(--wander-primary) #f1f1f1;
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: auto;
+            scrollbar-color: var(--wander-primary) #e5e7eb;
             padding-bottom: 1.5rem;
-            /* Space for scrollbar */
+            width: 100%;
+            /* Robust centering: 
+               - If cards overflow, start alignment works for scroll.
+               - If cards fit, they center. */
+            justify-content: safe center;
+            align-items: stretch;
         }
 
+        /* Adaptive Centered Grid */
         .home-grid {
-            display: grid;
-            gap: 1rem;
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 1.5rem;
             justify-content: center;
-            grid-template-columns: repeat(5, 1fr);
-            max-width: 1150px;
+            max-width: 1250px;
             margin: 0 auto;
+            width: 100%;
+            padding: 0 1.5rem;
         }
 
-        @media (max-width: 1120px) {
+
+        /* Responsive Scaling for Grid & Widgets */
+        @media (max-width: 1366px) {
             .home-grid {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 1.25rem;
             }
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 768px) {
             .home-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 680px) {
-            .home-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem;
             }
         }
 
         @media (max-width: 480px) {
             .home-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.5rem;
+                padding: 0 0.5rem;
+                max-width: 100%;
             }
         }
 
-        @media (max-width: 400px) {
+        /* Fix 550-770px: Enlarge elements inside white card */
+        @media (min-width: 550px) and (max-width: 770px) {
             .home-grid {
-                grid-template-columns: repeat(2, 140px);
-                gap: 0.5rem;
+                gap: 0.75rem;
+            }
+
+            /* Card info section: less top spacing, bigger content */
+            .home-grid a[style*="aspect-ratio"]>div:last-child {
+                top: 35% !important;
+                padding: 0.8rem !important;
+            }
+        }
+
+        /* Deals Carousel Styling */
+        .deals-carousel {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            justify-content: flex-start;
+            /* Force left alignment */
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 0.5rem 0;
+        }
+
+        /* Deals Carousel - EXACT match to Home Grid Card Sizes */
+        .month-carousel .compact-card-root {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+        }
+
+
+        @media (min-width: 480px) {
+
+            .deals-carousel>*,
+            .carousel .compact-card {
+                width: 200px !important;
+            }
+        }
+
+        @media (min-width: 900px) {
+
+            .deals-carousel>*,
+            .carousel .compact-card {
+                width: 240px !important;
+            }
+        }
+
+        /* Force exactly 4 cards per row on large desktop */
+        @media (min-width: 1200px) {
+
+            .deals-carousel>*,
+            .carousel .compact-card {
+                width: calc(25% - 12px) !important;
+                max-width: 280px;
             }
         }
 
@@ -1397,6 +2287,35 @@
             flex: 1;
             height: 1px;
             border-top: 2px dashed #e5e7eb;
+        }
+
+        /* MENU BUTTONS STYLING */
+        .nav-link-premium {
+            border: 3px solid var(--wander-primary);
+            color: var(--wander-primary);
+            background: white;
+            font-weight: 700;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+        }
+
+        .nav-link-premium:hover,
+        .nav-link-premium.active {
+            border: 3px solid white;
+            /* Explicit white border for active state */
+            background: var(--wander-primary);
+            color: white;
+            border-radius: 9999px;
+            /* Ensure 9999px radius persists */
+        }
+
+        .nav-link-premium i {
+            margin-right: 0.5rem;
         }
 
         /* SHAKE ANIMATION SLOWER */
@@ -1926,22 +2845,234 @@
                 padding: 8px;
             }
         }
+
+        /* --- FESTIVAL CARD STYLES (Sophie Bennett Design) --- */
+        .festival-profile-component {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 302/690;
+            max-width: 302px;
+            margin: 0 auto;
+            overflow: hidden;
+            /* Ensure glass slides out cleanly */
+        }
+
+        .festival-profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 32px;
+            border: 8px solid #ffffff;
+            box-sizing: border-box;
+        }
+
+        .festival-glass-card {
+            position: absolute;
+            top: 45%;
+            bottom: 8px;
+            left: 4%;
+            width: 92%;
+            height: auto;
+            /* Glass starts at 45% of image height for centering room (desktop/tablet) */
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%);
+            z-index: 10;
+            overflow: hidden;
+
+            /* Flex Layout */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 16px;
+            gap: 6px;
+
+            /* Transition */
+            transition: all 0.4s ease-in-out;
+        }
+
+        /* Mobile: Glass 15% higher (at 35%) and text -10% */
+        @media (max-width: 768px) {
+            .festival-glass-card {
+                top: 35%;
+            }
+
+            .fest-title {
+                font-size: 112% !important;
+            }
+
+            .fest-location {
+                font-size: clamp(12px, 1.2vw, 15px);
+            }
+
+            .fest-date-group {
+                font-size: clamp(12px, 1.5vw, 17px);
+            }
+        }
+
+        /* --- Hover State: Expand --- */
+        .festival-profile-component:hover .festival-glass-card {
+            top: 0;
+            height: 100%;
+            min-height: 100%;
+            max-height: 100%;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            border-radius: 32px;
+            background-color: rgba(255, 255, 255, 0.3);
+            padding-top: 50px;
+            /* Adjust mask to show bottom button clearly */
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+        }
+
+        /* --- Inner Elements --- */
+        .fest-title {
+            color: #ffffff;
+            font-size: clamp(12px, 1.2vw, 18px);
+            margin-bottom: 2px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .fest-location {
+            width: 100%;
+            margin-bottom: auto;
+            /* Push bottom row down normally */
+            transition: all 0.4s ease;
+        }
+
+        .fest-bottom-row {
+            width: 100%;
+            margin-top: 12px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            transition: all 0.4s ease;
+        }
+
+        .fest-date-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: all 0.4s ease;
+        }
+
+        /* Mobile & Tablet Refinement: Center dates and stack layout */
+        @media (max-width: 980px) {
+            .fest-bottom-row {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .fest-date-group {
+                align-items: center;
+                text-align: center;
+            }
+
+            .fest-deal-btn {
+                width: 100%;
+            }
+        }
+
+        .fest-deal-btn {
+            transition: all 0.4s ease;
+        }
+
+        /* --- Hover Transforms --- */
+        .festival-profile-component:hover .fest-title {
+            -webkit-line-clamp: unset;
+            display: block;
+            overflow: visible;
+            text-align: center;
+        }
+
+        .festival-profile-component:hover .fest-location {
+            margin-bottom: 5px;
+        }
+
+        .festival-profile-component:hover .fest-bottom-row {
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 5px;
+            margin-bottom: 0;
+            flex-grow: 1;
+        }
+
+        .festival-profile-component:hover .fest-date-group {
+            align-items: center;
+            transform: scale(1.15);
+            margin-top: 10px;
+        }
+
+        .festival-profile-component:hover .fest-deal-btn {
+            width: 100%;
+            background-color: #7c3aed;
+            /* Purple 600 */
+            color: #ffffff;
+            padding: 12px 0;
+            /* Taller */
+            margin-bottom: 5px;
+            /* Lower position */
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.5);
+            border: none;
+        }
+
+        .fest-element {
+            position: relative;
+            /* Changed from absolute to flow */
+        }
+
+        /* PREMIUM SHIMMER ANIMATION (Round 9) */
+        @keyframes shimmer-sweep {
+            0% {
+                transform: translateX(-150%) skewX(-15deg);
+            }
+
+            100% {
+                transform: translateX(150%) skewX(-15deg);
+            }
+        }
+
+        .shimmer-overlay {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shimmer-sweep {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            animation: shimmer-sweep 1.5s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 5;
+        }
     </style>
 </head>
 
-<body class="bg-gray-50 overflow-x-hidden">
+<body class="bg-gray-100 overflow-x-hidden">
 
-    <!-- PAGE TRANSITION LOADER -->
-    <div id="pageLoader"
-        class="fixed inset-0 bg-white/60 backdrop-blur-md z-[800] hidden flex-col items-center justify-center transition-opacity duration-300">
-        <div class="relative scale-75">
-            <div class="w-20 h-20 border-8 border-purple-100 border-t-purple-600 rounded-full animate-spin"></div>
-            <div class="absolute inset-0 flex items-center justify-center">
-                <i data-lucide="plane" class="w-6 h-6 text-purple-600 animate-bounce"></i>
-            </div>
-        </div>
-        <p class="mt-4 text-purple-600 text-[10px] font-black uppercase tracking-[0.3em]">Updating Skyview...</p>
-    </div>
+
 
     <!-- GLOBAL LOADER -->
     <div id="globalLoader"
@@ -1959,10 +3090,10 @@
 
     <!-- POPUP AU DÉMARRAGE -->
     <div id="cityPopup" class="fixed inset-0 bg-black/70 z-[500] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative overflow-hidden">
+        <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative">
             <!-- Popup Loader Overlay (Scanning effect) -->
             <div id="popupLoader"
-                class="absolute inset-0 bg-white z-30 flex flex-col items-center justify-center transition-opacity duration-300">
+                class="absolute inset-0 bg-white z-30 flex flex-col items-center justify-center transition-opacity duration-300 rounded-3xl">
                 <div class="relative scale-90">
                     <div class="w-20 h-20 border-6 border-purple-100 border-t-purple-600 rounded-full animate-spin">
                     </div>
@@ -2020,17 +3151,12 @@
             </div>
 
             <nav class="hidden md:flex">
-                <ul class="flex gap-8 list-none items-center relative z-10">
+                <ul class="flex gap-4 list-none items-center relative z-10">
                     <!-- Ajout de la classe 'nav-link' pour que le script existant détecte les clics -->
-                    <li><a href="#home"
-                            class="text-[#556068] hover:text-[#2C3E50] font-medium text-sm transition nav-trigger nav-link flex items-center gap-2"
-                            data-page="home"><i class="fa-solid fa-house"></i> Home</a></li>
-                    <li><a href="#deals"
-                            class="text-[#556068] hover:text-[#2C3E50] font-medium text-sm transition nav-trigger nav-link flex items-center gap-2"
-                            data-page="deals"><i class="fa-solid fa-tag"></i> Deals</a></li>
-                    <li><a href="#festivals"
-                            class="text-[#556068] hover:text-[#2C3E50] font-medium text-sm transition nav-trigger nav-link flex items-center gap-2"
-                            data-page="festivals"><i class="fa-solid fa-champagne-glasses"></i> Festivals</a></li>
+                    <li><a href="#home" class="nav-link-premium nav-trigger nav-link" data-page="home">Flights</a></li>
+                    <li><a href="#deals" class="nav-link-premium nav-trigger nav-link" data-page="deals">Deals</a></li>
+                    <li><a href="#festivals" class="nav-link-premium nav-trigger nav-link"
+                            data-page="festivals">Festivals</a></li>
                     <!-- Custom Language Selector with Flags -->
                     <li class="custom-lang-selector" id="langSelector">
                         <div class="lang-trigger" onclick="this.parentElement.classList.toggle('open')">
@@ -2066,7 +3192,7 @@
             <!-- Mobile Burger -->
             <button
                 class="md:hidden p-3 relative z-10 bg-white/90 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center"
-                onclick="document.getElementById('mobileMenu').classList.toggle('open')">
+                onclick="toggleDrawer()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="text-wander-primary w-6 h-6">
@@ -2077,57 +3203,166 @@
             </button>
         </header>
 
-        <!-- HEADER MOBILE DRAWER -->
-        <div id="mobileMenu"
-            class="mobile-menu bg-white fixed top-0 right-[-100%] w-[80%] max-w-[320px] h-full z-[100] transition-all duration-300 p-8 shadow-2xl">
-            <button class="absolute top-6 right-6 p-2 hover:bg-gray-100 rounded-full transition"
-                onclick="this.parentElement.classList.remove('open')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="text-gray-600 w-6 h-6">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                </svg>
-            </button>
-            <div class="flex flex-col gap-6 mt-16 text-lg font-semibold">
-                <a href="#home"
-                    class="mobile-nav-link nav-trigger flex items-center gap-4 p-3 rounded-xl hover:bg-purple-50 transition"
-                    data-page="home"
-                    onclick="event.preventDefault(); document.getElementById('mobileMenu').classList.remove('open'); if(typeof goHomeAndReset === 'function') goHomeAndReset(); else showPage('home');">
+        <!-- MENU DRAWER OVERLAY -->
+        <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+
+        <!-- HEADER MOBILE DRAWER (KAYAK STYLE) -->
+        <div id="mobileMenu" class="mobile-drawer">
+            <div class="drawer-header">
+                <div class="drawer-logo">Wingsky</div>
+                <button onclick="toggleDrawer()" class="p-2 hover:bg-gray-100 rounded-full text-gray-500">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="text-wander-primary w-6 h-6">
-                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                        <polyline points="9 22 9 12 15 12 15 22" />
-                    </svg> Home
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="drawer-content">
+                <div class="drawer-section-title mt-4">Explore</div>
+                <a href="#home" class="drawer-item"
+                    onclick="toggleDrawer(); if(typeof goHomeAndReset === 'function') goHomeAndReset();">
+                    <i class="fa-solid fa-plane-departure"></i> Flights
                 </a>
-                <a href="#deals"
-                    class="mobile-nav-link nav-trigger flex items-center gap-4 p-3 rounded-xl hover:bg-purple-50 transition"
-                    data-page="deals"
-                    onclick="event.preventDefault(); document.getElementById('mobileMenu').classList.remove('open'); if(typeof goToDealsAndReset === 'function') goToDealsAndReset(); else showPage('deals');">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="text-wander-primary w-6 h-6">
-                        <path
-                            d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l5 5a2 2 0 0 0 2.828 0l7.172-7.172a2 2 0 0 0 0-2.828l-5-5z" />
-                        <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
-                    </svg> Deals
+                <a href="#deals" class="drawer-item"
+                    onclick="toggleDrawer(); if(typeof showPage==='function') showPage('deals');">
+                    <i class="fa-solid fa-tags"></i> Deals
                 </a>
-                <a href="#festivals"
-                    class="mobile-nav-link nav-trigger flex items-center gap-4 p-3 rounded-xl hover:bg-purple-50 transition"
-                    data-page="festivals"
-                    onclick="event.preventDefault(); document.getElementById('mobileMenu').classList.remove('open'); showPage('festivals');">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="text-wander-primary w-6 h-6">
-                        <path d="M8 22h8" />
-                        <path d="M7 10h10" />
-                        <path d="M12 15v7" />
-                        <path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z" />
-                    </svg> Festivals
+                <a href="#festivals" class="drawer-item"
+                    onclick="toggleDrawer(); if(typeof showPage==='function') showPage('festivals');">
+                    <i class="fa-solid fa-champagne-glasses"></i> Festivals
                 </a>
             </div>
+
+            <div class="drawer-footer">
+                <div>
+                    <div class="drawer-section-title" style="padding-left: 0;">Settings</div>
+                    <!-- Trigger pour ouvrir la liste des langues -->
+                    <div class="drawer-lang"
+                        onclick="document.getElementById('mobileLangList').classList.toggle('hidden')">
+                        <img src="https://flagcdn.com/w40/gb.png" width="24" style="border-radius: 2px;"
+                            id="mobileCurrentFlag">
+                        <span id="mobileCurrentName">English</span>
+                        <span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded ml-2">CHANGE <i
+                                class="fa-solid fa-chevron-down ml-1"></i></span>
+                    </div>
+
+                    <!-- Liste des langues (Accordéon) -->
+                    <div id="mobileLangList"
+                        class="hidden flex flex-col gap-2 mt-2 pl-2 border-l-2 border-gray-100 ml-1">
+                        <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                            onclick="selectMobileLang('en', 'gb')">
+                            <img src="https://flagcdn.com/w40/gb.png" width="20"> <span
+                                class="text-sm font-medium">English</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                            onclick="selectMobileLang('fr', 'fr')">
+                            <img src="https://flagcdn.com/w40/fr.png" width="20"> <span
+                                class="text-sm font-medium">Français</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                            onclick="selectMobileLang('de', 'de')">
+                            <img src="https://flagcdn.com/w40/de.png" width="20"> <span
+                                class="text-sm font-medium">Deutsch</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                            onclick="selectMobileLang('es', 'es')">
+                            <img src="https://flagcdn.com/w40/es.png" width="20"> <span
+                                class="text-sm font-medium">Español</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                            onclick="selectMobileLang('it', 'it')">
+                            <img src="https://flagcdn.com/w40/it.png" width="20"> <span
+                                class="text-sm font-medium">Italiano</span>
+                        </div>
+                    </div>
+
+                    <div class="drawer-lang">
+                        <span class="text-lg w-6 text-center text-gray-500">€</span> Euro
+                    </div>
+                </div>
+
+                <div>
+                    <div class="drawer-section-title" style="padding-left: 0;">Follow Us</div>
+                    <div class="drawer-social">
+                        <!-- Instagram -->
+                        <a href="https://instagram.com" target="_blank" class="social-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                            </svg>
+                        </a>
+                        <!-- TikTok -->
+                        <a href="https://tiktok.com" target="_blank" class="social-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                            </svg>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="https://facebook.com" target="_blank" class="social-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                            </svg>
+                        </a>
+                        <!-- Pinterest -->
+                        <a href="https://pinterest.com" target="_blank" class="social-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <!-- Note: Generic 'plus' as fallback or better Pinterest path below -->
+                        </a>
+                        <!-- Corrected Pinterest Path -->
+                        <script>
+                            // Replace last SVG with proper Pinterest path on load (inline fix)
+                            document.currentScript.previousElementSibling.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"/><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/><path d="M12 8v8"/></svg>'; // Temporary placeholder, real path is complex:
+                            // Using a simple "P" representation for clarity if path is too complex for basic svg stroke
+                        </script>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <script>
+            function toggleDrawer() {
+                const menu = document.getElementById('mobileMenu');
+                const overlay = document.getElementById('drawerOverlay');
+                if (menu && overlay) {
+                    menu.classList.toggle('open');
+                    overlay.classList.toggle('open');
+                }
+            }
+
+            function selectMobileLang(lang, flag) {
+                // Update mobile display
+                document.getElementById('mobileCurrentFlag').src = `https://flagcdn.com/w40/${flag}.png`;
+                const names = { en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', it: 'Italiano' };
+                document.getElementById('mobileCurrentName').textContent = names[lang] || 'English';
+
+                // Hide list
+                document.getElementById('mobileLangList').classList.add('hidden');
+
+                // Correctly trigger the Google Translate update by finding the correct button in the custom dropdown
+                const desktopItem = document.querySelector(`.lang-option[data-lang="${lang}"]`);
+                if (desktopItem) {
+                    desktopItem.click();
+                } else {
+                    // Fallback to local storage and refresh if Google Translate is tricky
+                    localStorage.setItem('googtrans', `/en/${lang}`);
+                    location.reload();
+                }
+            }
+        </script>
 
         <!-- HERO WRAPPER POLYMORPHE -->
         <div class="hero-wrapper style-inverted" id="mainHero">
@@ -2164,33 +3399,53 @@
         </div>
 
         <!-- SEARCH WIDGET HOME (Actif par défaut) -->
-        <div id="searchWidgetHome" class="search-widget-container transition-opacity duration-300">
-            <div class="flex gap-4 mb-5">
-                <span class="bg-[var(--primary-yellow)] rounded-2xl px-3 py-1 text-sm font-semibold text-[#222]">Round
-                    Trip Only</span>
+        <div id="searchWidgetHome" class="search-widget-container transition-opacity duration-300 relative">
+            <div class="trip-type-toggle">
+                <button id="btnRoundTrip" class="trip-type-btn active-trip-type" onclick="setTripType('roundtrip')">
+                    <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+                    Round Trip
+                </button>
+                <button id="btnOneWay" class="trip-type-btn" onclick="setTripType('oneway')">
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    One Way
+                </button>
             </div>
 
             <div class="search-row-flex flex items-center gap-2">
+                <!-- Departure -->
                 <div class="v2-input-group">
                     <span class="v2-label">Leaving from</span>
-                    <select id="searchFrom" class="v2-select">
-                        <option value="">Select departure city</option>
-                    </select>
+                    <div class="autocomplete-wrapper">
+                        <input type="text" id="originInput" class="autocomplete-input" placeholder="City or Airport..."
+                            autocomplete="off">
+                        <div id="originDropdown" class="autocomplete-dropdown"></div>
+                        <input type="hidden" id="originIATA">
+                    </div>
                 </div>
-                <div class="v2-input-group">
+
+                <!-- Destination -->
+                <div class="v2-input-group opacity-50 cursor-not-allowed transition-opacity" id="destInputGroup">
                     <span class="v2-label">Going to</span>
-                    <select id="searchTo" class="v2-select">
-                        <option value="">All countries</option>
-                    </select>
+                    <div class="autocomplete-wrapper">
+                        <input type="text" id="destInput" class="autocomplete-input cursor-not-allowed"
+                            placeholder="Anywhere or City..." autocomplete="off" disabled>
+                        <div id="destDropdown" class="autocomplete-dropdown"></div>
+                        <input type="hidden" id="destIATA">
+                    </div>
                 </div>
-                <div class="v2-input-group">
-                    <span class="v2-label">Date</span>
-                    <select id="searchMonth" class="v2-select">
-                        <option value="">Any month</option>
-                    </select>
+
+                <!-- Date Picker Trigger -->
+                <div class="v2-input-group opacity-50 cursor-not-allowed transition-opacity" id="dateWrapper">
+                    <span class="v2-label">When</span>
+                    <button type="button" class="date-trigger cursor-not-allowed" onclick="openDatePicker()"
+                        id="dateTriggerBtn" disabled>
+                        <div id="dateDisplayText" class="dates-preview placeholder">Select dates...</div>
+                    </button>
                 </div>
+
                 <!-- BOUTON SEARCH AVEC SVG -->
-                <button id="searchBtn" class="btn-go-v2 shadow-lg hover:shadow-xl flex-shrink-0">
+                <button id="searchBtn" class="btn-go-v2 shadow-lg hover:shadow-xl flex-shrink-0"
+                    onclick="performSearchProject()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
@@ -2198,8 +3453,59 @@
                     </svg>
                 </button>
             </div>
-            <p id="searchError" class="text-red-500 text-sm mt-3 text-center hidden font-bold">⚠️ Please select a
+            <p id="searchHomeError" class="text-red-500 text-sm mt-3 text-center hidden font-bold">⚠️ Please select a
                 departure city first!</p>
+
+            <!-- DATE PICKER MODAL (Injecté ici pour positionnement absolu relatif au wrapper) -->
+            <div id="datePickerModal" class="date-picker-modal">
+                <div class="date-picker-popup">
+                    <div class="dp-header">
+                        <div class="trip-type-toggle-modal">
+                            <button id="modalBtnRoundTrip" class="trip-type-btn-clean active"
+                                onclick="setTripType('roundtrip')">
+                                <i data-lucide="arrow-left-right" class="w-4 h-4"></i> Round Trip
+                            </button>
+                            <button id="modalBtnOneWay" class="trip-type-btn-clean" onclick="setTripType('oneway')">
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i> One Way
+                            </button>
+                        </div>
+                        <div class="dp-tabs">
+                            <button class="dp-tab" data-tab="flexible" onclick="switchDateTab('flexible')">Anytime /
+                                Flexible</button>
+                            <button class="dp-tab" data-tab="month" onclick="switchDateTab('month')">Monthly</button>
+                            <button class="dp-tab active" data-tab="exact" onclick="switchDateTab('exact')">Exact
+                                Dates</button>
+                        </div>
+                    </div>
+                    <div class="dp-content">
+                        <div id="tabMonth" class="dp-months hidden">
+                            <div class="month-selection-container flex flex-col md:flex-row gap-8">
+                                <div class="month-col flex-1">
+                                    <div id="depMonthLabel"
+                                        class="text-xs font-black text-gray-400 uppercase mb-3 text-center tracking-widest">
+                                        Select departure month</div>
+                                    <div id="depMonthsGrid" class="months-grid"></div>
+                                </div>
+                                <div id="retMonthCol" class="month-col flex-1 hidden">
+                                    <div
+                                        class="text-xs font-black text-gray-400 uppercase mb-3 text-center tracking-widest">
+                                        Select return month</div>
+                                    <div id="retMonthsGrid" class="months-grid"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="tabExact" class="dp-exact">
+                            <div class="dp-calendar-wrapper">
+                                <input type="text" id="inlineCalendar" placeholder="Select dates">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dp-footer-simple">
+                        <button class="btn-confirm-simple" onclick="confirmDates()">Validate Selection</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- SEARCH WIDGET DEALS (Masqué par défaut) -->
@@ -2209,29 +3515,36 @@
                         class="fa-solid fa-filter mr-2"></i>Filter Deals</span>
             </div>
             <div class="search-row-flex flex items-center gap-2">
-                <div class="v2-input-group">
+                <div class="v2-input-group flex-1">
                     <span class="v2-label">Filter From</span>
-                    <select id="dealsFrom" class="v2-select">
+                    <select id="dealsFrom" class="v2-select w-full">
                         <option value="">All departure cities</option>
                     </select>
                 </div>
-                <div class="v2-input-group">
-                    <span class="v2-label">Filter To</span>
-                    <select id="dealsTo" class="v2-select">
-                        <option value="">All countries</option>
+                <div class="v2-input-group flex-1 opacity-50 cursor-not-allowed transition-opacity"
+                    id="dealsMonthWrapper">
+                    <span class="v2-label">Month</span>
+                    <select id="dealsMonth" class="v2-select w-full cursor-not-allowed" disabled>
+                        <option value="">Select city first...</option>
                     </select>
                 </div>
-                <div class="v2-input-group">
-                    <span class="v2-label">Month</span>
-                    <select id="dealsMonth" class="v2-select">
-                        <option value="">Any month</option>
+
+                <div class="v2-input-group flex-1">
+                    <span class="v2-label">Sort By</span>
+                    <select id="dealsSort" class="v2-select w-full">
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="city-asc">City: A → Z</option>
+                        <option value="city-desc">City: Z → A</option>
                     </select>
                 </div>
                 <!-- BOUTON DEALS AVEC SVG -->
-                <button id="dealsSearchBtn" class="btn-go-v2 shadow-lg hover:shadow-xl flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                <button id="dealsSearchBtn"
+                    class="btn-go-v2 shadow-lg hover:shadow-xl flex-shrink-0 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
                 </button>
             </div>
@@ -2240,19 +3553,20 @@
     </div>
 
     <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto px-4 pb-12"> <!-- Pas de padding top, géré par le widget -->
+    <main class="max-w-7xl mx-auto px-4 pb-12 relative"> <!-- Relative for loader positioning -->
+
+
 
         <!-- HOME SECTION -->
         <section id="home" class="content-section hidden">
             <!-- Slogan maintenant affiché dans le Hero -->
-            <div class="home-grid mb-16" id="homeDeals"></div>
+            <div class="home-grid mb-16 mt-12" id="homeDeals"></div>
 
             <div class="text-center">
                 <button id="loadMoreBtn"
                     class="inline-block px-16 py-6 bg-wander-primary hover:bg-wander-primaryDark text-white text-2xl font-bold rounded-3xl shadow-2xl transition-all">
                     More
                 </button>
-            </div>
             </div>
 
             <!-- FEATURES SECTION -->
@@ -2280,32 +3594,17 @@
                 </div>
             </div>
 
-            <!-- NEWSLETTER -->
-            <div class="py-20">
-                <div
-                    class="bg-gradient-to-r from-wander-primary to-wander-primaryDark rounded-3xl p-10 text-center text-white max-w-4xl mx-auto shadow-2xl relative overflow-hidden">
-                    <h3 class="text-3xl md:text-5xl font-black mb-4 relative z-10">Unlock Secret Deals</h3>
-                    <p class="text-lg md:text-xl mb-8 opacity-90 relative z-10">Get exclusive deals delivered straight
-                        to your inbox.</p>
-                    <div class="flex flex-col md:flex-row gap-4 justify-center max-w-lg mx-auto relative z-10">
-                        <input type="email" placeholder="Enter your email" aria-label="Email address"
-                            class="h-14 px-6 rounded-xl text-gray-800 w-full focus:outline-none focus:ring-4 focus:ring-white/30">
-                        <button
-                            class="h-14 px-8 bg-white text-wander-primaryDark font-bold rounded-xl hover:bg-gray-100 transition shadow-lg">Subscribe</button>
-                    </div>
-                </div>
-            </div>
 
         </section>
 
         <!-- DEALS PAGE -->
-        <section id="deals" class="hidden relative pt-6 pb-20">
+        <section id="deals" class="hidden relative pt-12 pb-20">
             <!-- Titre supprimé - Maintenant affiché dans le Hero -->
             <div id="dynamicCarousels" class="space-y-16"></div>
         </section>
 
         <!-- FESTIVALS -->
-        <section id="festivals" class="hidden relative text-center" style="padding-top: 0.5rem;">
+        <section id="festivals" class="hidden relative text-center pt-12">
             <!-- Abstract Gradient Background -->
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-[800px] -z-10 overflow-hidden"
                 style="mask-image: linear-gradient(to bottom, black 70%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);">
@@ -2362,6 +3661,13 @@
             <p class="text-2xl text-gray-600 mb-12 hidden">Page en construction – les meilleurs festivals arrivent
                 bientôt !</p>
             <div class="home-grid" id="festivalDeals"></div>
+
+            <div class="text-center mt-12 hidden" id="festivalLoadMoreContainer">
+                <button id="festivalLoadMoreBtn"
+                    class="inline-block px-12 py-4 bg-white text-wander-primary border-2 border-wander-primary hover:bg-wander-primary hover:text-white text-lg font-bold rounded-full shadow-lg transition-all transform hover:scale-105">
+                    See More Festivals
+                </button>
+            </div>
         </section>
 
     </main>
@@ -2465,14 +3771,565 @@
         ];
         let sloganIndex = 0;
 
+        // ============================================================================
+        // DATE PICKER & SEARCH STATE (Migrated from aviasales-search.html)
+        // ============================================================================
+        const AIRPORTS = [
+            { city: "Paris", country: "France", iata: "PAR", flag: "🇫🇷" },
+            { city: "London", country: "United Kingdom", iata: "LON", flag: "🇬🇧" },
+            { city: "Nice", country: "France", iata: "NCE", flag: "🇫🇷" },
+            { city: "Lyon", country: "France", iata: "LYS", flag: "🇫🇷" },
+            { city: "Marseille", country: "France", iata: "MRS", flag: "🇫🇷" },
+            { city: "Berlin", country: "Germany", iata: "BER", flag: "🇩🇪" },
+            { city: "Munich", country: "Germany", iata: "MUC", flag: "🇩🇪" },
+            { city: "Frankfurt", country: "Germany", iata: "FRA", flag: "🇩🇪" },
+            { city: "Madrid", country: "Spain", iata: "MAD", flag: "🇪🇸" },
+            { city: "Barcelona", country: "Spain", iata: "BCN", flag: "🇪🇸" },
+            { city: "Rome", country: "Italy", iata: "ROM", flag: "🇮🇹" },
+            { city: "Milan", country: "Italy", iata: "MIL", flag: "🇮🇹" },
+            { city: "Amsterdam", country: "Netherlands", iata: "AMS", flag: "🇳🇱" },
+            { city: "Brussels", country: "Belgium", iata: "BRU", flag: "🇧🇪" },
+            { city: "Vienna", country: "Austria", iata: "VIE", flag: "🇦🇹" },
+            { city: "Zurich", country: "Switzerland", iata: "ZRH", flag: "🇨🇭" },
+            { city: "Lisbon", country: "Portugal", iata: "LIS", flag: "🇵🇹" },
+            { city: "Dublin", country: "Ireland", iata: "DUB", flag: "🇮🇪" },
+            { city: "Athens", country: "Greece", iata: "ATH", flag: "🇬🇷" },
+            { city: "Prague", country: "Czech Republic", iata: "PRG", flag: "🇨🇿" },
+            { city: "Warsaw", country: "Poland", iata: "WAW", flag: "🇵🇱" },
+            { city: "Budapest", country: "Hungary", iata: "BUD", flag: "🇭🇺" },
+            { city: "Copenhagen", country: "Denmark", iata: "CPH", flag: "🇩🇰" },
+            { city: "Stockholm", country: "Sweden", iata: "ARN", flag: "🇸🇪" },
+            { city: "Oslo", country: "Norway", iata: "OSL", flag: "🇳🇴" },
+            { city: "Helsinki", country: "Finland", iata: "HEL", flag: "🇫🇮" },
+            { city: "New York", country: "USA", iata: "JFK", flag: "🇺🇸" },
+            { city: "Los Angeles", country: "USA", iata: "LAX", flag: "🇺🇸" }
+        ];
+
+        const searchState = {
+            originIATA: 'PAR',
+            destType: 'anywhere',
+            destIATA: null,
+            dateMode: 'flexible',
+            selectedMonth: null,
+            selectedReturnMonth: null,
+            departureDate: null,
+            returnDate: null,
+            tripType: 'roundtrip'
+        };
+
+        let inlineCalendar = null;
+
+        // ============================================================================
+        // AUTOCOMPLETE FUNCTIONS
+        // ============================================================================
+        function initSearchAutocomplete(inputId, dropdownId, hiddenId, isOrigin) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+            const hidden = document.getElementById(hiddenId);
+            if (!input || !dropdown) return;
+
+            function showDropdown(e) {
+                const isManualEvent = e && (e.type === 'focus' || e.type === 'click');
+                const rawVal = input.value;
+                const query = (isManualEvent || rawVal === 'Anywhere') ? '' : rawVal.toLowerCase().trim();
+
+                let matches = AIRPORTS.filter(a =>
+                    a.city.toLowerCase().includes(query) ||
+                    a.iata.toLowerCase().includes(query)
+                ).slice(0, 8);
+
+
+                if (!isOrigin) {
+                    const anywhereOption = { city: "Anywhere", iata: "ANY", flag: "✈️", type: 'anywhere' };
+                    if (query === '' || 'anywhere'.includes(query)) {
+                        matches.unshift(anywhereOption);
+                    }
+                    if (searchState.originIATA) {
+                        matches = matches.filter(a => a.iata !== searchState.originIATA);
+                    }
+                }
+
+                dropdown.innerHTML = ''; // Clear previous results
+
+                if (matches.length === 0) {
+                    dropdown.style.display = 'none';
+                    return;
+                }
+
+                dropdown.innerHTML = matches.map(a => `
+                    <div class="autocomplete-item" data-iata="${a.iata}" data-type="${a.type || 'city'}">
+                        <span class="flag">${a.flag}</span>
+                        <span class="city">${a.city}</span>
+                        <span class="iata">${a.iata}</span>
+                    </div>
+                `).join('');
+
+                dropdown.style.display = 'block';
+
+                dropdown.querySelectorAll('.autocomplete-item').forEach(item => {
+                    item.onclick = () => {
+                        const iata = item.dataset.iata;
+                        const type = item.dataset.type;
+                        const cityName = item.querySelector('.city').textContent;
+
+                        input.value = type === 'anywhere' ? 'Anywhere' : `${cityName} (${iata})`;
+                        hidden.value = iata;
+                        dropdown.style.display = 'none';
+
+                        if (isOrigin) {
+                            searchState.originIATA = iata;
+                        } else {
+                            if (type === 'anywhere') {
+                                searchState.destType = 'anywhere';
+                                searchState.destIATA = null;
+                            } else {
+                                searchState.destType = 'city';
+                                searchState.destIATA = iata;
+                            }
+                        }
+                    };
+                });
+            }
+
+            input.addEventListener('input', showDropdown);
+            input.addEventListener('focus', showDropdown);
+            input.addEventListener('click', showDropdown);
+            document.addEventListener('click', (e) => {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+
+            if (isOrigin && input.value.trim() === '') {
+                input.value = "Paris (PAR)";
+                hidden.value = "PAR";
+            }
+        }
+
+        // ============================================================================
+        // DATE PICKER FUNCTIONS
+        // ============================================================================
+        function openDatePicker() {
+            const modal = document.getElementById('datePickerModal');
+            if (modal) {
+                // If destination is 'Anywhere', hide Exact Dates tab and switch to Flexible
+                if (searchState.destType === 'anywhere') {
+                    document.querySelector('.dp-tab[data-tab="exact"]')?.classList.add('hidden');
+                    if (searchState.dateMode === 'exact') switchDateTab('flexible');
+                } else {
+                    document.querySelector('.dp-tab[data-tab="exact"]')?.classList.remove('hidden');
+                }
+
+                modal.classList.add('show');
+
+                // Redraw calendar if needed
+                if ((searchState.dateMode === 'exact' || searchState.dateMode === 'flexible') && inlineCalendar) {
+                    setTimeout(() => inlineCalendar.redraw(), 10);
+                }
+            }
+        }
+
+        function closeDatePicker() {
+            const modal = document.getElementById('datePickerModal');
+            if (modal) modal.classList.remove('show');
+        }
+
+        function switchDateTab(tab) {
+            searchState.dateMode = tab;
+            document.querySelectorAll('.dp-tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.tab === tab);
+            });
+
+            // Hide legacy Flexible/Month if they are separate divs
+            document.getElementById('tabMonth')?.classList.add('hidden');
+
+            // Update display text immediately for better UX
+            const displayText = document.getElementById('dateDisplayText');
+            if (displayText) {
+                if (tab === 'flexible') displayText.innerHTML = "Anytime";
+                else if (tab === 'month') displayText.innerHTML = "Select a month...";
+            }
+
+            // Flexible and Exact tabs both use the calendar container (tabExact)
+            const calendarContainer = document.getElementById('tabExact');
+            if (tab === 'flexible' || tab === 'exact') {
+                calendarContainer?.classList.remove('hidden');
+                if (inlineCalendar) {
+                    const mode = (tab === 'flexible' || searchState.tripType === 'roundtrip') ? 'range' : 'single';
+                    inlineCalendar.set('mode', mode);
+                    inlineCalendar.clear();
+                    inlineCalendar.redraw();
+                    setTimeout(() => inlineCalendar.redraw(), 20);
+                }
+            } else {
+                calendarContainer?.classList.add('hidden');
+            }
+
+            if (tab === 'month') {
+                document.getElementById('tabMonth')?.classList.remove('hidden');
+                // Ensure correct columns show for trip type
+                const retCol = document.getElementById('retMonthCol');
+                if (retCol) {
+                    if (searchState.tripType === 'roundtrip') retCol.classList.remove('hidden');
+                    else retCol.classList.add('hidden');
+                }
+                const depLabel = document.getElementById('depMonthLabel');
+                if (depLabel) {
+                    depLabel.textContent = searchState.tripType === 'roundtrip' ? "Departure Month" : "Select Month";
+                }
+                populateMonthsGrid();
+            }
+        }
+
+
+        function setTripType(type) {
+            searchState.tripType = type;
+            const btnRound = document.getElementById('btnRoundTrip');
+            const btnOne = document.getElementById('btnOneWay');
+            const modalBtnRound = document.getElementById('modalBtnRoundTrip');
+            const modalBtnOne = document.getElementById('modalBtnOneWay');
+
+            if (type === 'roundtrip') {
+                btnRound?.classList.add('active-trip-type');
+                btnOne?.classList.remove('active-trip-type');
+                modalBtnRound?.classList.add('active');
+                modalBtnOne?.classList.remove('active');
+            } else {
+                btnRound?.classList.remove('active-trip-type');
+                btnOne?.classList.add('active-trip-type');
+                modalBtnRound?.classList.remove('active');
+                modalBtnOne?.classList.add('active');
+            }
+
+            if (inlineCalendar) {
+                const mode = (searchState.dateMode === 'flexible' || type === 'roundtrip') ? 'range' : 'single';
+                inlineCalendar.set('mode', mode);
+                inlineCalendar.clear();
+                searchState.departureDate = null;
+                searchState.returnDate = null;
+            }
+
+            // Update monthly picker if open
+            if (searchState.dateMode === 'month') {
+                switchDateTab('month');
+            }
+        }
+
+
+        function populateMonthsGrid() {
+            const depContainer = document.getElementById('depMonthsGrid');
+            const retContainer = document.getElementById('retMonthsGrid');
+            if (!depContainer || !retContainer) return;
+
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const now = new Date();
+
+            const generateGrid = (isReturn) => {
+                let html = '';
+                for (let i = 0; i < 12; i++) {
+                    const date = new Date(now.getFullYear(), now.getMonth() + i, 1);
+                    const m = date.getMonth();
+                    const y = date.getFullYear();
+                    const monthVal = m + 1;
+                    const yearVal = y;
+
+                    // Calculate if disabled (for return side)
+                    let disabledClass = "";
+                    if (isReturn && searchState.selectedMonth) {
+                        const depDate = new Date(searchState.selectedMonth.year, searchState.selectedMonth.month - 1, 1);
+                        const thisDate = new Date(yearVal, monthVal - 1, 1);
+                        if (thisDate < depDate) disabledClass = "disabled";
+                    }
+
+                    // Calculate active class
+                    let activeClass = "";
+                    const target = isReturn ? searchState.selectedReturnMonth : searchState.selectedMonth;
+                    if (target && target.month === monthVal && target.year === yearVal) {
+                        activeClass = "active";
+                    }
+
+                    html += `<div class="month-card ${activeClass} ${disabledClass}" 
+                                  onclick="selectMonth(${monthVal}, ${yearVal}, ${isReturn}, this)">
+                        <span class="m-name">${months[m]}</span>
+                        <span class="m-year">${y}</span>
+                    </div>`;
+                }
+                return html;
+            };
+
+            depContainer.innerHTML = generateGrid(false);
+            retContainer.innerHTML = generateGrid(true);
+        }
+
+        function selectMonth(month, year, isReturn, el) {
+            if (isReturn) {
+                searchState.selectedReturnMonth = { month, year };
+            } else {
+                searchState.selectedMonth = { month, year };
+                // Reset return if it's now before departure
+                if (searchState.selectedReturnMonth) {
+                    const depDate = new Date(year, month - 1, 1);
+                    const retDate = new Date(searchState.selectedReturnMonth.year, searchState.selectedReturnMonth.month - 1, 1);
+                    if (retDate < depDate) searchState.selectedReturnMonth = null;
+                }
+            }
+            populateMonthsGrid(); // Refresh grids to show new active/disabled states
+        }
+
+
+        function initSearchCalendar() {
+            const calendarInput = document.getElementById('inlineCalendar');
+            if (!calendarInput || typeof flatpickr === 'undefined') return;
+
+            const minDate = new Date();
+            minDate.setDate(minDate.getDate() + 1);
+
+            // Responsive: 2 months on desktop, 1 on mobile
+            const isMobile = window.innerWidth <= 768;
+            const monthsToShow = isMobile ? 1 : 2;
+
+            inlineCalendar = flatpickr("#inlineCalendar", {
+                inline: true,
+                mode: searchState.tripType === 'oneway' ? 'single' : 'range',
+                dateFormat: "Y-m-d",
+                minDate: minDate,
+                showMonths: monthsToShow,
+                showOtherMonths: true,
+                onChange: function (selectedDates) {
+                    const isOneWay = searchState.tripType === 'oneway';
+                    const isFlexible = searchState.dateMode === 'flexible';
+
+                    // For One-way + Flexible, we allow range selection
+                    if (isOneWay && !isFlexible) {
+                        searchState.departureDate = selectedDates[0] || null;
+                        searchState.returnDate = null;
+                    } else {
+                        searchState.departureDate = selectedDates[0] || null;
+                        searchState.returnDate = selectedDates[1] || null;
+                    }
+                }
+
+            });
+        }
+
+        // Note: Resize listener removed to prevent constant DOM updates
+        // Calendar uses initial screen size to determine month count
+
+        function formatShortDate(date) {
+            if (!date) return '';
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${date.getDate()} ${months[date.getMonth()]}`;
+        }
+
+        function confirmDates() {
+            const displayText = document.getElementById('dateDisplayText');
+            if (!displayText) return;
+
+            if (searchState.dateMode === 'month' && searchState.selectedMonth) {
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                const depMonthText = `${months[searchState.selectedMonth.month - 1]} ${searchState.selectedMonth.year}`;
+
+                if (searchState.tripType === 'roundtrip') {
+                    if (!searchState.selectedReturnMonth) {
+                        alert('Please select a return month');
+                        return;
+                    }
+                    const retMonthText = `${months[searchState.selectedReturnMonth.month - 1]} ${searchState.selectedReturnMonth.year}`;
+                    displayText.innerHTML = `<span class="date-chip">${depMonthText}</span> → <span class="date-chip">${retMonthText}</span>`;
+                } else {
+                    displayText.innerHTML = `<span class="date-chip">${depMonthText}</span>`;
+                }
+            } else if (searchState.dateMode === 'flexible') {
+                if (searchState.departureDate && searchState.returnDate) {
+                    displayText.innerHTML = `<span class="date-chip">${formatShortDate(searchState.departureDate)}</span> → <span class="date-chip">${formatShortDate(searchState.returnDate)}</span>`;
+                } else {
+                    displayText.innerHTML = `<span class="date-chip">Anytime</span>`;
+                }
+            } else {
+                if (!searchState.departureDate) {
+                    alert('Please select a departure date');
+                    return;
+                }
+                if (searchState.tripType === 'roundtrip' && !searchState.returnDate) {
+                    alert('Please select a return date');
+                    return;
+                }
+                if (searchState.tripType === 'oneway') {
+                    displayText.innerHTML = `<span class="date-chip">${formatShortDate(searchState.departureDate)}</span> → <span class="date-chip">One-way</span>`;
+                } else {
+                    displayText.innerHTML = `<span class="date-chip">${formatShortDate(searchState.departureDate)}</span> → <span class="date-chip">${formatShortDate(searchState.returnDate)}</span>`;
+                }
+            }
+            displayText.classList.remove('placeholder');
+            closeDatePicker();
+        }
+
+        // ============================================================================
+        // SEARCH EXECUTION (Routes to Trip.com or Aviasales)
+        // ============================================================================
+        function performSearchProject() {
+            const originIATA = searchState.originIATA;
+            if (!originIATA) {
+                document.getElementById('searchHomeError')?.classList.remove('hidden');
+                return;
+            }
+            document.getElementById('searchHomeError')?.classList.add('hidden');
+
+            const destIATA = searchState.destType === 'anywhere' ? null : searchState.destIATA;
+
+            // Determine date range
+            let startDate, endDate;
+            const today = new Date();
+
+            if (searchState.departureDate) {
+                startDate = searchState.departureDate;
+                endDate = searchState.returnDate || new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+            } else if (searchState.dateMode === 'month' && searchState.selectedMonth) {
+                const { month, year } = searchState.selectedMonth;
+                startDate = new Date(year, month - 1, 1);
+                endDate = new Date(year, month, 0);
+            } else {
+                // Flexible Mode: Next 3 months
+                startDate = new Date(today);
+                startDate.setDate(startDate.getDate() + 7);
+                endDate = new Date(today);
+                endDate.setMonth(endDate.getMonth() + 3);
+            }
+
+            // Format: YYYY-MM-DD for Trip.com
+            const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            const ddateStr = (searchState.dateMode === 'exact' && searchState.tripType === 'oneway')
+                ? fmt(startDate)
+                : `${fmt(startDate)},${fmt(endDate)}`; // Use comma separator for Trip.com range
+            const tripTypeParam = (searchState.tripType === 'oneway') ? 'ow' : 'rt';
+
+            // ROUTING LOGIC:
+            // - If Anywhere or Flexible/Monthly date: Trip.com Explore
+            // - If Specific City + Exact Dates: Aviasales
+            if (searchState.destType === 'anywhere' || searchState.dateMode !== 'exact') {
+                // Trip.com Explore
+                let tripUrl = `https://www.trip.com/flights/explore?dcity=${originIATA}&ddate=${ddateStr}&triptype=${tripTypeParam}&class=y&quantity=1&searchboxarg=t&nonstoponly=off&locale=en-XX&curr=EUR`;
+
+                // Add return date only if NOT one-way
+                if (searchState.tripType !== 'oneway') {
+                    tripUrl += `&rdate=${ddateStr}`;
+                }
+
+                // If specific destination city but flexible/month date, append acity
+                if (searchState.destType === 'city' && destIATA) {
+                    tripUrl += `&acity=${destIATA.toLowerCase()}`;
+                }
+
+                const encodedUrl = encodeURIComponent(tripUrl);
+                const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
+                window.open(finalUrl, '_blank');
+            } else if (destIATA && searchState.departureDate) {
+                // Aviasales Specific Route
+                const depStr = `${String(searchState.departureDate.getDate()).padStart(2, '0')}${String(searchState.departureDate.getMonth() + 1).padStart(2, '0')}`;
+                let aviasalesUrl = `https://www.aviasales.com/search/${originIATA}${depStr}${destIATA}`;
+                if (searchState.tripType === 'roundtrip' && searchState.returnDate) {
+                    const retStr = `${String(searchState.returnDate.getDate()).padStart(2, '0')}${String(searchState.returnDate.getMonth() + 1).padStart(2, '0')}`;
+                    aviasalesUrl += retStr;
+                }
+                aviasalesUrl += '1'; // 1 Passenger
+
+                const encodedUrl = encodeURIComponent(aviasalesUrl);
+                const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=4114&u=${encodedUrl}&campaign_id=100`;
+                window.open(finalUrl, '_blank');
+            } else {
+                // Fallback to Trip.com
+                let tripUrl = `https://www.trip.com/flights/explore?dcity=${originIATA}&ddate=${ddateStr}&triptype=${tripTypeParam}&class=y&quantity=1&searchboxarg=t&nonstoponly=off&locale=en-XX&curr=EUR`;
+                const encodedUrl = encodeURIComponent(tripUrl);
+                const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
+                window.open(finalUrl, '_blank');
+            }
+        }
+
+        // ============================================================================
+        // INIT DATE PICKER ON DOM READY
+        // ============================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize search autocomplete & calendar
+            initSearchAutocomplete('originInput', 'originDropdown', 'originIATA', true);
+            initSearchAutocomplete('destInput', 'destDropdown', 'destIATA', false);
+            populateMonthsGrid();
+            initSearchCalendar();
+
+            // INPUT DEPENDENCY LOGIC
+            const originInput = document.getElementById('originInput');
+            const destInput = document.getElementById('destInput');
+            const destGroup = document.getElementById('destInputGroup');
+            const dateBtn = document.getElementById('dateTriggerBtn');
+            const dateGroup = document.getElementById('dateWrapper');
+
+            function checkOrigin() {
+                if (originInput.value.trim().length > 0) {
+                    destInput.disabled = false;
+                    destInput.classList.remove('cursor-not-allowed');
+                    destGroup.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    destInput.disabled = true;
+                    destInput.classList.add('cursor-not-allowed');
+                    destGroup.classList.add('opacity-50', 'cursor-not-allowed');
+                    destInput.value = ''; // Reset
+                    checkDest(); // Cascading reset
+                }
+            }
+
+            function checkDest() {
+                if (destInput.value.trim().length > 0) {
+                    dateBtn.disabled = false;
+                    dateBtn.classList.remove('cursor-not-allowed');
+                    dateGroup.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    dateBtn.disabled = true;
+                    dateBtn.classList.add('cursor-not-allowed');
+                    dateGroup.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            }
+
+            // Listeners
+            originInput.addEventListener('input', checkOrigin);
+            // Also check on click/select from dropdown (initSearchAutocomplete handles value set)
+            // We can poll or add a custom event, but input event triggers on typing. 
+            // For dropdown click, we modified initSearchAutocomplete to set value.
+            // Let's patch initSearchAutocomplete slightly or just use a MutationObserver? 
+            // Simpler: input event works for typing. For dropdown, we need to manually trigger check.
+            // We will add a periodic check or just rely on the user typing. 
+            // Better: Add a 'change' listener keying off the hidden input update?
+
+            // Re-check on blur to catch dropdown selections if they don't fire input
+            originInput.addEventListener('blur', () => setTimeout(checkOrigin, 200));
+            destInput.addEventListener('input', checkDest);
+            destInput.addEventListener('blur', () => setTimeout(checkDest, 200));
+
+            // Initial check
+            checkOrigin();
+
+            // Close date picker on outside click
+            document.addEventListener('mousedown', (e) => {
+                const modal = document.getElementById('datePickerModal');
+                const popup = document.querySelector('.date-picker-popup');
+                const trigger = document.getElementById('dateTriggerBtn');
+                if (modal && modal.classList.contains('show')) {
+                    if (e.target === modal || (!popup?.contains(e.target) && !trigger?.contains(e.target))) {
+                        closeDatePicker();
+                    }
+                }
+            });
+        });
+
         let persistentFilters = {
             city: "",
             destination: "",
-            month: ""
+            month: "",
+            sort: "price-asc"
         };
 
         let isSearchFromHome = false;
-        let homeDisplayedCount = 10;
+        let homeDisplayedCount = 12;
+        let festivalDisplayedCount = 12;
         let moreClicks = 0;
 
         const today = new Date();
@@ -2602,6 +4459,22 @@
 
         async function loadData() {
             console.log("🚀 loadData() starting...");
+
+            // Show skeletons immediately on startup based on target page
+            const hash = window.location.hash.split('?')[0].replace('#', '');
+            const initialPage = hash || 'home';
+
+            if (initialPage === 'deals') {
+                renderDealsPage();
+            } else if (initialPage === 'festivals') {
+                renderFestivalDeals();
+            } else {
+                renderHomeDeals();
+            }
+
+            // UNHIDE target section immediately so skeletons are visible during fetch
+            showPage(initialPage);
+
             initSupabase(); // Initialize right before loading data
 
             try {
@@ -2872,98 +4745,154 @@
                 const countries = [...new Set(allFestivals.map(f => f.country).filter(c => c))].sort();
                 festivalCountryEl.innerHTML = '<option value="">All countries</option>' +
                     countries.map(c => `<option value="${c}">${c}</option>`).join('');
+
+                // Add Listener
+                festivalCountryEl.addEventListener('change', applyFestivalFilters);
             }
 
             // Populate Month Filter - Afficher TOUS les mois
             const festivalFilterInfo = document.getElementById('festivalMonthFilter');
             if (festivalFilterInfo) {
-                // Afficher tous les 12 mois
                 festivalFilterInfo.innerHTML = '<option value="">All Months</option>' +
                     monthNames.map(m => `<option value="${m}">${m}</option>`).join('');
 
-                festivalFilterInfo.onchange = function () {
-                    const val = this.value;
-                    if (val) {
-                        const filtered = allFestivals.filter(f => f.month === val);
-                        renderFestivalDeals(filtered);
-                    } else {
-                        renderFestivalDeals(allFestivals);
-                    }
-                };
+                // Add Listener
+                festivalFilterInfo.addEventListener('change', applyFestivalFilters);
             }
 
+            // Add Listener to Sort Filter here as well
+            const isoSort = document.getElementById('festivalSortFilter');
+            if (isoSort) isoSort.addEventListener('change', applyFestivalFilters);
+
+            // Initial Render
             renderFestivalDeals();
         }
 
+        // UNIFIED FESTIVAL FILTER FUNCTION
+        function applyFestivalFilters() {
+            const country = document.getElementById('festivalCountryFilter')?.value;
+            const month = document.getElementById('festivalMonthFilter')?.value;
+            const sort = document.getElementById('festivalSortFilter')?.value || 'name-asc';
+
+            let filtered = allFestivals;
+
+            // Filter by Country
+            if (country) {
+                filtered = filtered.filter(f => f.country === country);
+            }
+
+            // Filter by Month
+            if (month) {
+                filtered = filtered.filter(f => f.month === month);
+            }
+
+            // Sort
+            if (sort === 'name-desc') {
+                filtered = [...filtered].sort((a, b) => b.title.localeCompare(a.title));
+            } else {
+                filtered = [...filtered].sort((a, b) => a.title.localeCompare(b.title));
+            }
+
+            renderFestivalDeals(filtered);
+        }
+
         function renderFestivalDeals(festivalsToRender = null) {
-            const list = festivalsToRender || allFestivals;
             const container = document.getElementById('festivalDeals');
             if (!container) return;
 
-            if (list.length === 0) {
-                container.innerHTML = '\u003cp class="text-2xl text-gray-600 col-span-full">No festivals found for this selection.\u003c/p>';
+            // Show skeletons if allFestivals is empty (initial load)
+            if (!festivalsToRender && (!allFestivals || allFestivals.length === 0)) {
+                container.innerHTML = Array(8).fill(0).map(() => festivalCardSkeleton()).join('');
+                document.getElementById('festivalLoadMoreContainer')?.classList.add('hidden');
                 return;
             }
 
-            // Sort by title
-            const sortedList = [...list].sort((a, b) => a.title.localeCompare(b.title));
-
-            container.innerHTML = sortedList.map(f => {
-                let imgPath = f.image;
-
-                // Check valid image source
-                if (imgPath) {
-                    if (imgPath.startsWith('http') || imgPath.startsWith('data:image')) {
-                        // Deja une URL ou Base64 complet
-                    } else if (imgPath.match(/^[A-Za-z0-9+/=]+$/) && imgPath.length > 100) {
-                        // Semble être du Base64 brut (longue chaîne sans espace)
-                        imgPath = `data:image/jpeg;base64,${imgPath}`;
-                    } else {
-                        // Fallback au chemin local si c'est un nom de fichier
-                        imgPath = `data/inputs/festivals/festivals_images/${f.month}/${f.image}`;
-                    }
-                } else {
-                    // Fallback Unsplash par défaut
-                    imgPath = "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80";
+            const renderAction = () => {
+                const list = festivalsToRender || allFestivals;
+                if (!list || list.length === 0) {
+                    container.innerHTML = '<p class="text-2xl text-gray-600 col-span-full py-10 text-center">No festivals found for this selection.</p>';
+                    document.getElementById('festivalLoadMoreContainer')?.classList.add('hidden');
+                    return;
                 }
 
-                const festivalId = `${f.month}_${f.city}`.replace(/\s/g, '_');
+                const visibleList = list.slice(0, festivalDisplayedCount);
+                const loadMoreBtn = document.getElementById('festivalLoadMoreContainer');
 
-                return `
-            <div class="compact-card group relative cursor-pointer" onclick="showFlightsModal('${f.city.replace(/'/g, "\\'")}', '${f.month}', '${f.title.replace(/'/g, "\\'")}')">
-                    <div class="deal-image h-40 overflow-hidden relative">
-                        <img src="${imgPath}" alt="${f.title}"
-                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            loading="lazy"
-                            onerror="this.src='https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80'">
-                            <div class="absolute top-3 right-3 bg-black/70 text-white px-2 py-1 rounded-md text-xs font-bold backdrop-blur-sm">
-                                ${f.month}
+                if (list.length > festivalDisplayedCount) {
+                    loadMoreBtn?.classList.remove('hidden');
+                } else {
+                    loadMoreBtn?.classList.add('hidden');
+                }
+
+                container.innerHTML = visibleList.map(f => {
+                    let imgPath = f.image;
+                    if (imgPath) {
+                        if (imgPath.startsWith('http') || imgPath.startsWith('data:image')) {
+                        } else if (imgPath.match(/^[A-Za-z0-9+/=]+$/) && imgPath.length > 100) {
+                            imgPath = `data:image/jpeg;base64,${imgPath}`;
+                        } else {
+                            imgPath = `data/inputs/festivals/festivals_images/${f.month}/${f.image}`;
+                        }
+                    } else {
+                        imgPath = "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80";
+                    }
+
+                    const countryCode = cityToCountryCode[f.city] || 'fr';
+                    const flagUrl = `https://flagcdn.com/w40/${countryCode.toLowerCase()}.png`;
+
+                    // Format dates to stack for better fit
+                    const cleanD = (s) => (s && s.length > 10) ? s.substring(0, 10) : s;
+                    const dateStack = f.start ? `
+                        <div class="flex flex-col items-center md:items-start opacity-60 font-black text-[9px] md:text-[10px] leading-tight uppercase">
+                            <span>${cleanD(f.start)}</span>
+                            ${f.end ? `<span>${cleanD(f.end)}</span>` : ''}
+                        </div>
+                    ` : '';
+
+                    return `
+                    <div class="festival-profile-component group cursor-pointer" onclick="showFlightsModal('${f.city.replace(/'/g, "\\'")}', '${f.month}', '${f.title.replace(/'/g, "\\'")}')">
+                      <img src="${imgPath}" class="festival-profile-image transition-transform duration-700 group-hover:scale-105" alt="${f.title}" loading="lazy"
+                           onerror="this.src='https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80'">
+                        <div class="festival-glass-card flex flex-col items-center justify-between" style="padding: 1rem 0.5rem 1.5rem 0.5rem;">
+                          <div class="flex-1 flex flex-col items-center justify-center w-full min-h-0 text-center px-2">
+                            <div class="fest-element fest-title font-black leading-tight mb-2 truncate-2-lines w-full" 
+                                 style="color: #ffffff; font-size: clamp(1.1rem, 4.5vw, 1.6rem); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal;">
+                              ${f.title}
                             </div>
-                    </div>
-                    <div class="p-4 bg-white relative z-10 text-left">
-                        <h3 class="text-lg font-black text-gray-900 leading-tight mb-2" title="${f.title}">${f.title}</h3>
-                        <div class="flex items-center gap-2 text-sm text-gray-600 mb-2">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-wander-primary"></i> ${f.city}
+                            <div class="fest-element fest-location font-bold leading-tight drop-shadow-md flex items-center justify-center gap-2 mb-2"
+                                 style="color: #e2e8f0; font-size: clamp(0.85rem, 3.5vw, 1.2rem); opacity: 0.95;">
+                              <span>${f.city}</span>
+                              <img src="${flagUrl}" class="w-4 h-3 md:w-5 md:h-4 rounded-sm shadow-sm opacity-100" alt="flag">
+                            </div>
+                          </div>
+                        <div class="fest-bottom-row flex flex-col md:flex-row md:items-end md:justify-between w-full gap-3 mt-auto">
+                            <div class="fest-date-group fest-element drop-shadow-md text-white flex flex-col items-center md:items-start" 
+                                 style="line-height: 1;">
+                                     <span class="font-black text-[13px] md:text-2xl tracking-tighter uppercase mb-2">${f.month}</span>
+                                     <div class="flex flex-col items-center md:items-start opacity-70 font-black text-[11px] md:text-[13px] leading-tight uppercase">
+                                         <span>${cleanD(f.start)}</span>
+                                         ${f.end ? `<span>${cleanD(f.end)}</span>` : ''}
+                                     </div>
+                            </div>
+                            <div class="fest-btn-group flex gap-2">
+                                <button class="fest-btn-deals flex items-center gap-2 px-4 py-2 bg-white text-wander-primaryDark rounded-xl font-black shadow-lg hover:scale-105 active:scale-95 transition-all text-sm md:text-base md:px-5 md:py-2.5">
+                                    <i data-lucide="plane" class="w-4 h-4"></i> Deals
+                                </button>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-2 text-sm font-black text-wander-primary mb-3">
-                            <i data-lucide="calendar" class="w-4 h-4"></i> ${f.start} - ${f.end}
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="flex-1 bg-wander-primary hover:bg-wander-primaryDark text-white py-2 rounded-lg font-bold transition text-sm">
-                                View
-                            </button>
-                            <a href="${f.link}" target="_blank" 
-                               class="px-3 py-2 border-2 border-gray-200 hover:border-wander-primary rounded-lg text-gray-600 hover:text-wander-primary transition flex items-center justify-center"
-                               onclick="event.stopPropagation()" title="Visit Festival Website">
-                                <i data-lucide="external-link" class="w-4 h-4"></i>
-                            </a>
-                        </div>
-                    </div>
-            </div>
-            `;
-            }).join('');
+                      </div>
+                    </div>`;
+                }).join('');
+                lucide.createIcons();
+            };
 
-            lucide.createIcons();
+            // If data is ready, render immediately
+            if (festivalsToRender || (allFestivals && allFestivals.length > 0)) {
+                renderAction();
+            } else {
+                // Show skeletons immediately
+                container.innerHTML = Array(12).fill(0).map(() => festivalCardSkeleton()).join('');
+            }
         }
 
         async function showFlightsModal(city, month, festivalTitle) {
@@ -2977,7 +4906,26 @@
             modalSubtitle.textContent = `Premium Flight Manifest to ${city}`;
 
             // Show loading state
-            modalContent.innerHTML = '<div class="flex justify-center p-12"><i data-lucide="loader" class="w-12 h-12 animate-spin text-wander-primary"></i></div>';
+            // Show loading state with skeletons
+            modalContent.innerHTML = `
+                <div class="tickets-container">
+                    ${Array(3).fill(0).map(() => `
+                        <div class="city-flight-box">
+                            <div class="city-box-header px-4">
+                                <div class="w-8 h-8 rounded bg-gray-200 animate-pulse"></div>
+                                <div class="space-y-2 flex-1">
+                                    <div class="h-4 w-1/3 bg-gray-200 rounded animate-pulse"></div>
+                                    <div class="h-3 w-1/4 bg-gray-100 rounded animate-pulse"></div>
+                                </div>
+                            </div>
+                            <div class="city-tickets-row">
+                                ${flightTicketSkeleton()}
+                                ${flightTicketSkeleton()}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
@@ -3284,7 +5232,7 @@
                                             <span class="ticket-date-val">${formattedEarlyDepart}</span>
                                             <svg class="ticket-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M5 12h14M12 5l7 7-7 7"/>
-                                            </svg>
+                                                </svg>
                                             <span class="ticket-date-val">${returnDate}</span>
                                         </div>
 
@@ -3457,7 +5405,9 @@
                     price: price,
                     date: cols[7],
                     url: cols[12],
-                    countryCode: cc ? cc.toLowerCase() : 'un' // default 'un' (unknown) or skip
+                    countryCode: cc ? cc.toLowerCase() : 'un', // default 'un' (unknown) or skip
+                    iataFrom: depIATA,
+                    iataTo: destIATA
                 };
             }).filter(Boolean);
 
@@ -3569,7 +5519,7 @@
 
         // ============================================================================
         // URL ROUTING SYSTEM - Deep linking for Deals page
-        // Supports URLs like: ?page=deals&from=Paris&to=gb&month=January%202025
+        // Supports URLs like: ?page=deals&from=Paris&to=gb&month=January%2025
         // Works on GitHub Pages, custom domains, localhost, etc.
         // ============================================================================
 
@@ -3939,7 +5889,8 @@
             const cityOptions = generateOptions("All departure cities");
             const searchOptions = generateOptions("Select departure city");
 
-            document.getElementById('searchFrom').innerHTML = searchOptions;
+            const searchFromDropdownLegacy = document.getElementById('searchFrom');
+            if (searchFromDropdownLegacy) searchFromDropdownLegacy.innerHTML = searchOptions;
             document.getElementById('popupFromCity').innerHTML = searchOptions;
             document.getElementById('dealsFrom').innerHTML = cityOptions;
 
@@ -3967,7 +5918,7 @@
             // FESTIVALS : Peupler le dropdown de mois avec TOUS les 12 mois
             const festivalMonthEl = document.getElementById('festivalMonthFilter');
             if (festivalMonthEl) {
-                festivalMonthEl.innerHTML = '<option value="">Any month</option>' + monthNames.map(m => `<option value="${m}">${m}</option>`).join('');
+                festivalMonthEl.innerHTML = '<option value="">All Months</option>' + monthNames.map(m => `<option value="${m}">${m}</option>`).join('');
             }
 
             // INITIALIZATION: Set default selection and update 'available destinations'
@@ -4131,25 +6082,78 @@
         function setupEvents() {
             console.log('setupEvents initialized');
 
-            // Home/Search listeners
-            document.getElementById('searchFrom').addEventListener('change', () => {
-                const city = document.getElementById('searchFrom').value;
-                updateToDropdown('searchTo', city);
-                updateMonthDropdown('searchMonth', city, document.getElementById('searchTo').value);
-            });
-            document.getElementById('searchTo').addEventListener('change', () => {
-                updateMonthDropdown('searchMonth', document.getElementById('searchFrom').value, document.getElementById('searchTo').value);
-            });
+            // Festival Load More
+            const festLoadMoreBtn = document.getElementById('festivalLoadMoreBtn');
+            if (festLoadMoreBtn) {
+                festLoadMoreBtn.onclick = () => {
+                    festivalDisplayedCount += 12;
+                    applyFestivalFilters();
+                };
+            }
+
+
+            // Home/Search listeners (Legacy - may not exist if using new autocomplete system)
+            const searchFromEl = document.getElementById('searchFrom');
+            const searchToEl = document.getElementById('searchTo');
+            if (searchFromEl) {
+                searchFromEl.addEventListener('change', () => {
+                    const city = searchFromEl.value;
+                    updateToDropdown('searchTo', city);
+                    updateMonthDropdown('searchMonth', city, searchToEl?.value);
+                });
+            }
+            if (searchToEl) {
+                searchToEl.addEventListener('change', () => {
+                    updateMonthDropdown('searchMonth', searchFromEl?.value, searchToEl.value);
+                });
+            }
 
             // Deals listeners
-            document.getElementById('dealsFrom').addEventListener('change', () => {
-                const city = document.getElementById('dealsFrom').value;
-                updateToDropdown('dealsTo', city);
-                updateMonthDropdown('dealsMonth', city, document.getElementById('dealsTo').value);
+            document.getElementById('dealsFrom').addEventListener('change', function () {
+                const dMonth = document.getElementById('dealsMonth');
+                const dMonthWrapper = document.getElementById('dealsMonthWrapper');
+
+                // Logic to enable/disable month input
+                if (this.value) {
+                    if (dMonth) {
+                        dMonth.disabled = false;
+                        dMonth.classList.remove('cursor-not-allowed');
+                        if (dMonth.options[0].text === "Select city first...") dMonth.options[0].text = "Any month";
+                    }
+                    if (dMonthWrapper) dMonthWrapper.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                    // Update month dropdown based on selected city
+                    updateMonthDropdown('dealsMonth', this.value, "");
+
+                    // Auto-Search Trigger
+                    applyDealsFilters();
+                } else {
+                    if (dMonth) {
+                        dMonth.disabled = true;
+                        dMonth.classList.add('cursor-not-allowed');
+                        dMonth.value = "";
+                        dMonth.options[0].text = "Select city first...";
+                    }
+                    if (dMonthWrapper) dMonthWrapper.classList.add('opacity-50', 'cursor-not-allowed');
+                }
             });
-            document.getElementById('dealsTo').addEventListener('change', () => {
-                updateMonthDropdown('dealsMonth', document.getElementById('dealsFrom').value, document.getElementById('dealsTo').value);
+
+            // Auto-search on deals month or sort change
+            document.getElementById('dealsMonth')?.addEventListener('change', () => {
+                applyDealsFilters();
             });
+            document.getElementById('dealsSort')?.addEventListener('change', () => {
+                applyDealsFilters();
+            });
+
+            // Festivals listeners for auto-search
+            document.getElementById('festivalCountryFilter')?.addEventListener('change', () => {
+                applyFestivalFilters();
+            });
+            document.getElementById('festivalMonthFilter')?.addEventListener('change', () => {
+                applyFestivalFilters();
+            });
+            // Removed dealsTo listener
 
             // Popup listener
             document.getElementById('popupFromCity').addEventListener('change', e => {
@@ -4218,70 +6222,86 @@
                 }, 800);
             };
 
-            document.getElementById('searchFrom').addEventListener('click', () => {
-                document.getElementById('searchError').classList.add('hidden');
-            });
-            document.getElementById('searchFrom').addEventListener('change', () => {
-                document.getElementById('searchError').classList.add('hidden');
-            });
+            // Legacy searchFrom handlers (may not exist with new autocomplete system)
+            const legacySearchFrom = document.getElementById('searchFrom');
+            const legacySearchTo = document.getElementById('searchTo');
+            const legacySearchMonth = document.getElementById('searchMonth');
+            const legacySearchBtn = document.getElementById('searchBtn');
+            const legacySearchError = document.getElementById('searchError');
 
-            document.getElementById('searchBtn').onclick = () => {
-                const fromCity = document.getElementById('searchFrom').value;
-                if (!fromCity || fromCity === "") {
-                    const group = document.getElementById('searchFrom').parentElement;
-                    const error = document.getElementById('searchError');
-                    group.classList.add('shake');
-                    error.classList.remove('hidden');
-                    setTimeout(() => {
-                        group.classList.remove('shake');
-                    }, 1500);
-                    return;
-                }
+            if (legacySearchFrom) {
+                legacySearchFrom.addEventListener('click', () => {
+                    legacySearchError?.classList.add('hidden');
+                });
+                legacySearchFrom.addEventListener('change', () => {
+                    legacySearchError?.classList.add('hidden');
+                });
+            }
 
-                currentCity = fromCity;
-                currentDestinationFilter = document.getElementById('searchTo').value;
-                currentMonthFilter = document.getElementById('searchMonth').value;
-                isSearchFromHome = true;
+            if (legacySearchBtn) {
+                legacySearchBtn.onclick = () => {
+                    // If new autocomplete system exists, use performSearchProject
+                    if (typeof performSearchProject === 'function' && document.getElementById('originInput')) {
+                        performSearchProject();
+                        return;
+                    }
 
-                // Sync with Deals page elements
-                const dealsFrom = document.getElementById('dealsFrom');
-                const dealsTo = document.getElementById('dealsTo');
-                const dealsMonth = document.getElementById('dealsMonth');
+                    // Legacy dropdown-based search
+                    const fromCity = legacySearchFrom?.value;
+                    if (!fromCity || fromCity === "") {
+                        const group = legacySearchFrom?.parentElement;
+                        if (group) group.classList.add('shake');
+                        legacySearchError?.classList.remove('hidden');
+                        setTimeout(() => {
+                            if (group) group.classList.remove('shake');
+                        }, 1500);
+                        return;
+                    }
 
-                if (dealsFrom) {
-                    dealsFrom.value = currentCity;
-                    if (typeof updateToDropdown === 'function') updateToDropdown('dealsTo', currentCity);
-                    if (dealsTo) dealsTo.value = currentDestinationFilter;
-                    if (dealsMonth) dealsMonth.value = currentMonthFilter;
+                    currentCity = fromCity;
+                    currentDestinationFilter = legacySearchTo?.value || '';
+                    currentMonthFilter = legacySearchMonth?.value || '';
+                    isSearchFromHome = true;
 
-                    // Sync custom dropdowns
-                    [dealsFrom, dealsTo, dealsMonth].forEach(sel => {
-                        if (sel && sel.parentNode) {
-                            const custom = sel.parentNode.querySelector('.custom-dropdown');
-                            if (custom && typeof syncCustomDropdownWithSelect === 'function') {
-                                syncCustomDropdownWithSelect(custom, sel);
+                    // Sync with Deals page elements
+                    const dealsFrom = document.getElementById('dealsFrom');
+                    const dealsTo = document.getElementById('dealsTo');
+                    const dealsMonth = document.getElementById('dealsMonth');
+
+                    if (dealsFrom) {
+                        dealsFrom.value = currentCity;
+                        // if (typeof updateToDropdown === 'function') updateToDropdown('dealsTo', currentCity); // Removed
+                        // if (dealsTo) dealsTo.value = currentDestinationFilter; // Removed
+                        if (dealsMonth) dealsMonth.value = currentMonthFilter;
+
+                        // Sync custom dropdowns
+                        [dealsFrom, dealsMonth].forEach(sel => {
+                            if (sel && sel.parentNode) {
+                                const custom = sel.parentNode.querySelector('.custom-dropdown');
+                                if (custom && typeof syncCustomDropdownWithSelect === 'function') {
+                                    syncCustomDropdownWithSelect(custom, sel);
+                                }
                             }
-                        }
-                    });
-                }
+                        });
+                    }
 
-                saveFiltersToPersistent();
+                    saveFiltersToPersistent();
 
-                // Update URL
-                if (typeof updateURLParams === 'function') {
-                    updateURLParams({
-                        page: 'deals',
-                        from: currentCity || '',
-                        to: currentDestinationFilter || '',
-                        month: currentMonthFilter || ''
-                    });
-                }
+                    // Update URL
+                    if (typeof updateURLParams === 'function') {
+                        updateURLParams({
+                            page: 'deals',
+                            from: currentCity || '',
+                            to: currentDestinationFilter || '',
+                            month: currentMonthFilter || ''
+                        });
+                    }
 
-                showPage('deals');
-                // Removed applyDealsFilters() here as showPage('deals') already handles it via restoreFiltersFromPersistent() when isSearchFromHome is true
+                    showPage('deals');
 
-                if (typeof updateHeroStyle === 'function') updateHeroStyle('deals');
-            };
+                    if (typeof updateHeroStyle === 'function') updateHeroStyle('deals');
+                };
+            }
 
 
             // Deals Search Button - triggers filter application
@@ -4366,6 +6386,7 @@
             persistentFilters.city = currentCity;
             persistentFilters.destination = currentDestinationFilter;
             persistentFilters.month = currentMonthFilter;
+            persistentFilters.sort = document.getElementById('dealsSort')?.value || "price-asc";
         }
 
         function restoreFiltersFromPersistent() {
@@ -4379,15 +6400,25 @@
 
             if (dFrom) {
                 dFrom.value = currentCity || "";
-                // Populate the "To" dropdown with correct options before setting its value
-                if (currentCity) updateToDropdown('dealsTo', currentCity);
+                // Logic to enable month if city is restored
+                const dMonthWrapper = document.getElementById('dealsMonthWrapper');
+                const dMonth = document.getElementById('dealsMonth');
+                if (currentCity && dMonth) {
+                    dMonth.disabled = false;
+                    dMonth.classList.remove('cursor-not-allowed');
+                    if (dMonthWrapper) dMonthWrapper.classList.remove('opacity-50', 'cursor-not-allowed');
+                    // Restore original placeholder if needed or keep selection
+                }
             }
 
-            if (dTo) dTo.value = currentDestinationFilter || "";
+            // if (dTo) dTo.value = currentDestinationFilter || ""; // Removed
             if (dMonth) dMonth.value = currentMonthFilter || "";
 
+            const dSort = document.getElementById('dealsSort');
+            if (dSort) dSort.value = persistentFilters.sort || "price-asc";
+
             // Sync Custom Dropdowns
-            [dFrom, dTo, dMonth].forEach(sel => {
+            [dFrom, dMonth, dSort].forEach(sel => {
                 if (sel && sel.parentNode) {
                     const custom = sel.parentNode.querySelector('.custom-dropdown');
                     if (custom && typeof syncCustomDropdownWithSelect === 'function') {
@@ -4400,7 +6431,7 @@
         }
 
         function resetDealsFilters() {
-            persistentFilters = { city: "", destination: "", month: "" };
+            persistentFilters = { city: "", destination: "", month: "", sort: "price-asc" };
             currentCity = "";
             currentDestinationFilter = "";
             currentMonthFilter = "";
@@ -4431,13 +6462,15 @@
 
         function applyDealsFilters() {
             currentCity = document.getElementById('dealsFrom').value;
-            currentDestinationFilter = document.getElementById('dealsTo').value;
+            // currentDestinationFilter = document.getElementById('dealsTo').value; // Removing this dependency
+            currentDestinationFilter = ""; // Reset destination filter as input is removed
             currentMonthFilter = document.getElementById('dealsMonth').value;
+            const currentSort = document.getElementById('dealsSort')?.value || 'price-asc';
 
             console.log('--- Applying Filters ---');
             console.log('City:', currentCity || 'All');
-            console.log('Destination:', currentDestinationFilter || 'All');
             console.log('Month:', currentMonthFilter || 'All');
+            console.log('Sort:', currentSort);
 
             // Update URL with current filters
             updateURLParams({
@@ -4451,167 +6484,303 @@
             renderDealsPage();
         }
 
+        const compactCardSkeleton = () => `
+        <div class="compact-card-root">
+            <div class="compact-card-wrapper shimmer-overlay" style="padding: 8px; background: white; border: 1px solid #c5c5c5; border-radius: 1.8rem; width: 100%;">
+                <div class="shimmer-sweep"></div>
+                <div class="compact-card compact-card-aspect relative" style="width: 100%; background: #f3f4f6; border-radius: 1.5rem; border: 1px solid #c5c5c5; display: block;">
+                    <!-- Skeleton for Floating Info Card -->
+                    <div class="absolute bg-white/90" style="width: 92%; left: 4%; top: 40%; bottom: 4%; border-radius: 1rem; border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; padding: 0.6rem 0.75rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 22% 1fr; align-items: center; gap: 4px;">
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <div style="width: 30px; height: 8px; background: #e5e7eb; border-radius: 4px;"></div>
+                                <div style="width: 50px; height: 20px; background: #e5e7eb; border-radius: 4px;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: center;">
+                                <div style="width: 28px; height: 28px; background: #e5e7eb; border-radius: 50%;"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                                <div style="width: 30px; height: 8px; background: #e5e7eb; border-radius: 4px;"></div>
+                                <div style="width: 50px; height: 20px; background: #e5e7eb; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+
+
+
+
+        const festivalCardSkeleton = () => `
+            <div class="festival-profile-component shimmer-overlay" style="border: 8px solid white; background: white; border-radius: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden; position: relative;">
+                 <div class="w-full h-full bg-gray-100 rounded-3xl relative">
+                      <!-- Skeleton for glass card area -->
+                      <div class="absolute bottom-4 left-4 right-4 h-1/2 bg-white/40 backdrop-blur-sm rounded-2xl border border-white/20"></div>
+                 </div>
+                 <div class="shimmer-sweep"></div>
+            </div>
+            `;
+
         const compactCardTemplate = (d) => {
             // Get departure country code for flag
-            const depCountryCode = cityToCountryCode[d.from] || 'eu';
-            const depFlagUrl = `https://flagcdn.com/w40/${depCountryCode.toLowerCase()}.png`;
+            const depCountryCode = cityToCountryCode[d.from] || 'fr';
+
+            // Main image (destination country flag/image)
+            const mainImgSrc = flagStore[d.countryCode?.toLowerCase()] || `https://flagcdn.com/w320/${d.countryCode?.toLowerCase()}.png`;
+
+            // IATA Codes (always 3 chars, no truncation)
+            const iataFrom = d.iataFrom || (d.from ? d.from.substring(0, 3).toUpperCase() : 'DEP');
+            const iataTo = d.iataTo || (d.to ? d.to.substring(0, 3).toUpperCase() : 'ARR');
 
             return `
-            <a href="${d.url}" target="_blank" rel="noopener noreferrer" class="compact-card group">
-                <div class="deal-image relative overflow-hidden rounded-t-xl">
-                    <img src="${flagStore[d.countryCode?.toLowerCase()] || `https://flagcdn.com/w320/${d.countryCode?.toLowerCase()}.png`}" 
-                         alt="${d.to}" class="w-full h-full object-cover transition-all duration-500 shadow-sm" style="transform: scale(1.25);"
-                         onerror="this.src='https://picsum.photos/800/600?random=${d.to}'">
-                    <div class="absolute inset-0 bg-black/10 pointer-events-none"></div>
+            <div class="compact-card-root">
+                <div class="compact-card-wrapper" style="padding: 8px; background: white; border: 1px solid #c5c5c5; border-radius: 1.8rem; width: 100%;">
+                    <a href="${d.url}" target="_blank" rel="noopener noreferrer"
+                            class="compact-card compact-card-aspect relative group block flex-shrink-0 min-w-[160px] md:min-w-[290px]"
+                            style="width: 100%; display: block;">
+
+                        <!-- Background Image Container -->
+                        <div class="absolute inset-0 overflow-hidden shadow-2xl z-0"
+                            style="background: white; border-radius: 1.5rem; border: 1px solid #c5c5c5;">
+                            <img src="${mainImgSrc}"
+                                class="w-full h-full object-fill transition-transform duration-700 scale-125 group-hover:scale-150"
+                                style="border-radius: 1.4rem;"
+                                onerror="this.src='https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop'">
+                            <div class="absolute inset-0 bg-black/10 transition-colors duration-300"></div>
+                        </div>
+
+                        <!-- Floating Info Card -->
+                        <div class="absolute bg-white shadow-xl z-10"
+                            style="width: 92%; left: 4%; top: 40%; bottom: 4%; border-radius: 1rem; padding: 0.6rem 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
+
+                            <!-- Top Row: Origin - Plane - Dest -->
+                            <div class="grid items-center relative" style="flex: 1; grid-template-columns: 1fr 28% 1fr;">
+
+                                <!-- Origin (Left) -->
+                                <div class="flex flex-col items-start z-10" style="min-width: 0;">
+                                    <span class="text-gray-400 font-black uppercase tracking-tighter"
+                                        style="font-size: clamp(8px, 1.8vw, 11px); line-height: 1;">DEPART</span>
+                                    <span class="text-wander-primary font-black w-full notranslate" translate="no"
+                                        style="font-size: clamp(1rem, 5vw, 1.8rem); line-height: 1.1;">${iataFrom}</span>
+                                    <div class="flex items-center gap-1.5 w-full">
+                                        <span class="text-gray-800 font-black truncate"
+                                            style="font-size: clamp(9px, 2.2vw, 14px); line-height: 1.2;">${d.from}</span>
+                                        ${iataToCountryCode[iataFrom] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataFrom].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm hidden md:block" alt="flag">` : ''}
+                                    </div>
+                                </div>
+
+                                <!-- Plane Icon -->
+                                <div class="flex flex-col items-center justify-center relative z-0">
+                                    <div class="w-full border-t-2 border-dashed border-gray-300 opacity-60"></div>
+                                    <div class="absolute bg-wander-primary rounded-full flex items-center justify-center shadow-md border-2 border-white"
+                                        style="width: clamp(22px, 6vw, 40px); height: clamp(22px, 6vw, 40px); left: 50%; top: 50%; transform: translate(calc(-50% + 2px), -50%);">
+                                        <svg class="text-white transform rotate-45"
+                                            style="width: clamp(12px, 3vw, 20px); height: clamp(12px, 3vw, 20px);"
+                                            viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <!-- Destination (Right) -->
+                                <div class="flex flex-col items-end z-10" style="min-width: 0;">
+                                    <span class="text-gray-400 font-black uppercase tracking-tighter"
+                                        style="font-size: clamp(8px, 1.8vw, 11px); line-height: 1;">ARRIVE</span>
+                                    <span class="text-wander-primary font-black text-right w-full notranslate" translate="no"
+                                        style="font-size: clamp(1rem, 5vw, 1.8rem); line-height: 1.1;">${iataTo}</span>
+                                    <div class="flex items-center justify-end gap-1.5 w-full">
+                                        ${iataToCountryCode[iataTo] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataTo].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm hidden md:block" alt="flag">` : ''}
+                                        <span class="text-gray-800 font-black truncate text-right"
+                                            style="font-size: clamp(9px, 2.2vw, 14px); line-height: 1.2;">${d.to}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Details Box -->
+                            <div class="bg-gray-50 border border-gray-200 rounded-lg flex justify-between items-center mt-auto"
+                                style="padding: 0.4rem 0.6rem; height: 40%;">
+
+                                <!-- Date -->
+                                <div class="flex flex-col items-start justify-center overflow-hidden" style="flex: 1; margin-right: 0.5rem;">
+                                    <span class="text-gray-400 font-black uppercase tracking-tighter hidden sm:block"
+                                        style="font-size: clamp(7px, 1.5vw, 9px); line-height: 1; margin-bottom: 2px;">Dates</span>
+                                    <span class="hidden sm:block text-gray-800 font-black uppercase whitespace-nowrap overflow-hidden text-ellipsis w-full notranslate" translate="no"
+                                        style="font-size: clamp(10px, 2.2vw, 15px); line-height: 1.2; letter-spacing: -0.02em;">${d.date}</span>
+                                    <div class="sm:hidden flex flex-col gap-0.5 notranslate" translate="no">
+                                        <span class="text-gray-800 font-black" style="font-size: 11.5px; line-height: 1.1;">${d.date.split('-')[0].trim()}</span>
+                                        <span class="text-gray-800 font-black" style="font-size: 11.5px; line-height: 1.1;">${(d.date.split('-')[1] || '').trim()}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="flex flex-col items-end justify-center">
+                                    <span class="text-gray-400 font-black uppercase tracking-tighter hidden sm:block"
+                                        style="font-size: clamp(7px, 1.5vw, 9px); line-height: 1; margin-bottom: 2px;">Price</span>
+                                    <span class="text-wander-primary font-black"
+                                        style="font-size: clamp(1.2rem, 5vw, 1.8rem); line-height: 1;">€${d.price}</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </a>
                 </div>
-                <div class="p-4 text-center">
-                    <h4 class="text-3xl font-black text-gray-900 mb-1 truncate">${d.to}</h4>
-                    <div class="flex flex-col items-center gap-1 mb-3">
-                        <span class="flex items-center gap-2 text-sm font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
-                            <span class="text-gray-400 text-xs uppercase">from</span>
-                            <img src="${depFlagUrl}" alt="${d.from}" class="w-5 h-4 object-cover rounded-sm shadow-sm" onerror="this.style.display='none'">
-                            <span class="font-bold">${d.from}</span>
-                        </span>
-                        <span class="text-sm font-black text-wander-primary uppercase tracking-widest bg-wander-light px-2 py-1 rounded-md border border-wander-primary/20">${d.date}</span>
+            </div>
+
+            `;
+
+
+
+        };
+
+        const flightTicketSkeleton = () => {
+            return `
+            <div class="flight-ticket shimmer-overlay" style="border: 2px solid #e5e7eb; background: #fff;">
+                <div class="shimmer-sweep"></div>
+                <div class="ticket-top flex flex-col items-center gap-4 pt-6">
+                    <!-- Logo placeholder -->
+                    <div class="h-4 w-20 bg-gray-100 rounded-full"></div>
+                    
+                    <!-- Route placeholder -->
+                    <div class="flex flex-col items-center gap-3 w-full px-4">
+                        <div class="h-6 w-12 bg-gray-200 rounded"></div>
+                        <div class="flex items-center gap-2 w-full justify-center">
+                            <div class="h-px bg-gray-200 flex-1"></div>
+                            <div class="w-5 h-5 rounded-full bg-gray-200"></div>
+                            <div class="h-px bg-gray-200 flex-1"></div>
+                        </div>
+                        <div class="h-6 w-12 bg-gray-200 rounded"></div>
                     </div>
-                    <div class="flex flex-col items-center">
-                        <span class="text-sm font-bold text-gray-400 uppercase tracking-tighter mb-1">From only</span>
-                        <span class="text-4xl font-black text-wander-primary tracking-tighter">€${d.price}</span>
-                    </div>
-                    <div class="mt-4 bg-gray-50 group-hover:bg-wander-primary group-hover:text-white transition-all py-3 rounded-2xl text-sm font-black text-wander-primary uppercase tracking-widest border border-gray-100">
-                        View Deal
+                    
+                    <!-- Dates -->
+                    <div class="h-8 w-11/12 bg-gray-50 rounded-lg mt-2"></div>
+                    
+                    <!-- Price -->
+                    <div class="mt-auto mb-2 flex flex-col items-center gap-1">
+                        <div class="h-2 w-10 bg-gray-100 rounded"></div>
+                        <div class="h-8 w-16 bg-gray-200 rounded"></div>
                     </div>
                 </div>
-            </a>
+                <div class="ticket-bottom">
+                    <div class="w-14 h-14 bg-gray-200/50 rounded-md"></div>
+                </div>
+            </div>
             `;
         };
 
         function renderHomeDeals() {
-            const deals = allDeals.filter(d => d.price < 80).sort((a, b) => a.price - b.price).slice(0, homeDisplayedCount);
-            document.getElementById('homeDeals').innerHTML = deals.map(compactCardTemplate).join('');
+            const homeDealsContainer = document.getElementById('homeDeals');
+            if (!homeDealsContainer) return;
+
+            // If data is already loaded, render it immediately
+            if (allDeals && allDeals.length > 0) {
+                const deals = allDeals.filter(d => d.price < 100).sort((a, b) => a.price - b.price).slice(0, homeDisplayedCount);
+                if (deals.length > 0) {
+                    homeDealsContainer.innerHTML = deals.map(compactCardTemplate).join('');
+                } else {
+                    homeDealsContainer.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No flight deals found under €100.</p>';
+                }
+            } else {
+                // Display skeletons only if data is not available
+                homeDealsContainer.innerHTML = Array(homeDisplayedCount).fill(0).map(() => compactCardSkeleton()).join('');
+            }
         }
 
         function renderDealsPage() {
+            const dynamicCarouselsContainer = document.getElementById('dynamicCarousels');
+            if (!dynamicCarouselsContainer) return;
+
+            // If data is already ready, render content immediately (e.g. on filter change or re-navigation)
+            if (allDeals && allDeals.length > 0) {
+                renderDealsContent();
+                return;
+            }
+
+            // Display skeletons immediately on initial load
+            const skeletonHTML = `
+                <div class="carousel-container relative group">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl md:text-5xl font-black uppercase tracking-tighter inline-block">Loading... <span class="text-2xl md:text-3xl text-gray-500 normal-case tracking-normal font-bold">(Please wait)</span></h3>
+                    </div>
+                    <div class="relative">
+                        <div class="carousel month-carousel pr-12 justify-start">
+                            ${Array(6).fill(0).map(() => compactCardSkeleton()).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            dynamicCarouselsContainer.innerHTML = skeletonHTML;
+        }
+
+        function renderDealsContent() {
+            const dynamicCarouselsContainer = document.getElementById('dynamicCarousels');
+            if (!dynamicCarouselsContainer || !allDeals || allDeals.length === 0) return;
+
             let filtered = allDeals;
-            console.log(`DEBUG: Initial deals: ${filtered.length}. Filter: City=${currentCity}, Dest=${currentDestinationFilter}`);
-
             if (currentCity) filtered = filtered.filter(d => d.from === currentCity);
-            console.log(`DEBUG: After City Filter: ${filtered.length}`);
-
             if (currentDestinationFilter) {
-                console.log('DEBUG: Applying Destination Filter:', currentDestinationFilter);
-                // If value is 2 chars, assume it is a country code (from new dropdown logic)
                 if (currentDestinationFilter.length === 2) {
                     const countryCode = currentDestinationFilter.toLowerCase();
-                    filtered = filtered.filter(d => {
-                        const match = d.countryCode && d.countryCode.toLowerCase() === countryCode;
-                        if (!match && filtered.length < 5) console.log(`DEBUG: No match for deal to ${d.to} (code: ${d.countryCode})`);
-                        return match;
-                    });
+                    filtered = filtered.filter(d => d.countryCode && d.countryCode.toLowerCase() === countryCode);
                 } else {
                     filtered = filtered.filter(d => d.to === currentDestinationFilter);
                 }
             }
-            console.log(`DEBUG: After Dest Filter: ${filtered.length}`);
 
-
-            // Determine which months to show based on filtered results
             let monthsToShow = [];
             if (currentMonthFilter) {
                 monthsToShow = [currentMonthFilter];
             } else {
-                // If no specific month selected, show all months that have deals in the filtered set
-                // But keep them sorted chronologically
                 const distinctMonths = new Set();
                 filtered.forEach(d => {
-                    // Extract month from date string (e.g. "26 May" -> "May")
-                    // Date format is roughly "Day Month - Day Month"
-                    // We need to match with monthNames keys
-                    // Simple heuristic: check if date string contains any month name
                     monthNames.forEach(m => {
-                        // Check short month name (first 3 chars)
                         if (d.date.includes(m) || d.date.includes(m.substring(0, 3))) {
                             distinctMonths.add(m);
                         }
                     });
                 });
-
-                // Sort months based on global monthNames order
                 monthsToShow = monthNames.filter(m => distinctMonths.has(m));
-
-                // Fallback: if no deals found or no months matched, show next 3 months as default view
-                if (monthsToShow.length === 0) {
-                    monthsToShow = getNextThreeMonths();
-                }
+                if (monthsToShow.length === 0) monthsToShow = getNextThreeMonths();
             }
 
-            let html = '';
+            const currentSort = document.getElementById('dealsSort')?.value || 'price-asc';
 
+            let html = '';
             monthsToShow.forEach(month => {
                 const shortMonth = month.split(' ')[0].slice(0, 3);
                 let monthDeals = filtered.filter(d =>
                     d.date.includes(shortMonth) || d.date.includes(month.split(' ')[0])
                 );
 
-                monthDeals.sort((a, b) => a.price - b.price || a.to.localeCompare(b.to));
+                // Apply global sort
+                if (currentSort === 'price-asc') monthDeals.sort((a, b) => a.price - b.price);
+                else if (currentSort === 'price-desc') monthDeals.sort((a, b) => b.price - a.price);
+                else if (currentSort === 'city-asc') monthDeals.sort((a, b) => a.to.localeCompare(b.to));
+                else if (currentSort === 'city-desc') monthDeals.sort((a, b) => b.to.localeCompare(a.to));
+                else monthDeals.sort((a, b) => a.price - b.price || a.to.localeCompare(b.to));
 
                 html += `
-            <div class="carousel-container relative group">
-                <div class="flex flex-col md:flex-row md:flex-wrap md:items-center md:justify-between gap-4 mb-8">
-                    <h3 class="text-3xl font-bold">${month} <span class="block text-xl text-gray-500 mt-1">(${monthDeals.length} deals)</span></h3>
-                    <div class="flex gap-4">
-                        <select class="sort-price h-12 px-4 rounded-xl border border-gray-300 text-sm" aria-label="Sort by price">
-                            <option value="price-asc" selected>Price: Low to High</option>
-                            <option value="price-desc">Price: High to Low</option>
-                        </select>
-                        <select class="sort-city h-12 px-4 rounded-xl border border-gray-300 text-sm" aria-label="Sort by city">
-                            <option value="city-asc" selected>City: A → Z</option>
-                            <option value="city-desc">City: Z → A</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="relative">
-                    <div class="carousel month-carousel pr-8">
-                        ${monthDeals.length ? monthDeals.map(compactCardTemplate).join('') : '<p class="text-center text-gray-500 text-xl w-full">No deals available.</p>'}
-                    </div>
-                </div>
-                <div class="carousel-controls absolute inset-y-0 left-0 right-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button class="carousel-prev absolute left-4 top-1/2 -translate-y-1/2 bg-white shadow-2xl p-3 rounded-full pointer-events-auto hover:scale-110" aria-label="Previous deals"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
-                    <button class="carousel-next absolute right-4 top-1/2 -translate-y-1/2 bg-white shadow-2xl p-3 rounded-full pointer-events-auto hover:scale-110" aria-label="Next deals"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
-                </div>
-            </div>
-            `;
+                    <div class="carousel-container relative group">
+                        <div class="text-center mb-8">
+                            <h3 class="text-3xl md:text-5xl font-black tracking-tighter uppercase inline-block">${month} <span class="text-2xl md:text-3xl text-gray-500 font-bold lowercase tracking-normal italic opacity-60">(${monthDeals.length} deals)</span></h3>
+                        </div>
+                        <div class="relative">
+                            <div class="carousel month-carousel pr-12 flex flex-row overflow-x-auto whitespace-nowrap scrollbar-hide" style="justify-content: flex-start !important;">
+                                ${monthDeals.length ? monthDeals.map(compactCardTemplate).join('') : '<p class="text-center text-gray-500 text-xl w-full">No deals available.</p>'}
+                            </div>
+                        </div>
+                        <div class="carousel-controls absolute inset-y-0 left-0 right-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="carousel-prev absolute left-4 top-1/2 -translate-y-1/2 bg-white shadow-2xl p-3 rounded-full pointer-events-auto hover:scale-110" aria-label="Previous deals"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+                            <button class="carousel-next absolute right-4 top-1/2 -translate-y-1/2 bg-white shadow-2xl p-3 rounded-full pointer-events-auto hover:scale-110" aria-label="Next deals"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
+                        </div>
+                    </div>`;
             });
 
-            document.getElementById('dynamicCarousels').innerHTML = html;
-
-            document.querySelectorAll('.sort-price, .sort-city').forEach(select => {
-                select.addEventListener('change', function () {
-                    const carousel = this.closest('.carousel-container').querySelector('.month-carousel');
-                    const cards = Array.from(carousel.querySelectorAll('.compact-card'));
-                    let sorted = [...cards];
-
-                    if (this.classList.contains('sort-price')) {
-                        sorted.sort((a, b) => {
-                            const pa = parseInt(a.querySelector('.text-4xl').textContent.replace('€', ''));
-                            const pb = parseInt(b.querySelector('.text-4xl').textContent.replace('€', ''));
-                            return this.value === 'price-asc' ? pa - pb : pb - pa;
-                        });
-                    } else {
-                        sorted.sort((a, b) => {
-                            const ca = a.querySelector('.text-2xl').textContent;
-                            const cb = b.querySelector('.text-2xl').textContent;
-                            return this.value === 'city-asc' ? ca.localeCompare(cb) : cb.localeCompare(ca);
-                        });
-                    }
-
-                    sorted.forEach(card => carousel.appendChild(card));
-                });
-            });
-
+            dynamicCarouselsContainer.innerHTML = html;
             setupCarouselControls();
             lucide.createIcons();
-        }
+        } // Close renderDealsContent
 
         function setupCarouselControls() {
             document.querySelectorAll('.carousel-container').forEach(container => {
@@ -4624,64 +6793,44 @@
         }
 
         function showPage(id) {
-            const pageLoader = document.getElementById('pageLoader');
+            document.querySelectorAll('section[id]').forEach(s => s.classList.add('hidden'));
+            const target = document.getElementById(id);
+            if (target) target.classList.remove('hidden');
+            window.scrollTo(0, 0);
 
-            // Show page transition loader
-            if (pageLoader) {
-                pageLoader.classList.remove('hidden');
-                pageLoader.classList.add('flex', 'opacity-100');
+            // Update active navigation state
+            document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll(`[data-page="${id}"]`).forEach(link => link.classList.add('active'));
+
+            // Update Hero Style
+            if (typeof updateHeroStyle === 'function') {
+                updateHeroStyle(id);
             }
 
-            // Small delay to allow loader to appear and feel like a "scan"
-            setTimeout(() => {
-                document.querySelectorAll('section[id]').forEach(s => s.classList.add('hidden'));
-                const target = document.getElementById(id);
-                if (target) target.classList.remove('hidden');
-                window.scrollTo(0, 0);
+            // Update URL routing
+            if (id === 'home') {
+                updateURLParams({});
+            } else if (id === 'deals') {
+                updateURLParams({ page: 'deals' });
+            } else if (id === 'festivals') {
+                updateURLParams({ page: 'festivals' });
+            }
 
-                // Update active navigation state
-                document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => link.classList.remove('active'));
-                document.querySelectorAll(`[data-page="${id}"]`).forEach(link => link.classList.add('active'));
-
-                // Update Hero Style
-                if (typeof updateHeroStyle === 'function') {
-                    updateHeroStyle(id);
+            if (id === 'deals') {
+                if (isSearchFromHome) {
+                    restoreFiltersFromPersistent();
+                    isSearchFromHome = false;
+                } else {
+                    resetDealsFilters();
+                    renderDealsPage();
                 }
+            }
 
-                // Update URL routing
-                if (id === 'home') {
-                    updateURLParams({});
-                } else if (id === 'deals') {
-                    updateURLParams({ page: 'deals' });
-                } else if (id === 'festivals') {
-                    updateURLParams({ page: 'festivals' });
+            if (id === 'festivals') {
+                if (typeof renderFestivalDeals === 'function') {
+                    renderFestivalDeals(allFestivals);
                 }
-
-                if (id === 'deals') {
-                    if (isSearchFromHome) {
-                        restoreFiltersFromPersistent();
-                        isSearchFromHome = false;
-                    } else {
-                        resetDealsFilters();
-                        renderDealsPage();
-                    }
-                }
-
-                if (id === 'festivals') {
-                    if (typeof renderFestivalDeals === 'function') {
-                        renderFestivalDeals(allFestivals);
-                    }
-                }
-
-                // Hide page loader
-                if (pageLoader) {
-                    pageLoader.classList.add('opacity-0');
-                    setTimeout(() => {
-                        pageLoader.classList.add('hidden');
-                        pageLoader.classList.remove('flex', 'opacity-0');
-                    }, 300);
-                }
-            }, 600); // 600ms scanning duration
+            }
         }
 
         document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(l => l.addEventListener('click', e => {
@@ -5035,26 +7184,140 @@
         const initialHash = window.location.hash.replace('#', '') || 'home';
         updateHeroStyle(initialHash);
 
-        // 5. FESTIVAL SORT BY NAME
+        // 5. FESTIVAL SORT BY NAME (Handled by applyFestivalFilters now)
+        // Kept for safety or external triggers, but listener logic is moved.
+        /*
         const festivalSortFilter = document.getElementById('festivalSortFilter');
         if (festivalSortFilter) {
-            festivalSortFilter.addEventListener('change', function () {
-                const sortValue = this.value;
-                const monthValue = document.getElementById('festivalMonthFilter').value;
-
-                let filtered = monthValue
-                    ? allFestivals.filter(f => f.month === monthValue)
-                    : allFestivals;
-
-                if (sortValue === 'name-desc') {
-                    filtered = [...filtered].sort((a, b) => b.title.localeCompare(a.title));
-                } else {
-                    filtered = [...filtered].sort((a, b) => a.title.localeCompare(b.title));
-                }
-
-                renderFestivalDeals(filtered);
-            });
+                        festivalSortFilter.addEventListener('change', applyFestivalFilters);
         }
+                    */
+
+        // FORCE GLOBAL LOADER HIDING (Shortened for Round 8)
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('globalLoader');
+            if (loader) {
+                // Shortened delay to allow skeletons to take over faster
+                const delay = 500;
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 300);
+                }, delay);
+            }
+        });
+    </script>
+    <section id="qrScannerSection" class="max-w-4xl mx-auto px-6 py-20">
+        <div class="bg-white rounded-[40px] shadow-2xl overflow-hidden border-4 border-[#5d3fd3]">
+            <div class="bg-[#5d3fd3] px-10 py-6 flex items-center justify-between">
+                <h2 class="text-3xl font-black text-white uppercase tracking-tighter"
+                    style="font-family:'Luckiest Guy', cursive;">Scan a Ticket</h2>
+                <div
+                    class="bg-white/20 px-4 py-1.5 rounded-full text-xs font-black text-white uppercase tracking-widest">
+                    VIDEO TOOL</div>
+            </div>
+            <div class="p-10 flex flex-col md:flex-row gap-10 items-center">
+                <div class="flex-1 text-center md:text-left">
+                    <h3 class="text-2xl font-black text-slate-800 mb-4 uppercase tracking-tight">Saw a flight in our
+                        video?</h3>
+                    <p class="text-slate-500 mb-8 font-medium text-lg leading-relaxed">Upload a screenshot of any ticket
+                        from our 360 rotation to instantly unlock the booking link.</p>
+                    <label for="qrFileInput"
+                        class="inline-flex items-center gap-3 bg-[#5d3fd3] hover:bg-[#4b32b0] text-white font-black px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-xl shadow-indigo-100 hover:scale-105 active:scale-95 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                            class="transition-transform group-hover:-translate-y-1">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" x2="12" y1="3" y2="15" />
+                        </svg>
+                        UPLOAD SCREENSHOT
+                    </label>
+                    <input type="file" id="qrFileInput" accept="image/*" class="hidden">
+                </div>
+                <div class="w-60 h-60 bg-slate-50 border-4 border-dashed border-slate-200 rounded-[32px] flex items-center justify-center relative overflow-hidden"
+                    id="qrPreview">
+                    <div class="flex flex-col items-center gap-3 text-slate-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                            <circle cx="9" cy="9" r="2" />
+                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                        </svg>
+                        <span class="text-xs font-black uppercase tracking-widest">No Image</span>
+                    </div>
+                    <canvas id="qrCanvas" class="hidden"></canvas>
+                </div>
+            </div>
+            <div id="qrResult"
+                class="hidden bg-indigo-50 border-t-2 border-indigo-100 p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div class="flex items-center gap-6">
+                    <div
+                        class="w-16 h-16 bg-white text-[#5d3fd3] rounded-2xl flex items-center justify-center shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-black text-[#5d3fd3]/60 uppercase tracking-[0.2em] mb-1">Deal Link Found
+                        </p>
+                        <a id="qrLink" href="#" target="_blank"
+                            class="text-[#5d3fd3] font-black text-2xl flex items-center gap-3 hover:underline group">
+                            Go to Booking Site
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                                <line x1="7" x2="17" y1="17" y2="7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        (function () {
+            const fileInput = document.getElementById('qrFileInput');
+            const preview = document.getElementById('qrPreview');
+            const result = document.getElementById('qrResult');
+            const qrLink = document.getElementById('qrLink');
+            const canvas = document.getElementById('qrCanvas');
+            const ctx = canvas.getContext('2d');
+
+            fileInput.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = event => {
+                    const img = new Image();
+                    img.onload = () => {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                        if (code) {
+                            qrLink.href = code.data;
+                            result.classList.remove('hidden');
+                            preview.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-cover">`;
+                            window.scrollBy({ top: 300, behavior: 'smooth' });
+                        } else {
+                            alert("❌ No QR code found. Please ensure the screenshot clearly shows the ticket's QR code.");
+                            preview.innerHTML = `<div class="flex flex-col items-center gap-3 text-red-300"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span class="text-[10px] font-black uppercase tracking-widest">Invalid Screenshot</span></div>`;
+                            result.classList.add('hidden');
+                        }
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        })();
     </script>
 
     <!-- ========== PREMIUM FOOTER ========== -->
@@ -5116,6 +7379,28 @@
                     <a href="#">How it Works</a>
                     <a href="https://www.facebook.com/groups/629026353602233/" target="_blank">Our Story</a>
                     <a href="mailto:wingsky.contact@gmail.com">Contact Us</a>
+                </div>
+            </div>
+
+            <!-- Legal & Info -->
+            <div class="footer-section">
+                <h4 class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="text-wander-primary">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Legal & GDPR
+                </h4>
+                <div class="footer-legal-text">
+                    <p>
+                        Wingsky is an informational travel blog. We find the best deals and redirect you to official
+                        booking platforms. We do not sell any services directly.
+                    </p>
+                    <p style="margin-top: 10px;">
+                        Committed to your privacy, we are fully GDPR compliant and do not collect, store, or process any
+                        personal data.
+                    </p>
                 </div>
             </div>
 
