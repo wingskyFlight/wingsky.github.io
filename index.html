@@ -12,28 +12,7 @@
     <title>Wingsky – Real Flight Deals</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        // SUPABASE CONFIGURATION
-        const SUPABASE_URL = 'https://cmxrottwkqkevtmpcdjr.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNteHJvdHR3a3FrZXZ0bXBjZGpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3NDQwNzAsImV4cCI6MjA4MTMyMDA3MH0.mobyFiIs_LxE1Vqlt5KP9xYfWwiygLi3vAhH2K8_jJ4';
-
-        // Initialisation du client
-        let supabaseClient = null;
-
-        function initSupabase() {
-            if (typeof supabase !== 'undefined') {
-                try {
-                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-                    console.log("✅ Supabase Client initialized successfully");
-                } catch (e) {
-                    console.error("❌ Failed to create Supabase client:", e);
-                }
-            } else {
-                console.warn("⚠️ Supabase SDK not found. Check if the script is loaded correctly.");
-            }
-        }
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Luckiest+Guy&display=swap"
         rel="stylesheet">
@@ -110,21 +89,30 @@
 
         .compact-card-aspect {
             aspect-ratio: 17/16;
-            /* 20% shorter on desktop/tablet */
         }
 
-        /* Original height on mobile */
-        @media (max-width: 768px) {
+        /* Original height on mobile/tablet portrait (<700px) */
+        @media (max-width: 700px) {
             .compact-card-aspect {
                 aspect-ratio: 17/20;
             }
         }
 
-        /* Carousel specific card optimization */
-        .carousel .compact-card-root {
-            width: 290px !important;
-            flex: 0 0 290px !important;
+        .carousel .compact-card {
+            width: 310px !important;
+            flex: 0 0 310px !important;
             margin: 0 !important;
+        }
+
+        @media (max-width: 700px) {
+            .carousel .compact-card {
+                width: 200px !important;
+                flex: 0 0 200px !important;
+            }
+
+            .compact-card-aspect {
+                aspect-ratio: 17/20 !important;
+            }
         }
 
         .carousel {
@@ -133,12 +121,66 @@
             flex-wrap: nowrap !important;
             overflow-x: auto !important;
             -webkit-overflow-scrolling: touch;
+            gap: 15px !important;
+            justify-content: flex-start !important;
         }
 
-        @media (max-width: 768px) {
-            .carousel .compact-card-root {
-                width: 220px !important;
-                flex: 0 0 220px !important;
+        /* Card Text Scaling */
+        .card-label {
+            font-size: 8px;
+            line-height: 1;
+        }
+
+        .card-iata {
+            font-size: 1.3rem;
+            line-height: 1.1;
+        }
+
+        .card-city {
+            font-size: 10px;
+            line-height: 1.2;
+        }
+
+        .card-date-label {
+            font-size: 8px;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        .card-date-value {
+            font-size: 11px;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        .card-price-value {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        @media (min-width: 701px) {
+            .card-label {
+                font-size: 11px !important;
+            }
+
+            .card-iata {
+                font-size: 1.65rem !important;
+            }
+
+            .card-city {
+                font-size: 13.5px !important;
+            }
+
+            .card-date-label {
+                font-size: 9px !important;
+            }
+
+            .card-date-value {
+                font-size: 15px !important;
+            }
+
+            .card-price-value {
+                font-size: 24px !important;
             }
         }
 
@@ -147,27 +189,23 @@
 
         /* PREMIUM NAVIGATION LINKS */
         .nav-link-premium {
-            padding: 8px 16px;
+            padding: 6.5px 13px !important;
             border-radius: 20px;
             color: #c5c5c5;
-            /* Gray-600 */
             font-weight: 600;
-            /* Semi-bold */
-            font-size: 0.9rem;
+            font-size: 0.72rem !important;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px !important;
             position: relative;
             overflow: hidden;
             border: 1px solid transparent;
-            /* Prevents layout shift on hover border */
         }
 
         .nav-link-premium i {
-            font-size: 1rem;
+            font-size: 0.8rem !important;
             color: #6b7280;
-            /* Gray-500 */
             transition: color 0.3s;
         }
 
@@ -192,20 +230,16 @@
         .lang-trigger {
             display: flex;
             align-items: center;
-            gap: 8px;
-            /* Match nav-link gap */
-            padding: 8px 16px;
-            /* Match nav-link padding */
+            gap: 6px !important;
+            padding: 6.5px 13px !important;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            /* Match nav-link font size */
+            border-radius: 20px !important;
+            font-size: 0.72rem !important;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid #e5e7eb;
             color: #c5c5c5
-                /* Gray-600 */
         }
 
         .lang-trigger:hover {
@@ -1811,40 +1845,136 @@
             transform: scale(1.15);
         }
 
-        @media (max-width: 480px) {
-            .compact-card {
-                /* Let grid handle width */
-                width: 100% !important;
+        /* RESPONSIVE TYPOGRAPHY & LAYOUT FOR FLIGHT CARDS */
+        /* Ensure plane icon is perfectly centered and sized appropriately */
+        .compact-card .bg-wander-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Base sizes for desktop (700px+) */
+        @media (min-width: 700px) {
+            .card-label {
+                font-size: 0.65rem;
+                line-height: 1.2;
             }
 
-            .compact-card .deal-image {
-                height: 100px !important;
+            .card-iata {
+                font-size: 1.25rem;
+                line-height: 1.1;
             }
 
-            .compact-card .p-4 {
-                padding: 0.75rem !important;
+            .card-city {
+                font-size: 0.875rem;
+                line-height: 1.2;
             }
 
-            .compact-card .text-2xl {
-                font-size: 1.1rem !important;
+            .card-date-label {
+                font-size: 0.65rem;
+                line-height: 1.2;
             }
 
-            .compact-card .text-4xl {
-                font-size: 1.8rem !important;
+            .card-date-value {
+                font-size: 0.875rem;
+                line-height: 1.2;
             }
 
-            .compact-card .text-base {
-                font-size: 0.75rem !important;
-            }
-
-            .compact-card .py-2 {
-                padding: 0.4rem 0 !important;
-            }
-
-            .compact-card .text-sm {
-                font-size: 0.65rem !important;
+            .card-price-value {
+                font-size: 1.125rem;
+                line-height: 1.1;
             }
         }
+
+        /* Medium screens (570px to 699px) - FILL THE SPACE */
+        @media (min-width: 570px) and (max-width: 699px) {
+            .card-label {
+                font-size: 0.75rem;
+            }
+
+            .card-iata {
+                font-size: 1.3rem;
+                font-weight: 900;
+            }
+
+            .card-city {
+                font-size: 0.9rem;
+                max-width: 100%;
+            }
+
+            .card-date-label {
+                font-size: 0.75rem;
+            }
+
+            .card-date-value {
+                font-size: 0.9rem;
+            }
+
+            .card-price-value {
+                font-size: 1.15rem;
+            }
+
+            /* Show flags on medium screens */
+            .compact-card img[alt="flag"] {
+                display: inline-block !important;
+            }
+
+            /* Slightly larger plane icon to fill space */
+            .compact-card .bg-wander-primary {
+                width: 40px !important;
+                height: 40px !important;
+            }
+
+            .compact-card .bg-wander-primary svg {
+                width: 22px !important;
+                height: 22px !important;
+            }
+        }
+
+        /* Small screens (420px to 569px) - Balanced */
+        @media (min-width: 420px) and (max-width: 569px) {
+            .card-label {
+                font-size: 0.6rem;
+                line-height: 1.1;
+            }
+
+            .card-iata {
+                font-size: 1.05rem;
+                line-height: 1.1;
+            }
+
+            .card-city {
+                font-size: 0.75rem;
+                line-height: 1.2;
+                max-width: 100%;
+                word-break: break-word;
+            }
+
+            .card-date-label {
+                font-size: 0.6rem;
+            }
+
+            .card-date-value {
+                font-size: 0.72rem;
+                line-height: 1.1;
+            }
+
+            .card-price-value {
+                font-size: 0.95rem;
+            }
+
+            /* Reduce plane icon size for better fit */
+            .compact-card .bg-wander-primary {
+                width: 32px !important;
+                height: 32px !important;
+            }
+
+            .compact-card .bg-wander-primary svg {
+                width: 16px !important;
+                height: 16px !important;
+            }
+        }
+
 
         .carousel {
             scroll-snap-type: x mandatory;
@@ -1915,59 +2045,138 @@
         /* Adaptive Centered Grid */
         .home-grid {
             display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 1.5rem;
+            gap: 0.75rem;
+            /* Default tighter gap for better fit */
             justify-content: center;
             max-width: 1250px;
             margin: 0 auto;
             width: 100%;
-            padding: 0 1.5rem;
+            padding: 0 0.75rem;
         }
 
+        /* --- USER DEFINED GRID BREAKPOINTS --- */
 
-        /* Responsive Scaling for Grid & Widgets */
-        /* CRITICAL: 770px to 970px - Force 3 columns for tickets */
-        @media (min-width: 770px) and (max-width: 970px) {
-            .home-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 0.75rem !important;
-                padding: 0 0.75rem !important;
-            }
-        }
-
-        @media (max-width: 1366px) {
-            .home-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 1.25rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .home-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
+        /* < 600px : 2 Cartes */
+        @media (max-width: 600px) {
             .home-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 0.5rem;
                 padding: 0 0.5rem;
-                max-width: 100%;
             }
         }
 
-        /* Fix 550-770px: Enlarge elements inside white card */
-        @media (min-width: 550px) and (max-width: 770px) {
+        /* 600px - 900px : 3 Cartes */
+        @media (min-width: 601px) and (max-width: 900px) {
             .home-grid {
-                gap: 0.75rem;
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+        }
+
+        /* > 900px : 4 Cartes */
+        @media (min-width: 901px) {
+            .home-grid {
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 1.5rem;
+            }
+        }
+
+        /* --- DYNAMIC DATE FORMATTING (Horizontal vs Vertical) --- */
+
+        /* Default: Horizontal is handled by span's default inline behavior */
+
+        /* Zone 1: 350px - 400px (2 cols tight) */
+        @media (min-width: 350px) and (max-width: 400px) {
+            .date-part {
+                display: block !important;
+                line-height: 1.1;
             }
 
-            /* Card info section: less top spacing, bigger content */
-            .home-grid a[style*="aspect-ratio"]>div:last-child {
-                top: 35% !important;
-                padding: 0.8rem !important;
+            .date-separator {
+                display: none !important;
+            }
+        }
+
+        /* Zone 2: 600px - 770px (3 cols tight) */
+        @media (min-width: 601px) and (max-width: 770px) {
+            .date-part {
+                display: block !important;
+                line-height: 1.1;
+                font-size: 0.75rem !important;
+            }
+
+            .date-separator {
+                display: none !important;
+            }
+
+            /* Increase box height relative to card (+20% effectively via padding/flex) */
+            .details-box {
+                height: 48% !important;
+                padding: 0.5rem 0.4rem !important;
+            }
+
+            .card-price-value {
+                font-size: 1rem !important;
+            }
+        }
+
+        /* Zone 3: 900px - 1135px (4 cols tight) */
+        @media (min-width: 901px) and (max-width: 1135px) {
+            .date-part {
+                display: block !important;
+                line-height: 1.1;
+                font-size: 0.75rem !important;
+            }
+
+            .date-separator {
+                display: none !important;
+            }
+
+            /* Increase box height relative to card */
+            .details-box {
+                height: 48% !important;
+                padding: 0.5rem 0.4rem !important;
+            }
+
+            .card-price-value {
+                font-size: 1rem !important;
+            }
+        }
+
+
+        /* --- TYPOGRAPHY ADJUSTMENTS FOR NEW GRID --- */
+
+
+        /* Keep existing small screen internal styling but ensure it applies to the new 2-col layout */
+        /* 300-470px with 2 cols is TIGHT. Use microscopic styling */
+        @media (max-width: 470px) {
+            .card-iata {
+                font-size: 0.9rem !important;
+            }
+
+            .card-city {
+                font-size: 0.65rem !important;
+            }
+
+            .card-date-value {
+                font-size: 0.6rem !important;
+            }
+
+            .card-price-value {
+                font-size: 0.85rem !important;
+            }
+
+            .compact-card img[alt="flag"] {
+                display: none !important;
+            }
+
+            .compact-card .bg-wander-primary {
+                width: 24px !important;
+                height: 24px !important;
+            }
+
+            .compact-card .bg-wander-primary svg {
+                width: 12px !important;
+                height: 12px !important;
             }
         }
 
@@ -3267,6 +3476,7 @@
         /* --- Hover Transforms --- */
         .festival-profile-component:hover .fest-title {
             -webkit-line-clamp: unset;
+            line-clamp: unset;
             display: block;
             overflow: visible;
             text-align: center;
@@ -3983,6 +4193,7 @@
         console.log("SCRIPT STARTING");
         let allDeals = [];
         let allFestivals = [];
+        let allFestivalFlights = []; // Local store for festival-specific flights
         let currentCity = "";
         let currentMonthFilter = "";
         let currentDestinationFilter = "";
@@ -4006,7 +4217,7 @@
             'Munich': 'de', 'Frankfurt': 'de', 'Frankfurt am Main': 'de', 'Hamburg': 'de',
             'Milan': 'it', 'Venice': 'it', 'Naples': 'it', 'Manchester': 'gb', 'Edinburgh': 'gb',
             'Glasgow': 'gb', 'Birmingham': 'gb', 'Liverpool': 'gb', 'Newcastle upon Tyne': 'gb',
-            'Inverness': 'gb', 'Belfast': 'ie', 'Lyon': 'fr', 'Marseille': 'fr', 'Nice': 'fr',
+            'Inverness': 'gb', 'Belfast': 'gb', 'Lyon': 'fr', 'Marseille': 'fr', 'Nice': 'fr',
             'Toulouse': 'fr', 'Bordeaux': 'fr', 'Nantes': 'fr', 'Krakow': 'pl', 'Gdansk': 'pl',
             'Katowice': 'pl', 'Lublin': 'pl', 'Rzeszow': 'pl', 'Bydgoszcz': 'pl', 'Sarajevo': 'ba',
             'Tirana': 'al', 'Ankara': 'tr', 'Istanbul': 'tr', 'Izmir': 'tr', 'Bergen': 'no',
@@ -4654,33 +4865,8 @@
         // Load airport data for city name normalization
         async function fetchAirportData() {
             try {
-                // 1. TRY SUPABASE DIRECT CLIENT FIRST
-                if (supabaseClient) {
-                    const { data, error } = await supabaseClient
-                        .from('airports')
-                        .select('city, country, iata, country_code');
-
-                    if (!error && data && data.length > 0) {
-                        data.forEach(row => {
-                            const iata = row.iata ? row.iata.trim().toUpperCase() : "";
-                            if (iata && iata.length === 3) {
-                                const city = row.city ? row.city.trim() : "";
-                                const country = row.country ? row.country.trim() : "";
-                                const countryCode = row.country_code ? row.country_code.trim().toUpperCase() : "";
-                                // Capitalize city name properly
-                                const normalizedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
-                                iataToCity[iata] = normalizedCity;
-                                iataToCountry[iata] = country;
-                                if (countryCode) iataToCountryCode[iata] = countryCode;
-                            }
-                        });
-                        console.log(`Loaded ${Object.keys(iataToCity).length} airport codes from Supabase`);
-                        return;
-                    }
-                }
-
-                // 2. FALLBACK TO LOCAL CSV
-                const response = await fetch('data/inputs/airport_Europe.csv');
+                // 1. FETCH FROM LOCAL CSV
+                const response = await fetch('/data/inputs/airport_Europe.csv');
                 if (response.ok) {
                     const text = await response.text();
                     const lines = text.trim().split('\n').slice(1); // Skip header
@@ -4699,39 +4885,14 @@
                             }
                         }
                     });
-                    console.log(`Loaded ${Object.keys(iataToCity).length} airport codes from CSV`);
+                    console.log(`✅ Loaded ${Object.keys(iataToCity).length} airport codes from local CSV`);
                 }
             } catch (e) {
-                console.warn("Could not load airport data:", e);
+                console.warn("❌ Could not load airport data:", e);
             }
         }
 
-        // Fetch Country Flags (Base64) - New (V2 style)
-        async function fetchFlagsData() {
-            if (!supabaseClient) return;
-            try {
-                const { data, error } = await supabaseClient
-                    .from('countries')
-                    .select('code, name, flag_base64');
 
-                if (error) throw error;
-
-                if (data) {
-                    data.forEach(c => {
-                        if (c.code) {
-                            const code = c.code.toLowerCase();
-                            flagStore[code] = c.flag_base64;
-                            if (c.name) {
-                                countryNameToCode[c.name.toLowerCase()] = code;
-                            }
-                        }
-                    });
-                    console.log(`✅ Loaded ${Object.keys(flagStore).length} flags and country mappings from Supabase`);
-                }
-            } catch (e) {
-                console.error("❌ Failed to load flags from Supabase:", e);
-            }
-        }
 
         // Normalize city name using IATA lookup
         function normalizeCity(cityName, iataCode) {
@@ -4761,16 +4922,26 @@
             // UNHIDE target section immediately so skeletons are visible during fetch
             showPage(initialPage);
 
-            initSupabase(); // Initialize right before loading data
 
             try {
                 await Promise.all([
                     fetchAirportData(),
-                    fetchFlagsData(),
                     fetchLatestDealsCSV(),
                     fetchFestivalData()
                 ]);
                 console.log("✅ All data fetches completed");
+
+                // Re-render pages with loaded data
+                const currentPage = window.location.hash.replace('#', '') || 'home';
+                if (currentPage === 'home') {
+                    renderHomeDeals();
+                } else if (currentPage === 'deals') {
+                    renderDealsPage();
+                } else if (currentPage === 'festivals') {
+                    if (typeof renderFestivalDeals === 'function') {
+                        renderFestivalDeals();
+                    }
+                }
             } catch (e) {
                 console.error("❌ Critical Error loading data:", e);
                 const container = document.getElementById('homeDeals');
@@ -4787,271 +4958,141 @@
                                 </div>
                             </div>
                         </div>`;
-                    if (window.lucide) lucide.createIcons();
+                    if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
                 }
             }
             initApp();
         }
 
         async function fetchLatestDealsCSV() {
-            // 1. TRY SUPABASE DIRECT CLIENT FIRST
+            const path = '/data/inputs/flights_deals.csv';
             try {
-                if (supabaseClient) {
-                    const { data, error } = await supabaseClient.from('explore_flights').select('*');
-                    if (!error && data && data.length > 0) {
-                        console.log(`Loaded ${data.length} deals from Supabase Client`);
-
-                        // Robust Mapping with Country Inference
-                        allDeals = data.map(d => {
-                            let iata = d.iata || d.dest_iata || "";
-                            let countryCode = d.dest_country_code || d.country_dest_code || d.country_code || "";
-                            let countryDest = d.country_dest || d.country || d.dest_country || "";
-
-                            // 1. Try to fill missing country/code using IATA
-                            if (iata) {
-                                if (iataToCountry[iata] && !countryDest) countryDest = iataToCountry[iata];
-                                if (iataToCountryCode[iata] && !countryCode) countryCode = iataToCountryCode[iata];
-                            }
-
-                            // 2. Try to fill missing ID/Code using Country Name
-                            if (!countryCode && countryDest) {
-                                const lowerC = countryDest.toLowerCase().trim();
-                                // Try dynamic map from Supabase first
-                                if (countryNameToCode[lowerC]) {
-                                    countryCode = countryNameToCode[lowerC];
-                                } else if (globalCountryMap[lowerC]) {
-                                    countryCode = globalCountryMap[lowerC];
-                                }
-                            }
-
-                            // 3. Last fallback: if it's already a 2-letter code in countryDest
-                            if (!countryCode && countryDest && countryDest.length === 2) {
-                                countryCode = countryDest.toLowerCase();
-                            }
-
-                            let fromCity = d.city_dep || d.from || d.origin;
-                            let fromIATA = d.city_dep_iata || d.origin_iata || d.iata_dep || "";
-                            let fromCountryCode = d.country_dep_code || d.country_from_code || d.country_code_dep || "";
-
-                            if (fromIATA && !fromCountryCode) fromCountryCode = iataToCountryCode[fromIATA.toUpperCase()];
-                            if (!fromCountryCode && fromCity) fromCountryCode = cityToCountryCode[fromCity];
-
-                            return {
-                                from: fromCity ? fromCity.trim() : "",
-                                fromCountryCode: fromCountryCode,
-                                to: (d.city_dest || d.to || d.destination || "").trim(),
-                                countryCode: countryCode ? countryCode.toLowerCase() : "",
-                                price: parseFloat(d.price_from || d.price),
-                                date: d.date || d.date_depart,
-                                url: d.trip_url || d.url,
-                                iata: iata,
-                                cityDest: (d.city_dest || d.to || d.destination || "").trim(),
-                                countryDest: countryDest
-                            };
-                        }).filter(d => d.from && d.to && !isNaN(d.price));
-
-                        // Populate filters logic
-                        availableCities = [...new Set(allDeals.map(d => d.from).filter(c => c))].sort();
-                        availableDestinations = {};
-
-                        allDeals.forEach(deal => {
-                            const f = deal.from ? deal.from.trim() : null;
-                            const t = deal.to ? deal.to.trim() : null;
-
-                            if (f && t) {
-                                if (!availableDestinations[f]) {
-                                    availableDestinations[f] = new Set();
-                                }
-                                availableDestinations[f].add(t);
-                                if (t && deal.countryCode) {
-                                    cityToCountryCode[t] = deal.countryCode.toLowerCase();
-                                }
-                                if (f && deal.fromCountryCode) {
-                                    cityCountryMap[f] = deal.fromCountryCode.toLowerCase();
-                                }
-                            }
-                        });
-
-                        return; // Success, skip CSV
-                    }
+                const response = await fetch(path);
+                if (response.ok) {
+                    const text = await response.text();
+                    parseCSVData(text);
+                    console.log(`✅ Loaded flights from ${path}`);
+                } else {
+                    console.error(`Failed to load flight deals from ${path}`);
+                    fallbackData();
                 }
             } catch (e) {
-                console.warn("API fetch failed, falling back to CSV", e);
+                console.error("❌ Failed to load flight deals from CSV:", e);
+                fallbackData();
             }
+        }
 
-            // 2. CSV FALLBACK (Old Logic)
-            // Try last 30 days to find the most recent file
-            for (let i = 0; i < 7; i++) {
-                const d = new Date();
-                d.setDate(d.getDate() - i);
-                const yyyy = d.getFullYear();
-                const mm = String(d.getMonth() + 1).padStart(2, '0');
-                const dd = String(d.getDate()).padStart(2, '0');
-                const dateStr = `${yyyy}${mm}${dd}`;
-
-                const path = `data/outputs/final_sheets/${dateStr}/all_merged_${dateStr}.csv`;
-
-                try {
-                    const response = await fetch(path);
-                    if (response.ok) {
-                        const text = await response.text();
-                        console.log(`Loaded deals from ${path}`);
-                        parseCSVData(text);
-                        return;
-                    }
-                } catch (e) {
-                    console.log(`Could not load ${path}`, e);
-                }
-            }
-            console.error("No recent deals CSV found.");
-            // UI Feedback for error
-            const container = document.getElementById('homeDeals');
-            if (container) {
-                container.innerHTML = `
-                <div class="col-span-full bg-red-50 border-l-4 border-red-500 p-4 rounded-r shadow-md">
-                    <div class="flex items-center">
-                        <i data-lucide="alert-circle" class="w-6 h-6 text-red-500 mr-4"></i>
-                        <div>
-                            <h3 class="font-bold text-red-700">Unable to load flight deals</h3>
-                            <p class="text-sm text-red-600 mt-1">
-                                If you are opening this file directly (file://), please use a local server instead.<br>
-                                Run <code>node src/server.js</code> in the project root and visit <code>http://localhost:3000/</code>.
-                            </p>
-                        </div>
-                    </div>
-                </div>`;
-                lucide.createIcons();
-            }
-            fallbackData();
+        function fallbackData() {
+            console.log("⚠️ Using fallback data (empty)");
+            allDeals = [];
+            availableCities = [];
+            availableDestinations = {};
         }
 
         async function fetchFestivalData() {
             allFestivals = [];
+            const path = `/data/festivals_combined.csv`;
 
-            // 1. TRY SUPABASE DIRECT CLIENT FIRST
             try {
-                if (supabaseClient) {
-                    const { data, error } = await supabaseClient.from('festivals').select('*');
-                    if (!error && data && data.length > 0) {
-                        console.log(`Loaded ${data.length} raw festivals from Supabase Client`);
+                const response = await fetch(path);
+                if (response.ok) {
+                    const text = await response.text();
+                    console.log(`✅ Loaded festivals from ${path}`);
 
-                        // DEDUPS : Utiliser un Map pour supprimer les doublons basés sur le titre
-                        const uniqueMap = new Map();
+                    const rows = text.trim().split('\n').slice(1);
+                    const uniqueMap = new Map();
 
-                        data.forEach(f => {
-                            const title = f.titre || f.title;
-                            // On garde le premier ou celui avec le plus d'infos (ici le premier trouvé pour l'instant)
+                    rows.forEach(row => {
+                        // Combined CSV Format: Titre,Date_Depart,Date_Retour,Ville,Lien_Source,Lien_Facebook,Nom_Image_Locale,Trip_URL,Mois
+                        const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+                        cols.forEach((c, i) => cols[i] = c.replace(/^"|"$/g, '').trim());
+
+                        if (cols.length >= 7) {
+                            const title = cols[0];
+                            const cityField = cols[3];
+                            let city = cityField || '';
+                            let country = '';
+                            if (cityField && cityField.includes(',')) {
+                                const parts = cityField.split(',');
+                                city = parts[0].trim();
+                                country = parts[parts.length - 1].trim();
+                            }
+
                             if (title && !uniqueMap.has(title)) {
                                 uniqueMap.set(title, {
                                     title: title,
-                                    start: f.date_depart || f.start,
-                                    end: f.date_retour || f.end,
-                                    city: f.ville || f.city,
-                                    country: f.pays || f.country,
-                                    image: f.image_base64 || f.nom_image_locale || f.image,
-                                    link: f.lien_source || f.link || "#",
-                                    month: f.mois || f.month,
-                                });
-                            }
-                        });
-
-                        allFestivals = Array.from(uniqueMap.values());
-                        console.log(`Unique festivals after dedupe: ${allFestivals.length}`);
-
-                        // Populate filters
-                        const festivalCountryEl = document.getElementById('festivalCountryFilter');
-                        if (festivalCountryEl && allFestivals.length > 0) {
-                            const countries = [...new Set(allFestivals.map(f => f.country).filter(c => c))].sort();
-                            festivalCountryEl.innerHTML = '<option value="">All countries</option>' +
-                                countries.map(c => `<option value="${c}">${c}</option>`).join('');
-                        }
-                        return; // Success
-                    }
-                }
-            } catch (e) {
-                console.warn("API festival fetch failed, falling back to CSV", e);
-            }
-
-            // 2. CSV FALLBACK (Old Logic)
-            // Basic month order or current month onwards? Let's load all months.
-            // Assumption: Files are named January.csv, February.csv etc. in data/inputs/festivals/festivals_data/
-            /*
-            const fetchPromises = monthNames.map(async (month) => {
-            ...
-            */
-
-            // Note: I'm keeping the map logic inside the fallback block below
-            const fetchPromises = monthNames.map(async (month) => {
-                const path = `data/inputs/festivals/festivals_data/${month}.csv`;
-                try {
-                    const response = await fetch(path);
-                    if (response.ok) {
-                        const text = await response.text();
-                        const rows = text.trim().split('\n').slice(1);
-                        rows.forEach(row => {
-                            // CSV Format: Titre,Date_Depart,Date_Retour,Ville,Lien_Source,Lien_Facebook,Nom_Image_Locale,Trip_URL
-                            // Handle CSV quote parsing roughly
-                            const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
-                            cols.forEach((c, i) => cols[i] = c.replace(/^"|"$/g, '').trim());
-
-                            if (cols.length >= 7) {
-                                // Extraire le pays de la ville (format "City, Country")
-                                const cityField = cols[3];
-                                let city = cityField;
-                                let country = '';
-                                if (cityField && cityField.includes(',')) {
-                                    const parts = cityField.split(',');
-                                    city = parts[0].trim();
-                                    country = parts[parts.length - 1].trim();
-                                }
-
-                                allFestivals.push({
-                                    title: cols[0],
                                     start: cols[1],
                                     end: cols[2],
                                     city: city,
                                     country: country,
                                     image: cols[6],
                                     link: cols[7] || "#",
-                                    month: month
+                                    month: cols[8] || 'Events'
                                 });
                             }
-                        });
+                        }
+                    });
+
+                    allFestivals = Array.from(uniqueMap.values());
+                    console.log(`Unique festivals: ${allFestivals.length}`);
+
+                    // Populate filters
+                    const festivalCountryEl = document.getElementById('festivalCountryFilter');
+                    if (festivalCountryEl && allFestivals.length > 0) {
+                        const countries = [...new Set(allFestivals.map(f => f.country).filter(c => c))].sort();
+                        festivalCountryEl.innerHTML = '<option value="">All countries</option>' +
+                            countries.map(c => `<option value="${c}">${c}</option>`).join('');
+                        festivalCountryEl.addEventListener('change', applyFestivalFilters);
                     }
-                } catch (e) {
-                    // Ignore missing months
+
+                    const festivalMonthEl = document.getElementById('festivalMonthFilter');
+                    if (festivalMonthEl) {
+                        festivalMonthEl.innerHTML = '<option value="">All Months</option>' +
+                            monthNames.map(m => `<option value="${m}">${m}</option>`).join('');
+                        festivalMonthEl.addEventListener('change', applyFestivalFilters);
+                    }
+
+                    renderFestivalDeals();
+
+                    // After festivals are loaded, fetch the associated flights
+                    fetchFestivalFlightsData();
                 }
-            });
-
-            await Promise.all(fetchPromises);
-
-            // Populate Country Filter (tous les pays uniques des festivals)
-            const festivalCountryEl = document.getElementById('festivalCountryFilter');
-            if (festivalCountryEl && allFestivals.length > 0) {
-                const countries = [...new Set(allFestivals.map(f => f.country).filter(c => c))].sort();
-                festivalCountryEl.innerHTML = '<option value="">All countries</option>' +
-                    countries.map(c => `<option value="${c}">${c}</option>`).join('');
-
-                // Add Listener
-                festivalCountryEl.addEventListener('change', applyFestivalFilters);
+            } catch (e) {
+                console.error("Failed to load festivals CSV", e);
             }
+        }
 
-            // Populate Month Filter - Afficher TOUS les mois
-            const festivalFilterInfo = document.getElementById('festivalMonthFilter');
-            if (festivalFilterInfo) {
-                festivalFilterInfo.innerHTML = '<option value="">All Months</option>' +
-                    monthNames.map(m => `<option value="${m}">${m}</option>`).join('');
+        async function fetchFestivalFlightsData() {
+            const path = `/data/festival_flights.csv`;
+            try {
+                const response = await fetch(path);
+                if (response.ok) {
+                    const text = await response.text();
+                    const rows = text.trim().split('\n').slice(1);
+                    allFestivalFlights = rows.map(row => {
+                        const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+                        cols.forEach((c, i) => cols[i] = c.replace(/^"|"$/g, '').trim());
 
-                // Add Listener
-                festivalFilterInfo.addEventListener('change', applyFestivalFilters);
+                        if (cols.length < 12) return null;
+
+                        // Origin,IATA,Country,Date_Depart,Date_Retour,URL,Price,Currency,Site,Destination,DestIATA,EventName
+                        return {
+                            origin: cols[0],
+                            origin_iata: cols[1],
+                            date_depart: cols[3],
+                            date_retour: cols[4],
+                            url: cols[5],
+                            price: parseFloat(cols[6]),
+                            destination: cols[9],
+                            dest_iata: cols[10],
+                            event_name: cols[11]
+                        };
+                    }).filter(Boolean);
+                    console.log(`✅ Loaded ${allFestivalFlights.length} festival flights from CSV`);
+                }
+            } catch (e) {
+                console.error("Failed to load festival flights CSV", e);
             }
-
-            // Add Listener to Sort Filter here as well
-            const isoSort = document.getElementById('festivalSortFilter');
-            if (isoSort) isoSort.addEventListener('change', applyFestivalFilters);
-
-            // Initial Render
-            renderFestivalDeals();
         }
 
         // UNIFIED FESTIVAL FILTER FUNCTION
@@ -5062,17 +5103,9 @@
 
             let filtered = allFestivals;
 
-            // Filter by Country
-            if (country) {
-                filtered = filtered.filter(f => f.country === country);
-            }
+            if (country) filtered = filtered.filter(f => f.country === country);
+            if (month) filtered = filtered.filter(f => f.month === month);
 
-            // Filter by Month
-            if (month) {
-                filtered = filtered.filter(f => f.month === month);
-            }
-
-            // Sort
             if (sort === 'name-desc') {
                 filtered = [...filtered].sort((a, b) => b.title.localeCompare(a.title));
             } else {
@@ -5136,7 +5169,7 @@
                     ` : '';
 
                     return `
-                    <div class="festival-profile-component group cursor-pointer" onclick="showFlightsModal('${f.city.replace(/'/g, "\\'")}', '${f.month}', '${f.title.replace(/'/g, "\\'")}')">
+                    <div class="festival-profile-component group cursor-pointer" onclick="showFlightsModal('${f.city.replace(/'/g, "\\'")}', '${f.month}', '${f.title.replace(/'/g, "\\'")}', '${f.start || ''}')">
                       <img src="${imgPath}" class="festival-profile-image transition-transform duration-700 group-hover:scale-105" alt="${f.title}" loading="lazy"
                            onerror="this.src='https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80'">
                         <div class="festival-glass-card flex flex-col items-center justify-between" style="padding: 1rem 0.5rem 1.5rem 0.5rem;">
@@ -5160,16 +5193,27 @@
                                          ${f.end ? `<span>${cleanD(f.end)}</span>` : ''}
                                      </div>
                             </div>
-                            <div class="fest-btn-group flex gap-2">
-                                <button class="fest-btn-deals flex items-center gap-2 px-4 py-2 bg-white text-wander-primaryDark rounded-xl font-black shadow-lg hover:scale-105 active:scale-95 transition-all text-sm md:text-base md:px-5 md:py-2.5">
-                                    <i data-lucide="plane" class="w-4 h-4"></i> Deals
+                            <div class="fest-btn-group flex gap-0 overflow-hidden rounded-xl shadow-lg">
+                                <!-- EVENTS Button (Left) - Link to festival page -->
+                                <a href="${f.link || '#'}" target="_blank" rel="noopener noreferrer" 
+                                   class="fest-btn-events flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white text-wander-primaryDark font-black hover:bg-gray-50 active:scale-95 transition-all text-xs md:text-sm border-r border-gray-200"
+                                   onclick="event.stopPropagation();">
+                                    <i data-lucide="calendar" class="w-3 h-3 md:w-4 md:h-4"></i>
+                                    <span>EVENTS</span>
+                                </a>
+                                <!-- FLIGHT Button (Right) - Opens modal with -1 day logic -->
+                                <button 
+                                   class="fest-btn-flight flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-wander-primary to-wander-accent text-white font-black hover:from-wander-primaryDark hover:to-wander-primary active:scale-95 transition-all text-xs md:text-sm"
+                                   onclick="event.stopPropagation(); showFlightsModal('${f.city.replace(/'/g, "\\'")}', '${f.month}', '${f.title.replace(/'/g, "\\'")}', '${f.start || ''}');">
+                                    <i data-lucide="plane" class="w-3 h-3 md:w-4 md:h-4"></i>
+                                    <span>FLIGHT</span>
                                 </button>
                             </div>
                         </div>
                       </div>
                     </div>`;
                 }).join('');
-                lucide.createIcons();
+                if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
             };
 
             // If data is ready, render immediately
@@ -5181,17 +5225,53 @@
             }
         }
 
-        async function showFlightsModal(city, month, festivalTitle) {
+        async function showFlightsModal(city, month, festivalTitle, festivalStartDate = '') {
             const modal = document.getElementById('flightModal');
             const modalTitle = document.getElementById('modalTitle');
             const modalSubtitle = document.getElementById('modalSubtitle');
             const modalContent = document.getElementById('modalContent');
 
+            // SMART DATE LOGIC: Calculate arrival date (1 day before festival start)
+            let targetArrivalDate = '';
+            let subtitleText = `Premium Flight Manifest to ${city}`;
+
+            if (festivalStartDate) {
+                try {
+                    // Parse the festival start date (format: YYYY-MM-DD or DD-MM-YYYY)
+                    let festivalDate;
+                    if (festivalStartDate.includes('-')) {
+                        const parts = festivalStartDate.split('-');
+                        if (parts[0].length === 4) {
+                            // YYYY-MM-DD format
+                            festivalDate = new Date(festivalStartDate);
+                        } else {
+                            // DD-MM-YYYY format
+                            festivalDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                        }
+                    } else {
+                        festivalDate = new Date(festivalStartDate);
+                    }
+
+                    // Calculate -1 day
+                    const arrivalDate = new Date(festivalDate);
+                    arrivalDate.setDate(arrivalDate.getDate() - 1);
+
+                    // Format for display
+                    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+                    const formattedDate = arrivalDate.toLocaleDateString('en-US', options);
+                    targetArrivalDate = arrivalDate.toISOString().split('T')[0]; // YYYY-MM-DD
+
+                    subtitleText = `Flights arriving ${formattedDate} (1 day before festival)`;
+                    console.log(`🎯 Smart Date: Festival starts ${festivalStartDate}, showing flights for ${targetArrivalDate}`);
+                } catch (e) {
+                    console.warn('⚠️ Could not parse festival date:', festivalStartDate, e);
+                }
+            }
+
             // Set title
             modalTitle.textContent = festivalTitle;
-            modalSubtitle.textContent = `Premium Flight Manifest to ${city}`;
+            modalSubtitle.textContent = subtitleText;
 
-            // Show loading state
             // Show loading state with skeletons
             modalContent.innerHTML = `
                 <div class="tickets-container">
@@ -5215,7 +5295,7 @@
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
-            lucide.createIcons();
+            if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
 
             let matchingFlights = [];
             // Robust match for festival link and image
@@ -5223,44 +5303,50 @@
                 (f.title && f.title.toLowerCase() === festivalTitle.toLowerCase()) ||
                 (f.title && f.city && `${f.title} (${f.city})`.toLowerCase() === festivalTitle.toLowerCase())
             );
-            const festivalImg = festival ? `/data/inputs/festivals/festivals_images/${festival.month}/${festival.image}` : '';
+            const festivalImg = festival ? `data/inputs/festivals/festivals_images/${festival.month}/${festival.image}` : '';
             const festivalLink = (festival && festival.link && festival.link !== '#') ? festival.link : 'https://Wingsky.com';
 
-            if (supabaseClient) {
-                try {
-                    // ALWAYS fetch from Supabase
-                    const { data, error } = await supabaseClient
-                        .from('festival_flights')
-                        .select('*')
-                        .ilike('event_name', festivalTitle);
+            // 1. FILTER FROM LOCAL CSV DATA (NO SUPABASE EGRESS)
+            if (allFestivalFlights.length > 0) {
+                let filtered = allFestivalFlights.filter(f =>
+                    f.event_name && f.event_name.toLowerCase().includes(festivalTitle.toLowerCase().replace(/_/g, ' '))
+                );
 
-                    if (!error && data && data.length > 0) {
-                        console.log(`✅ Supabase: Found ${data.length} flights for ${festivalTitle}`);
-                        matchingFlights = data.map(d => {
-                            // Robust IATA extraction
-                            const depIATA = d.origin_iata || d.iata_dep || d.from_iata || d.origin?.substring(0, 3).toUpperCase() || 'DEP';
-                            const arrIATA = d.dest_iata || d.iata || d.to_iata || d.destination?.substring(0, 3).toUpperCase() || 'ARR';
+                // If we have a target arrival date, further filter by date
+                if (targetArrivalDate && filtered.length > 0) {
+                    const dateFiltered = filtered.filter(f => {
+                        if (!f.date_depart) return false;
+                        // Match exact date or close dates (±1 day tolerance)
+                        const flightDate = new Date(f.date_depart);
+                        const targetDate = new Date(targetArrivalDate);
+                        const diffDays = Math.abs((flightDate - targetDate) / (1000 * 60 * 60 * 24));
+                        return diffDays <= 1; // Allow 1 day tolerance
+                    });
 
-                            return {
-                                from: d.origin,
-                                to: d.destination || city,
-                                from_iata: depIATA,
-                                price: d.price,
-                                date_depart: d.date_depart,
-                                date_retour: d.date_retour,
-                                url: d.url,
-                                countryCode: d.dest_country_code || 'eu',
-                                iata: arrIATA
-                            };
-                        });
+                    if (dateFiltered.length > 0) {
+                        filtered = dateFiltered;
+                        console.log(`✅ Filtered to ${filtered.length} flights matching target date ${targetArrivalDate}`);
                     }
-                } catch (e) {
-                    console.error("❌ Supabase fetch failed in Modal:", e);
+                }
+
+                if (filtered.length > 0) {
+                    console.log(`✅ CSV: Found ${filtered.length} flights for ${festivalTitle}`);
+                    matchingFlights = filtered.map(d => ({
+                        from: d.origin,
+                        to: d.destination || city,
+                        from_iata: d.origin_iata || 'DEP',
+                        price: d.price,
+                        date_depart: d.date_depart,
+                        date_retour: d.date_retour,
+                        url: d.url,
+                        countryCode: cityToCountryCode[d.destination] || 'eu',
+                        iata: d.dest_iata || 'ARR'
+                    }));
                 }
             }
 
             renderModalContent(modalContent, matchingFlights, city, festivalImg, festivalLink);
-            lucide.createIcons();
+            if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
         }
 
         function parseEventCSV(text) {
@@ -5600,7 +5686,7 @@
                 `;
             }
 
-            lucide.createIcons();
+            if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
         }
 
         function submitCityRequest() {
@@ -5655,57 +5741,61 @@
         }
 
         function parseCSVData(text) {
-            const rows = text.trim().split('\n').slice(1);
-            allDeals = rows.map(row => {
-                const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
-                cols.forEach((c, i) => cols[i] = c.replace(/^"|"$/g, '').trim());
+            Papa.parse(text, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function (results) {
+                    allDeals = results.data.map(row => {
+                        // Access by header name (safer) or index if headers are missing
+                        // Headers: city_dep,city_dest,date_depart,price,trip_url,dep_iata,dest_iata,country_dep,country_dest
 
-                // Actual CSV Structure (13 cols):
-                // cityDep,CountryDep,cityDest,countryDest,IATA(Dest),depIATA,priceFrom,date,depDay,depMonth,retDay,retMonth,tripUrl
-                if (cols.length < 13) return null;
+                        const price = parseInt(row.price || row[3]);
+                        if (!price || price === 0) return null;
 
-                const price = parseInt(cols[6]);
-                if (!price || price === 0) return null; // Skip 0 price
+                        const origin = row.city_dep || row[0];
+                        const destination = row.city_dest || row[1];
+                        const depIATA = row.dep_iata || row[5];
+                        const destIATA = row.dest_iata || row[6];
 
-                // Use IATA codes to normalize city names
-                const destIATA = cols[4]; // IATA(Dest)
-                const depIATA = cols[5];  // depIATA
+                        // Normalize city names
+                        const normalizedFrom = normalizeCity(origin, depIATA);
+                        const normalizedTo = normalizeCity(destination, destIATA);
 
-                // Normalize city names using airport data
-                const normalizedFrom = normalizeCity(cols[0], depIATA);
-                const normalizedTo = normalizeCity(cols[2], destIATA);
+                        // Infer country code
+                        let cc = cityToCountryCode[normalizedTo] || cityToCountryCode[destination];
+                        if (!cc && destIATA && iataToCountry[destIATA]) {
+                            const countryName = iataToCountry[destIATA].toLowerCase().trim();
+                            cc = globalCountryMap[countryName];
+                        }
 
-                // Infer country code for flag
-                let cc = cityToCountryCode[normalizedTo] || cityToCountryCode[cols[2]];
+                        return {
+                            from: normalizedFrom.trim(),
+                            to: normalizedTo.trim(),
+                            price: price,
+                            date: row.date_depart || row[2],
+                            url: row.trip_url || row[4],
+                            countryCode: cc ? cc.toLowerCase() : 'un',
+                            iataFrom: depIATA,
+                            iataTo: destIATA
+                        };
+                    }).filter(d => d !== null);
 
-                // Try using iataToCountry if we have the IATA
-                if (!cc && destIATA && iataToCountry[destIATA]) {
-                    // Map country name to code
-                    const countryName = iataToCountry[destIATA].toLowerCase().trim();
-                    cc = globalCountryMap[countryName];
+                    console.log(`📊 Valid deals parsed via PapaParse: ${allDeals.length}`);
+
+                    // Update cities lists and trigger render
+                    const cities = new Set(allDeals.map(d => d.from));
+                    availableCities = Array.from(cities).sort();
+
+                    availableDestinations = {};
+                    allDeals.forEach(d => {
+                        if (!availableDestinations[d.from]) availableDestinations[d.from] = new Set();
+                        availableDestinations[d.from].add(d.to);
+                    });
+
+                    // Force render home deals now that we have data
+                    renderHomeDeals();
                 }
-
-                return {
-                    from: normalizedFrom.trim(),
-                    to: normalizedTo.trim(),
-                    price: price,
-                    date: cols[7],
-                    url: cols[12],
-                    countryCode: cc ? cc.toLowerCase() : 'un', // default 'un' (unknown) or skip
-                    iataFrom: depIATA,
-                    iataTo: destIATA
-                };
-            }).filter(Boolean);
-
-            allDeals.forEach(d => {
-                if (!availableCities.includes(d.from)) {
-                    availableCities.push(d.from);
-                    availableDestinations[d.from] = new Set();
-                    cityCountryMap[d.from] = d.countryCode;
-                }
-                availableDestinations[d.from].add(d.to);
             });
-            availableCities.sort();
         }
 
         function fallbackData() { allDeals = []; }
@@ -5715,7 +5805,7 @@
             populateDropdowns();
             renderHomeDeals();
             renderDealsPage();
-            lucide.createIcons();
+            if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
             setupEvents();
             startSloganRotation();
 
@@ -6713,7 +6803,12 @@
                 }
             });
 
-            renderDealsPage();
+            // Defer renderDealsPage call to ensure function is defined
+            setTimeout(() => {
+                if (typeof renderDealsPage === 'function') {
+                    renderDealsPage();
+                }
+            }, 0);
         }
 
         function resetDealsFilters() {
@@ -6771,25 +6866,21 @@
         }
 
         const compactCardSkeleton = () => `
-        <div class="compact-card-root">
-            <div class="compact-card-wrapper shimmer-overlay" style="padding: 8px; background: white; border: 1px solid #c5c5c5; border-radius: 1.8rem; width: 100%;">
-                <div class="shimmer-sweep"></div>
-                <div class="compact-card compact-card-aspect relative" style="width: 100%; background: #f3f4f6; border-radius: 1.5rem; border: 1px solid #c5c5c5; display: block;">
-                    <!-- Skeleton for Floating Info Card -->
-                    <div class="absolute bg-white/90" style="width: 92%; left: 4%; top: 40%; bottom: 4%; border-radius: 1rem; border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; padding: 0.6rem 0.75rem;">
-                        <div style="display: grid; grid-template-columns: 1fr 22% 1fr; align-items: center; gap: 4px;">
-                            <div style="display: flex; flex-direction: column; gap: 4px;">
-                                <div style="width: 30px; height: 8px; background: #e5e7eb; border-radius: 4px;"></div>
-                                <div style="width: 50px; height: 20px; background: #e5e7eb; border-radius: 4px;"></div>
-                            </div>
-                            <div style="display: flex; justify-content: center;">
-                                <div style="width: 28px; height: 28px; background: #e5e7eb; border-radius: 50%;"></div>
-                            </div>
-                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
-                                <div style="width: 30px; height: 8px; background: #e5e7eb; border-radius: 4px;"></div>
-                                <div style="width: 50px; height: 20px; background: #e5e7eb; border-radius: 4px;"></div>
-                            </div>
-                        </div>
+        <div class="compact-card compact-card-aspect relative shimmer-overlay" style="background: #f3f4f6; border-radius: 1.5rem; border: 1px solid #c5c5c5; display: block; overflow: hidden;">
+            <div class="shimmer-sweep"></div>
+            <!-- Skeleton for Floating Info Card -->
+            <div class="absolute bg-white/90" style="width: 92%; left: 4%; top: 40%; bottom: 4%; border-radius: 1rem; border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; padding: 0.6rem 0.5rem; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: 1fr 28% 1fr; align-items: center; gap: 4px;">
+                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                        <div style="width: 20px; height: 6px; background: #e5e7eb; border-radius: 2px;"></div>
+                        <div style="width: 40px; height: 16px; background: #e5e7eb; border-radius: 4px;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: center;">
+                        <div style="width: 24px; height: 24px; background: #e5e7eb; border-radius: 50%;"></div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                        <div style="width: 20px; height: 6px; background: #e5e7eb; border-radius: 2px;"></div>
+                        <div style="width: 40px; height: 16px; background: #e5e7eb; border-radius: 4px;"></div>
                     </div>
                 </div>
             </div>
@@ -6810,6 +6901,24 @@
             `;
 
         const compactCardTemplate = (d) => {
+            // Date Formatting Logic: Prepared for CSS Control
+            // We split dates to allow CSS to stack them in specific breakpoints
+            let dateHtml = '';
+            if (d.date && d.date.includes('-')) {
+                const parts = d.date.split('-').map(s => s.trim());
+                if (parts.length === 2) {
+                    dateHtml = `
+                        <span class="date-part start-date">${parts[0]}</span>
+                        <span class="date-separator mx-1">-</span>
+                        <span class="date-part end-date">${parts[1]}</span>
+                     `;
+                } else {
+                    dateHtml = `<span>${d.date}</span>`;
+                }
+            } else {
+                dateHtml = `<span>${d.date}</span>`;
+            }
+
             // Get departure country code for flag
             const depCountryCode = cityToCountryCode[d.from] || 'fr';
 
@@ -6821,11 +6930,9 @@
             const iataTo = d.iataTo || (d.to ? d.to.substring(0, 3).toUpperCase() : 'ARR');
 
             return `
-            <div class="compact-card-root">
-                <div class="compact-card-wrapper" style="padding: 8px; background: white; border: 1px solid #c5c5c5; border-radius: 1.8rem; width: 100%;">
-                    <a href="${d.url}" target="_blank" rel="noopener noreferrer"
-                            class="compact-card compact-card-aspect relative group block flex-shrink-0 min-w-[160px] md:min-w-[290px]"
-                            style="width: 100%; display: block;">
+            <a href="${d.url}" target="_blank" rel="noopener noreferrer"
+                    class="compact-card compact-card-aspect relative group block flex-shrink-0"
+                    style="overflow: hidden; border-radius: 1.5rem;">
 
                         <!-- Background Image Container -->
                         <div class="absolute inset-0 overflow-hidden shadow-2xl z-0"
@@ -6846,14 +6953,11 @@
 
                                 <!-- Origin (Left) -->
                                 <div class="flex flex-col items-start z-10" style="min-width: 0;">
-                                    <span class="text-gray-400 font-black uppercase tracking-tighter"
-                                        style="font-size: clamp(8px, 1.8vw, 11px); line-height: 1;">DEPART</span>
-                                    <span class="text-wander-primary font-black w-full notranslate" translate="no"
-                                        style="font-size: clamp(1rem, 5vw, 1.8rem); line-height: 1.1;">${iataFrom}</span>
+                                    <span class="card-label text-gray-400 font-black uppercase tracking-tighter">DEPART</span>
+                                    <span class="card-iata text-wander-primary font-black w-full notranslate" translate="no">${iataFrom}</span>
                                     <div class="flex items-center gap-1.5 w-full">
-                                        <span class="text-gray-800 font-black truncate"
-                                            style="font-size: clamp(9px, 2.2vw, 14px); line-height: 1.2;">${d.from}</span>
-                                        ${iataToCountryCode[iataFrom] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataFrom].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm hidden md:block" alt="flag">` : ''}
+                                        <span class="card-city text-gray-800 font-black truncate">${d.from}</span>
+                                        ${iataToCountryCode[iataFrom] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataFrom].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm" alt="flag">` : ''}
                                     </div>
                                 </div>
 
@@ -6861,9 +6965,9 @@
                                 <div class="flex flex-col items-center justify-center relative z-0">
                                     <div class="w-full border-t-2 border-dashed border-gray-300 opacity-60"></div>
                                     <div class="absolute bg-wander-primary rounded-full flex items-center justify-center shadow-md border-2 border-white"
-                                        style="width: clamp(22px, 6vw, 40px); height: clamp(22px, 6vw, 40px); left: 50%; top: 50%; transform: translate(calc(-50% + 2px), -50%);">
+                                        style="width: 38px; height: 38px; left: 50%; top: 50%; transform: translate(calc(-50% + 1px), -50%);">
                                         <svg class="text-white transform rotate-45"
-                                            style="width: clamp(12px, 3vw, 20px); height: clamp(12px, 3vw, 20px);"
+                                            style="width: 20px; height: 20px;"
                                             viewBox="0 0 24 24" fill="currentColor">
                                             <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
                                         </svg>
@@ -6872,48 +6976,34 @@
 
                                 <!-- Destination (Right) -->
                                 <div class="flex flex-col items-end z-10" style="min-width: 0;">
-                                    <span class="text-gray-400 font-black uppercase tracking-tighter"
-                                        style="font-size: clamp(8px, 1.8vw, 11px); line-height: 1;">ARRIVE</span>
-                                    <span class="text-wander-primary font-black text-right w-full notranslate" translate="no"
-                                        style="font-size: clamp(1rem, 5vw, 1.8rem); line-height: 1.1;">${iataTo}</span>
+                                    <span class="card-label text-gray-400 font-black uppercase tracking-tighter">ARRIVE</span>
+                                    <span class="card-iata text-wander-primary font-black text-right w-full notranslate" translate="no">${iataTo}</span>
                                     <div class="flex items-center justify-end gap-1.5 w-full">
-                                        ${iataToCountryCode[iataTo] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataTo].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm hidden md:block" alt="flag">` : ''}
-                                        <span class="text-gray-800 font-black truncate text-right"
-                                            style="font-size: clamp(9px, 2.2vw, 14px); line-height: 1.2;">${d.to}</span>
+                                        ${iataToCountryCode[iataTo] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataTo].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm" alt="flag">` : ''}
+                                        <span class="card-city text-gray-800 font-black truncate text-right">${d.to}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Details Box -->
-                            <div class="bg-gray-50 border border-gray-200 rounded-lg flex justify-between items-center mt-auto"
+                            <div class="details-box bg-gray-50 border border-gray-200 rounded-lg flex justify-between items-center mt-auto"
                                 style="padding: 0.4rem 0.6rem; height: 40%;">
 
                                 <!-- Date -->
                                 <div class="flex flex-col items-start justify-center overflow-hidden" style="flex: 1; margin-right: 0.5rem;">
-                                    <span class="text-gray-400 font-black uppercase tracking-tighter hidden sm:block"
-                                        style="font-size: clamp(7px, 1.5vw, 9px); line-height: 1; margin-bottom: 2px;">Dates</span>
-                                    <span class="hidden sm:block text-gray-800 font-black uppercase whitespace-nowrap overflow-hidden text-ellipsis w-full notranslate" translate="no"
-                                        style="font-size: clamp(10px, 2.2vw, 15px); line-height: 1.2; letter-spacing: -0.02em;">${d.date}</span>
-                                    <div class="sm:hidden flex flex-col gap-0.5 notranslate" translate="no">
-                                        <span class="text-gray-800 font-black" style="font-size: 11.5px; line-height: 1.1;">${d.date.split('-')[0].trim()}</span>
-                                        <span class="text-gray-800 font-black" style="font-size: 11.5px; line-height: 1.1;">${(d.date.split('-')[1] || '').trim()}</span>
-                                    </div>
+                                    <span class="card-date-label text-gray-400 font-black uppercase tracking-tighter">Dates</span>
+                                    <span class="card-date-value text-gray-800 font-black uppercase whitespace-nowrap overflow-hidden text-ellipsis w-full notranslate" translate="no">${dateHtml}</span>
                                 </div>
 
                                 <!-- Price -->
                                 <div class="flex flex-col items-end justify-center">
-                                    <span class="text-gray-400 font-black uppercase tracking-tighter hidden sm:block"
-                                        style="font-size: clamp(7px, 1.5vw, 9px); line-height: 1; margin-bottom: 2px;">Price</span>
-                                    <span class="text-wander-primary font-black"
-                                        style="font-size: clamp(1.2rem, 5vw, 1.8rem); line-height: 1;">€${d.price}</span>
+                                    <span class="card-date-label text-gray-400 font-black uppercase tracking-tighter">Price</span>
+                                    <span class="card-price-value text-wander-primary font-black">€${d.price}</span>
                                 </div>
 
                             </div>
                         </div>
-                    </a>
-                </div>
-            </div>
-
+            </a>
             `;
 
 
@@ -6964,6 +7054,7 @@
                 const deals = allDeals.filter(d => d.price < 100).sort((a, b) => a.price - b.price).slice(0, homeDisplayedCount);
                 if (deals.length > 0) {
                     homeDealsContainer.innerHTML = deals.map(compactCardTemplate).join('');
+                    if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
                 } else {
                     homeDealsContainer.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No flight deals found under €100.</p>';
                 }
@@ -6973,24 +7064,35 @@
             }
         }
 
+        let dealsTransitioning = false;
         function renderDealsPage() {
             const dynamicCarouselsContainer = document.getElementById('dynamicCarousels');
             if (!dynamicCarouselsContainer) return;
 
-            // If data is already ready, render content immediately (e.g. on filter change or re-navigation)
-            if (allDeals && allDeals.length > 0) {
-                renderDealsContent();
+            // Force skeleton display on every navigation to Deals page for premium feel
+            if (!dealsTransitioning) {
+                dealsTransitioning = true;
+                showDealsSkeleton();
+
+                setTimeout(() => {
+                    if (allDeals && allDeals.length > 0) {
+                        renderDealsContent();
+                    }
+                    dealsTransitioning = false;
+                }, 500); // 500ms forced skeleton
                 return;
             }
+        }
 
-            // Display skeletons immediately on initial load
+        function showDealsSkeleton() {
+            const dynamicCarouselsContainer = document.getElementById('dynamicCarousels');
             const skeletonHTML = `
                 <div class="carousel-container relative group">
                     <div class="text-center mb-8">
                         <h3 class="text-3xl md:text-5xl font-black uppercase tracking-tighter inline-block">Loading... <span class="text-2xl md:text-3xl text-gray-500 normal-case tracking-normal font-bold">(Please wait)</span></h3>
                     </div>
                     <div class="relative">
-                        <div class="carousel month-carousel pr-12 justify-start">
+                        <div class="carousel month-carousel pr-12 flex flex-row overflow-x-auto whitespace-nowrap scrollbar-hide">
                             ${Array(6).fill(0).map(() => compactCardSkeleton()).join('')}
                         </div>
                     </div>
@@ -7052,7 +7154,7 @@
                             <h3 class="text-3xl md:text-5xl font-black tracking-tighter uppercase inline-block">${month} <span class="text-2xl md:text-3xl text-gray-500 font-bold lowercase tracking-normal italic opacity-60">(${monthDeals.length} deals)</span></h3>
                         </div>
                         <div class="relative">
-                            <div class="carousel month-carousel pr-12 flex flex-row overflow-x-auto whitespace-nowrap scrollbar-hide" style="justify-content: flex-start !important;">
+                            <div class="carousel month-carousel pr-12 flex flex-row overflow-x-auto whitespace-nowrap scrollbar-hide">
                                 ${monthDeals.length ? monthDeals.map(compactCardTemplate).join('') : '<p class="text-center text-gray-500 text-xl w-full">No deals available.</p>'}
                             </div>
                         </div>
@@ -7065,7 +7167,7 @@
 
             dynamicCarouselsContainer.innerHTML = html;
             setupCarouselControls();
-            lucide.createIcons();
+            if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
         } // Close renderDealsContent
 
         function setupCarouselControls() {
