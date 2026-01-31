@@ -4866,7 +4866,7 @@
         async function fetchAirportData() {
             try {
                 // 1. FETCH FROM LOCAL CSV
-                const response = await fetch('/data/inputs/airport_Europe.csv');
+                const response = await fetch('data/inputs/airport_Europe.csv');
                 if (response.ok) {
                     const text = await response.text();
                     const lines = text.trim().split('\n').slice(1); // Skip header
@@ -4965,7 +4965,7 @@
         }
 
         async function fetchLatestDealsCSV() {
-            const path = '/data/inputs/flights_deals.csv';
+            const path = 'data/inputs/flights_deals.csv';
             try {
                 const response = await fetch(path);
                 if (response.ok) {
@@ -4991,7 +4991,7 @@
 
         async function fetchFestivalData() {
             allFestivals = [];
-            const path = `/data/festivals_combined.csv`;
+            const path = `data/festivals_combined.csv`;
 
             try {
                 const response = await fetch(path);
@@ -5063,7 +5063,7 @@
         }
 
         async function fetchFestivalFlightsData() {
-            const path = `/data/festival_flights.csv`;
+            const path = `data/festival_flights.csv`;
             try {
                 const response = await fetch(path);
                 if (response.ok) {
