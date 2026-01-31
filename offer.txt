@@ -1,8 +1,0 @@
-Summary
-We do have a list of Swiss companies, each company has a number called UID. You have to go to a certain page, insert that number  we provide and get some specific data. 
-
-Please find the detailed job description in the attached file (.pdf). There are two different type of companies (AG, GmbH) and the companies are situated in different Cantons.
-
-Please find as well an excerpt of the list of comanies in the excel file. In total there will be 48'500 companies. 
-
-Please come back, if you have questions
