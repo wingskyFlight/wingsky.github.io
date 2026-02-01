@@ -4817,6 +4817,9 @@
             });
         });
 
+        // CLOUDFLARE R2 CONFIGURATION - Set this to your Public Bucket URL
+        const R2_BASE_URL = 'https://pub-5b8a06a783c449dcad6aad946dabdd09.r2.dev'; // e.g. 'https://pub-xxxxxxxx.r2.dev'
+
         let persistentFilters = {
             city: "",
             destination: "",
@@ -4865,8 +4868,9 @@
         // Load airport data for city name normalization
         async function fetchAirportData() {
             try {
-                // 1. FETCH FROM LOCAL CSV
-                const response = await fetch('data/inputs/airport_Europe.csv');
+                // 1. FETCH FROM LOCAL CSV or R2
+                const url = R2_BASE_URL ? `${R2_BASE_URL}/airport_Europe.csv` : '/data/inputs/airport_Europe.csv';
+                const response = await fetch(url);
                 if (response.ok) {
                     const text = await response.text();
                     const lines = text.trim().split('\n').slice(1); // Skip header
@@ -4965,7 +4969,7 @@
         }
 
         async function fetchLatestDealsCSV() {
-            const path = 'data/inputs/flights_deals.csv';
+            const path = R2_BASE_URL ? `${R2_BASE_URL}/flights_deals.csv` : '/data/inputs/flights_deals.csv';
             try {
                 const response = await fetch(path);
                 if (response.ok) {
@@ -4991,7 +4995,7 @@
 
         async function fetchFestivalData() {
             allFestivals = [];
-            const path = `data/festivals_combined.csv`;
+            const path = R2_BASE_URL ? `${R2_BASE_URL}/festivals_combined.csv` : '/data/festivals_combined.csv';
 
             try {
                 const response = await fetch(path);
@@ -5063,7 +5067,7 @@
         }
 
         async function fetchFestivalFlightsData() {
-            const path = `data/festival_flights.csv`;
+            const path = R2_BASE_URL ? `${R2_BASE_URL}/festival_flights.csv` : '/data/festival_flights.csv';
             try {
                 const response = await fetch(path);
                 if (response.ok) {
@@ -5150,7 +5154,9 @@
                         } else if (imgPath.match(/^[A-Za-z0-9+/=]+$/) && imgPath.length > 100) {
                             imgPath = `data:image/jpeg;base64,${imgPath}`;
                         } else {
-                            imgPath = `data/inputs/festivals/festivals_images/${f.month}/${f.image}`;
+                            // imgPath = `data/inputs/festivals/festivals_images/${f.month}/${f.image}`;
+                            // Use R2 path if configured, otherwise fallback to local
+                            imgPath = R2_BASE_URL ? `${R2_BASE_URL}/festivals_images/${f.month}/${f.image}` : `data/inputs/festivals/festivals_images/${f.month}/${f.image}`;
                         }
                     } else {
                         imgPath = "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&w=600&q=80";
@@ -5303,7 +5309,7 @@
                 (f.title && f.title.toLowerCase() === festivalTitle.toLowerCase()) ||
                 (f.title && f.city && `${f.title} (${f.city})`.toLowerCase() === festivalTitle.toLowerCase())
             );
-            const festivalImg = festival ? `data/inputs/festivals/festivals_images/${festival.month}/${festival.image}` : '';
+            const festivalImg = festival ? (R2_BASE_URL ? `${R2_BASE_URL}/festivals_images/${festival.month}/${festival.image}` : `data/inputs/festivals/festivals_images/${festival.month}/${festival.image}`) : '';
             const festivalLink = (festival && festival.link && festival.link !== '#') ? festival.link : 'https://Wingsky.com';
 
             // 1. FILTER FROM LOCAL CSV DATA (NO SUPABASE EGRESS)
