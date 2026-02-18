@@ -217,16 +217,23 @@
         .nav-link-premium {
             padding: 6.5px 13px !important;
             border-radius: 20px;
-            color: #c5c5c5;
-            font-weight: 600;
-            font-size: 0.72rem !important;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1rem !important;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             gap: 6px !important;
             position: relative;
             overflow: hidden;
-            border: 1px solid transparent;
+            /* Gradient Border 2px for Nav Links */
+            background: linear-gradient(rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.01)) padding-box,
+                linear-gradient(135deg, var(--wander-primary), var(--wander-accent)) border-box;
+            border: 2px solid transparent;
+            /* Text Stroke 5px */
+            -webkit-text-stroke: 3.5px var(--wander-primary);
+            paint-order: stroke fill;
         }
 
         .nav-link-premium i {
@@ -238,8 +245,9 @@
         .nav-link-premium:hover {
             color: #5d3fd3;
             /* Primary color */
-            background: rgba(255, 255, 255, 0.8);
-            border-color: rgba(93, 63, 211, 0.1);
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)) padding-box,
+                linear-gradient(135deg, var(--wander-primary), var(--wander-accent)) border-box;
+            border-color: transparent;
             box-shadow: 0 4px 12px rgba(93, 63, 211, 0.1);
             transform: translateY(-1px);
         }
@@ -248,9 +256,18 @@
             color: #5d3fd3;
         }
 
-        /* Active state style (optional) */
-        .nav-link-premium:active {
-            transform: translateY(0);
+        /* ACTIVE STATE: Gradient background following site theme */
+        .nav-link-premium.active {
+            background: linear-gradient(135deg, var(--wander-primary), var(--wander-accent));
+            border-color: white;
+            color: white;
+            -webkit-text-stroke: 0px;
+            /* Disable stroke when filled */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link-premium.active i {
+            color: white;
         }
 
         .lang-trigger {
@@ -1320,7 +1337,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
             transform: translateZ(0);
             overflow: hidden;
-            border: 3px solid var(--wander-primary);
+            /* border removed for gradient overlay */
         }
 
         /* STYLE V2 : SMILE (Convexe) - Par défaut pour HOME */
@@ -1355,6 +1372,22 @@
             transform: scale(1.03);
         }
 
+        /* Hero Gradient Border Overlay */
+        .hero-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 5px;
+            /* Border width */
+            background: linear-gradient(135deg, var(--wander-primary), var(--wander-accent));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: 10;
+        }
+
         .hero-overlay {
             position: absolute;
             inset: 0;
@@ -1372,13 +1405,15 @@
             position: relative;
             overflow: visible;
             border-radius: 30px;
-            background: rgba(255, 255, 255, 0.85);
+            /* Gradient Border Logic */
+            background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)) padding-box,
+                linear-gradient(135deg, var(--wander-primary), var(--wander-accent)) border-box;
             backdrop-filter: blur(10px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             transition: all 0.5s ease;
             z-index: 50;
             margin-bottom: 0;
-            border: 3px solid var(--wander-primary);
+            border: 4px solid transparent;
         }
 
         /* Responsive header: burger menu from 930px and below */
@@ -1412,10 +1447,13 @@
             border-radius: 26px;
         }
 
+
+
         /* SEARCH WIDGET */
         .search-widget-container {
             position: relative;
-            background: white;
+            background: linear-gradient(#fff, #fff) padding-box,
+                linear-gradient(135deg, var(--wander-primary), var(--wander-accent)) border-box;
             padding: 25px;
             border-radius: 26px;
             width: 100%;
@@ -1423,7 +1461,7 @@
             margin: 50px auto;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
             z-index: 20;
-            border: 3px solid var(--wander-primary);
+            border: 5px solid transparent;
             box-sizing: border-box;
             overflow: visible;
             margin-top: -5em;
@@ -1435,9 +1473,10 @@
             flex-direction: column;
             padding: 8px 16px;
             flex: 1;
-            background: #f8f9fa;
+            background: linear-gradient(#f8f9fa, #f8f9fa) padding-box,
+                linear-gradient(135deg, var(--wander-primary), var(--wander-accent)) border-box;
             border-radius: 10px;
-            border: 1px solid var(--wander-primary);
+            border: 2px solid transparent;
             margin: 0 4px;
         }
 
@@ -1689,10 +1728,11 @@
 
             /* Tous les input groups = style de base avec bordure thème */
             .search-row-flex .v2-input-group {
-                background: #f8f9fa;
+                background: linear-gradient(#f8f9fa, #f8f9fa) padding-box,
+                    linear-gradient(135deg, var(--wander-primary), var(--wander-accent)) border-box;
                 border-radius: 10px;
                 padding: 10px 12px;
-                border: 1px solid var(--wander-primary);
+                border: 2px solid transparent;
                 width: 100%;
             }
 
@@ -2552,9 +2592,8 @@
         /* MENU BUTTONS STYLING */
         .nav-link-premium {
             border: 3px solid var(--wander-primary);
-            color: var(--wander-primary);
             background: white;
-            font-weight: 700;
+            font-weight: 400;
             padding: 0.5rem 1rem;
             border-radius: 9999px;
             transition: all 0.3s ease;
@@ -3376,7 +3415,7 @@
 
         .festival-glass-card {
             position: absolute;
-            top: 45%;
+            top: 36%;
             bottom: 8px;
             left: 4%;
             width: 92%;
@@ -3451,6 +3490,9 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             transition: all 0.4s ease;
+            /* Text Stroke 6px as requested */
+            -webkit-text-stroke: 6px var(--wander-primary);
+            paint-order: stroke fill;
         }
 
         .fest-location {
@@ -3474,6 +3516,12 @@
             flex-direction: column;
             align-items: flex-start;
             transition: all 0.4s ease;
+        }
+
+        /* Text Stroke on Month (first child of date group) */
+        .fest-date-group>*:first-child {
+            -webkit-text-stroke: 6px var(--wander-primary);
+            paint-order: stroke fill;
         }
 
         /* Mobile & Tablet Refinement: Center dates and stack layout */
@@ -6106,8 +6154,8 @@
             console.log(`📍 Target Page decided: ${targetPage}`);
 
             // 1. First, check if we need to show the popup
-            const popupShownLS = localStorage.getItem('popupShown');
-            const popupShownSS = sessionStorage.getItem('popupShownThisSession');
+            const popupShownLS = null; // Storage removed
+            const popupShownSS = null; // Storage removed
 
             if (popupShownLS !== 'true' && popupShownSS !== 'true' && targetPage === 'home') {
                 // Only show popup on Home page if not seen
@@ -7014,9 +7062,12 @@
                 homeDisplayedCount += 8;
                 renderHomeDeals();
 
-                if (moreClicks >= 3) {
+                if (moreClicks >= 2) {
                     document.getElementById('loadMoreBtn').textContent = "Explore All Deals";
-                    document.getElementById('loadMoreBtn').onclick = () => showPage('deals');
+                    document.getElementById('loadMoreBtn').onclick = () => {
+                        showPage('deals');
+                        openPopup();
+                    };
                 }
             };
 
@@ -7105,12 +7156,57 @@
             }, 0);
         }
 
+        function resetHomeInputs() {
+            console.log('🧹 Resetting Home Inputs');
+            const city = document.getElementById('citySelect');
+            const df = document.getElementById('dateFrom');
+            const dt = document.getElementById('dateTo');
+
+            if (city) { city.value = ""; city.selectedIndex = 0; }
+            if (df) df.value = "";
+            if (dt) dt.value = "";
+
+            // Clear any potential hidden storage in DOM
+            document.querySelectorAll('#searchWidgetHome input').forEach(i => i.value = "");
+        }
+
+        function resetFestivalFilters() {
+            console.log('🧹 Resetting Festival Filters');
+            // Reset Month/Country Global Filter
+            monthCountryFilters = {};
+            // Clear inputs if any
+            document.querySelectorAll('#searchWidgetFestivals input').forEach(i => i.value = "");
+
+            // Re-render to show all
+            if (typeof renderFestivalDeals === 'function') {
+                renderFestivalDeals(allFestivals);
+            }
+        }
+
         function resetDealsFilters() {
             persistentFilters = { city: "", destination: "", month: "", sort: "price-asc" };
             currentCity = "";
             currentDestinationFilter = "";
             currentMonthFilter = "";
             isSearchFromHome = false;
+
+            // Force Clear DOM Inputs
+            const select = document.getElementById('citySelectDeals');
+            if (select) {
+                select.value = "";
+                select.selectedIndex = 0;
+            }
+            const sort = document.getElementById('dealsSort');
+            if (sort) sort.value = 'price-asc';
+
+            // Clear other inputs
+            document.querySelectorAll('#searchWidgetDeals input, #searchWidgetDeals select').forEach(i => {
+                if (i.id !== 'citySelectDeals' && i.id !== 'dealsSort') i.value = "";
+            });
+
+            console.log('🧹 Deals Filters Reset');
+            // Re-render
+            if (typeof renderDealsContent === 'function') renderDealsContent();
         }
 
         function goHomeAndReset() {
@@ -7122,9 +7218,12 @@
                 moreClicks++;
                 homeDisplayedCount += 8;
                 renderHomeDeals();
-                if (moreClicks >= 3) {
+                if (moreClicks >= 2) {
                     document.getElementById('loadMoreBtn').textContent = "Explore All Deals";
-                    document.getElementById('loadMoreBtn').onclick = () => showPage('deals');
+                    document.getElementById('loadMoreBtn').onclick = () => {
+                        showPage('deals');
+                        openPopup();
+                    };
                 }
             };
             showPage('home');
@@ -7136,7 +7235,14 @@
         }
 
         function applyDealsFilters() {
-            currentCity = document.getElementById('dealsFrom').value;
+            const newCity = document.getElementById('dealsFrom').value;
+
+            // Reset Country Filters if City changes to prevent stuck states (e.g. CZ filter with Budapest departure)
+            if (currentCity !== newCity) {
+                monthCountryFilters = {};
+            }
+
+            currentCity = newCity;
             // currentDestinationFilter = document.getElementById('dealsTo').value; // Removing this dependency
             currentDestinationFilter = ""; // Reset destination filter as input is removed
             currentMonthFilter = document.getElementById('dealsMonth').value;
@@ -7188,7 +7294,8 @@
             <div class="festival-profile-component shimmer-overlay" style="border: 8px solid white; background: white; border-radius: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden; position: relative;">
                  <div class="w-full h-full bg-gray-100 rounded-3xl relative">
                       <!-- Skeleton for glass card area -->
-                      <div class="absolute bottom-4 left-4 right-4 h-1/2 bg-white/40 backdrop-blur-sm rounded-2xl border border-white/20"></div>
+                      <div class="hidden md:flex items-center gap-3">
+                <div class="flex items-center bg-white/50 backdrop-blur-md rounded-full p-1.5 shadow-sm border border-white/20 gap-3.5"></div>
                  </div>
                  <div class="shimmer-sweep"></div>
             </div>
@@ -7202,9 +7309,11 @@
                 const parts = d.date.split('-').map(s => s.trim());
                 if (parts.length === 2) {
                     dateHtml = `
-                        <span class="date-part start-date">${parts[0]}</span>
-                        <span class="date-separator mx-1">-</span>
-                        <span class="date-part end-date">${parts[1]}</span>
+                        <div class="flex flex-col md:flex-row md:items-center leading-tight">
+                            <span>${parts[0]}</span>
+                            <span class="hidden md:inline mx-1">-</span>
+                            <span>${parts[1]}</span>
+                        </div>
                      `;
                 } else {
                     dateHtml = `<span>${d.date}</span>`;
@@ -7228,8 +7337,70 @@
             const isFav = typeof isDealFavorite === 'function' && isDealFavorite(dealUniqueId);
             const heartClass = isFav ? 'fa-solid text-red-500' : 'fa-regular text-white';
 
+            // Helper to generate Trip.com Layout
+            const generateTripComLink = (deal) => {
+                const iataFrom = deal.iataFrom || (deal.from ? deal.from.substring(0, 3).toUpperCase() : 'PAR');
+                const iataTo = deal.iataTo || (deal.to ? deal.to.substring(0, 3).toUpperCase() : 'XXX');
+
+                let ddate = '';
+                let rdate = '';
+                let isRT = false;
+
+                // Parse date "1 Apr - 7 Apr" or "12 Mar"
+                if (deal.date) {
+                    const now = new Date();
+                    const currentYear = now.getFullYear();
+                    const parts = deal.date.split('-');
+
+                    const parsePart = (str) => {
+                        // Append current year first to try parsing
+                        let d = new Date(str + " " + currentYear);
+                        if (isNaN(d.getTime())) return null;
+
+                        // If date is in the past (e.g. "2 Jan" parsed in "Feb"), assume next year
+                        // Strict check: if date < today - 1 day, add 1 year.
+                        if (d < new Date(now.getTime() - 86400000)) {
+                            d.setFullYear(currentYear + 1);
+                        }
+                        const year = d.getFullYear();
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const day = String(d.getDate()).padStart(2, '0');
+                        return `${year}-${month}-${day}`;
+                    };
+
+                    if (parts.length === 2) {
+                        ddate = parsePart(parts[0].trim());
+                        rdate = parsePart(parts[1].trim());
+                        isRT = true;
+                    } else {
+                        ddate = parsePart(deal.date.trim());
+                    }
+                }
+
+                if (!ddate) return deal.url || '#';
+
+                // 1. Build Base Trip.com URL (Target)
+                let targetUrl = `https://fr.trip.com/flights/showfarefirst?dcity=${iataFrom.toLowerCase()}&acity=${iataTo.toLowerCase()}`;
+                targetUrl += `&ddate=${ddate}`;
+                if (isRT && rdate) {
+                    targetUrl += `&rdate=${rdate}&triptype=rt`;
+                } else {
+                    targetUrl += `&triptype=ow`;
+                }
+                targetUrl += `&class=y&lowpricesource=searchform&quantity=1&searchboxarg=t&nonstoponly=off&locale=fr-FR&curr=EUR`;
+
+                // 2. Encode for Travelpayouts (tp.media)
+                const encodedUrl = encodeURIComponent(targetUrl);
+
+                // 3. Wrapper URL
+                // marker=598952, trs=394660, p=8626, campaign_id=121
+                return `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
+            };
+
+            const finalUrl = generateTripComLink(d);
+
             return `
-            <a href="${d.url}" target="_blank" rel="noopener noreferrer"
+            <a href="${finalUrl}" target="_blank" rel="noopener noreferrer"
                     class="compact-card compact-card-aspect relative group block flex-shrink-0"
                     style="overflow: hidden; border-radius: 1.5rem;">
 
@@ -7252,7 +7423,7 @@
 
                         <!-- Floating Info Card -->
                         <div class="absolute bg-white shadow-xl z-10"
-                            style="width: 92%; left: 4%; top: 40%; bottom: 4%; border-radius: 1rem; padding: 0.6rem 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
+                            style="width: 92%; left: 4%; top: 34%; bottom: 12px; border-radius: 1rem; padding: 0.6rem 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
 
                             <!-- Top Row: Origin - Plane - Dest -->
                             <div class="grid items-center relative" style="flex: 1; grid-template-columns: 1fr 28% 1fr;">
@@ -7262,8 +7433,8 @@
                                     <span class="card-label text-gray-400 font-black uppercase tracking-tighter">DEPART</span>
                                     <span class="card-iata text-wander-primary font-black w-full notranslate" translate="no">${iataFrom}</span>
                                     <div class="flex items-center gap-1.5 w-full">
-                                        <span class="card-city text-gray-800 font-black truncate">${d.from}</span>
-                                        ${iataToCountryCode[iataFrom] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataFrom].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm" alt="flag">` : ''}
+                                        <span class="card-city text-gray-800 font-black truncate flex-1 min-w-0">${d.from}</span>
+                                        ${iataToCountryCode[iataFrom] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataFrom].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm flex-shrink-0" alt="flag">` : ''}
                                     </div>
                                 </div>
 
@@ -7285,26 +7456,26 @@
                                     <span class="card-label text-gray-400 font-black uppercase tracking-tighter">ARRIVE</span>
                                     <span class="card-iata text-wander-primary font-black text-right w-full notranslate" translate="no">${iataTo}</span>
                                     <div class="flex items-center justify-end gap-1.5 w-full">
-                                        ${iataToCountryCode[iataTo] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataTo].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm" alt="flag">` : ''}
-                                        <span class="card-city text-gray-800 font-black truncate text-right">${d.to}</span>
+                                        ${iataToCountryCode[iataTo] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataTo].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm flex-shrink-0" alt="flag">` : ''}
+                                        <span class="card-city text-gray-800 font-black truncate text-right flex-1 min-w-0">${d.to}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Details Box -->
-                            <div class="details-box bg-gray-50 border border-gray-200 rounded-lg flex justify-between items-center mt-auto"
-                                style="padding: 0.4rem 0.6rem; height: 40%;">
+                            <div class="details-box bg-gray-50 border border-gray-200 rounded-lg flex justify-center gap-6 items-start md:justify-between md:items-center md:gap-0 mt-auto flex-shrink-0 p-[0.2rem] px-2 md:p-2 md:px-3"
+                                style="height: auto; min-height: 42px;">
 
                                 <!-- Date -->
-                                <div class="flex flex-col items-start justify-center overflow-hidden" style="flex: 1; margin-right: 0.5rem;">
+                                <div class="flex flex-col items-start justify-center overflow-hidden" style="flex: 1;">
                                     <span class="card-date-label text-gray-400 font-black uppercase tracking-tighter">Dates</span>
-                                    <span class="card-date-value text-gray-800 font-black uppercase whitespace-nowrap overflow-hidden text-ellipsis w-full notranslate" translate="no">${dateHtml}</span>
+                                    <span class="card-date-value text-gray-800 font-black uppercase text-lg md:text-sm overflow-hidden w-full notranslate" translate="no">${dateHtml}</span>
                                 </div>
 
                                 <!-- Price -->
                                 <div class="flex flex-col items-end justify-center">
                                     <span class="card-date-label text-gray-400 font-black uppercase tracking-tighter">Price</span>
-                                    <span class="card-price-value text-wander-primary font-black">€${d.price}</span>
+                                    <span class="card-price-value text-wander-primary font-black text-4xl md:text-lg leading-none md:leading-normal">€${d.price}</span>
                                 </div>
 
                             </div>
@@ -7785,25 +7956,32 @@
                 // VIEW: GRID OR CAROUSEL
                 if (isGridView) {
                     html += `
-                        <div class="container mx-auto px-4 pb-24" data-month="${monthBase}" data-total="${monthDeals.length}">
-                            <div class="flex flex-col md:flex-row items-end justify-between mb-8 gap-4 border-b border-gray-100 pb-4">
+                        <div class="pb-24" data-month="${monthBase}" data-total="${monthDeals.length}">
+                            <!-- Header Title (Static) -->
+                            <div class="flex flex-col md:flex-row items-end justify-between mb-2 gap-4 border-b border-gray-100 pt-4 px-3 mt-4">
                                 <div class="text-left">
                                      <h3 class="text-4xl md:text-6xl font-black tracking-tighter uppercase text-gray-900 mb-2 leading-none">${month} DEALS</h3>
-                                     <div class="flex items-center gap-2">
+                                     <div class="flex items-center gap-2 mb-2">
                                         <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-md text-xs font-bold uppercase tracking-widest border border-indigo-100">${monthDeals.length} FLIGHTS FOUND</span>
                                         ${currentCity ? `<span class="px-3 py-1 bg-white border border-gray-200 text-gray-500 rounded-md text-xs font-bold uppercase tracking-widest">FROM ${currentCity}</span>` : ''}
                                      </div>
                                 </div>
-                                ${filterHTML}
+                            </div>
+
+                            <!-- Sticky Filter (Buttons only) -->
+                            <div class="sticky top-[90px] z-40 flex justify-end px-3 pb-2 pointer-events-none -mt-16 mb-6">
+                                <div class="pointer-events-auto">
+                                    ${filterHTML}
+                                </div>
                             </div>
                             
-                            <!-- GRID VIEW: 4 Columns as requested -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            <!-- GRID VIEW: Same as Flights Home Grid -->
+                            <div class="home-grid mb-8">
                                 ${diversifiedMonth.map(deal => compactCardTemplate(deal)).join('')}
                             </div>
                             
                             <!-- Loader / End of List -->
-                            <div class="py-12 text-center w-full">
+                            <div class="py-8 text-center w-full">
                                 ${diversifiedMonth.length < monthDeals.length
                             ? `<div class="inline-flex items-center gap-2 text-indigo-400 font-bold uppercase tracking-widest text-xs animate-pulse" id="grid-loader-${monthBase}"><div class="w-2 h-2 bg-indigo-400 rounded-full"></div> Loading more flights...</div>`
                             : `<div class="text-gray-300 font-bold uppercase tracking-widest text-xs">End of results</div>`}
@@ -7956,8 +8134,8 @@
         });
 
         function showPage(id) {
-            // Save state for reload persistence
-            localStorage.setItem('lastActivePage', id);
+            // Save state for reload persistence (Removed)
+            // localStorage.setItem('lastActivePage', id);
 
             document.querySelectorAll('section[id]').forEach(s => s.classList.add('hidden'));
             const target = document.getElementById(id);
@@ -7974,27 +8152,50 @@
             }
 
             // Update URL routing
+            // Update URL routing & Reset State
             if (id === 'home') {
                 updateURLParams({});
+                if (typeof resetHomeInputs === 'function') resetHomeInputs();
+
+                // Reset Home View State variables
+                if (typeof moreClicks !== 'undefined') moreClicks = 0;
+                if (typeof homeDisplayedCount !== 'undefined') homeDisplayedCount = 8;
+                const btn = document.getElementById('loadMoreBtn');
+                if (btn) {
+                    btn.textContent = "More";
+                    btn.onclick = () => {
+                        moreClicks++;
+                        homeDisplayedCount += 8;
+                        if (typeof renderHomeDeals === 'function') renderHomeDeals();
+
+                        if (moreClicks >= 2) {
+                            const b = document.getElementById('loadMoreBtn');
+                            if (b) {
+                                b.textContent = "Explore All Deals";
+                                b.onclick = () => {
+                                    showPage('deals');
+                                    openPopup();
+                                };
+                            }
+                        }
+                    };
+                }
+                if (typeof renderHomeDeals === 'function') setTimeout(renderHomeDeals, 0);
+
             } else if (id === 'deals') {
                 updateURLParams({ page: 'deals' });
+                // Reset handled below
             } else if (id === 'festivals') {
                 updateURLParams({ page: 'festivals' });
+                if (typeof resetFestivalFilters === 'function') resetFestivalFilters();
             }
 
             if (id === 'deals') {
-                if (isSearchFromHome) {
-                    restoreFiltersFromPersistent();
+                if (typeof isSearchFromHome !== 'undefined' && isSearchFromHome) {
+                    if (typeof restoreFiltersFromPersistent === 'function') restoreFiltersFromPersistent();
                     isSearchFromHome = false;
                 } else {
-                    resetDealsFilters();
-                    renderDealsPage();
-                }
-            }
-
-            if (id === 'festivals') {
-                if (typeof renderFestivalDeals === 'function') {
-                    renderFestivalDeals(allFestivals);
+                    if (typeof resetDealsFilters === 'function') resetDealsFilters();
                 }
             }
         }
@@ -8023,16 +8224,16 @@
             const cityPopup = document.getElementById('cityPopup');
             cityPopup.classList.add('hidden');
             cityPopup.classList.remove('flex');
-            localStorage.setItem('popupShown', 'true');
-            sessionStorage.setItem('popupShownThisSession', 'true');
+            // localStorage.setItem('popupShown', 'true');
+            // sessionStorage.setItem('popupShownThisSession', 'true');
         }
 
         document.getElementById('closePopupBtn').onclick = closePopupAndRemember;
         cityPopup.onclick = e => { if (e.target === e.currentTarget) closePopupAndRemember(); };
 
         // Custom Language Selector Logic
-        const savedLang = localStorage.getItem('selectedLang') || 'en';
-        const savedFlag = localStorage.getItem('selectedFlag') || 'gb';
+        const savedLang = 'en'; // Storage removed
+        const savedFlag = 'gb'; // Storage removed
 
         // Restore saved language on page load
         if (savedLang !== 'en') {
@@ -8052,9 +8253,9 @@
                 const lang = this.dataset.lang;
                 const flag = this.dataset.flag;
 
-                // Save to localStorage
-                localStorage.setItem('selectedLang', lang);
-                localStorage.setItem('selectedFlag', flag);
+                // Save to localStorage (Removed)
+                // localStorage.setItem('selectedLang', lang);
+                // localStorage.setItem('selectedFlag', flag);
 
                 // Update current display
                 document.getElementById('currentLangFlag').src = `https://flagcdn.com/w40/${flag}.png`;
@@ -8077,8 +8278,8 @@
                     window.location.reload();
                 } else {
                     // Clear translation cookie for English
-                    localStorage.removeItem('selectedLang');
-                    localStorage.removeItem('selectedFlag');
+                    // localStorage.removeItem('selectedLang');
+                    // localStorage.removeItem('selectedFlag');
                     document.cookie = 'googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT';
                     document.cookie = 'googtrans=;path=/;domain=' + window.location.hostname + ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
                     window.location.reload();
