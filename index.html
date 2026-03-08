@@ -87,31 +87,182 @@
             margin: 0 auto;
         }
 
-        .compact-card-aspect {
-            aspect-ratio: 17/16;
+        /* ============================================
+           HOME DEALS (FLIGHTS) - FLUID RESPONSIVE SYSTEM
+           Uses clamp() for smooth, continuous scaling.
+           Scoped to #homeDeals only — Deals carousels untouched.
+           ============================================ */
+
+        /* ---- FLUID TYPOGRAPHY: applies from 344px -> 1120px ---- */
+        /* Each property scales progressively with viewport width */
+
+        #homeDeals .card-iata {
+            /* Reduced by 15% (0.85x) for a cleaner look: 0.935rem - 1.32rem */
+            font-size: clamp(0.935rem, 0.72rem + 2.1vw, 1.32rem) !important;
+            line-height: 1.1 !important;
         }
 
-        /* Original height on mobile/tablet portrait (<700px) */
-        @media (max-width: 700px) {
-            .compact-card-aspect {
-                aspect-ratio: 17/20;
+        #homeDeals .card-city {
+            /* 9px at 345px → 14px at 768px → 15px at 1120px */
+            font-size: clamp(9px, 2px + 2vw, 15px) !important;
+            line-height: 1.2 !important;
+        }
+
+        #homeDeals .compact-card-aspect {
+            aspect-ratio: 17/18 !important;
+        }
+
+        #homeDeals .card-date-value {
+            /* 9px at 345px → 11px at 768px → 12px at 1120px */
+            font-size: clamp(9px, 5px + 1.1vw, 12px) !important;
+            line-height: 1.15 !important;
+        }
+
+        #homeDeals .card-price-value {
+            /* 1.2rem at 345px → 1.55rem at 1120px */
+            font-size: clamp(1.2rem, 0.8rem + 2vw, 1.55rem) !important;
+            line-height: 1 !important;
+        }
+
+        #homeDeals .card-label,
+        #homeDeals .card-date-label {
+            /* 7px → 10px fluid */
+            font-size: clamp(7px, 5px + 0.6vw, 10px) !important;
+        }
+
+        /* ---- Galaxy Z Fold 5 (≤ 344px) - pinned overrides ---- */
+        @media (max-width: 344px) {
+            #homeDeals .card-iata {
+                font-size: 1.05rem !important;
             }
+
+            /* Plane Icon: Refined scaling (2.2em circle, 1.35em SVG) */
+            #homeDeals .compact-card .absolute.bg-wander-primary.rounded-full {
+                width: 2.2em !important;
+                height: 2.2em !important;
+            }
+
+            #homeDeals .compact-card .absolute.bg-wander-primary.rounded-full svg {
+                width: 1.35em !important;
+                height: 1.35em !important;
+            }
+
+            #homeDeals .card-city {
+                font-size: 8px !important;
+                white-space: normal !important;
+                word-break: break-word !important;
+            }
+
+            #homeDeals .card-date-value {
+                font-size: 7px !important;
+            }
+
+            #homeDeals .card-price-value {
+                font-size: 1.1rem !important;
+            }
+
+            #homeDeals .card-date-label,
+            #homeDeals .card-label {
+                font-size: 5.5px !important;
+            }
+
+            /* Tighten the floating info card padding on ultra-small */
+            #homeDeals .compact-card .absolute.bg-white.shadow-xl {
+                padding: 0.25rem 0.35rem !important;
+                bottom: 8px !important;
+                top: auto !important;
+            }
+
+            #homeDeals .zfold-grid-stack {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 2px !important;
+                grid-template-columns: none !important;
+            }
+
+            #homeDeals .zfold-hide {
+                display: none !important;
+            }
+
+            #homeDeals .zfold-show-block {
+                display: block !important;
+            }
+
+            #homeDeals .zfold-show-flex {
+                display: flex !important;
+            }
+
+            #homeDeals .zfold-items-center {
+                align-items: center !important;
+                text-align: center !important;
+            }
+
+            #homeDeals .zfold-text-center {
+                text-align: center !important;
+            }
+
+            #homeDeals .zfold-justify-center {
+                justify-content: center !important;
+            }
+
+            #homeDeals .sm-hide {
+                display: none !important;
+            }
+
+            /* Date specific for ZFold */
+            #homeDeals .card-date-value div:not(.zfold-show-block) {
+                display: none !important;
+            }
+        }
+
+        /* ---- 345px → 430px: slightly boost city names +10% vs base clamp ---- */
+        /* The clamp() already handles this zone, this rule ensures the city
+           minimum is slightly bigger on actual phones */
+        @media (min-width: 345px) and (max-width: 430px) {
+            #homeDeals .card-city {
+                font-size: clamp(8.3px, 1px + 1.9vw, 10px) !important;
+            }
+
+            #homeDeals .card-date-value {
+                font-size: clamp(11px, 5px + 0.9vw, 10px) !important;
+            }
+        }
+
+        /* ---- 768px → 1120px: ensure grid gap is tighter so cards fill space ---- */
+        @media (min-width: 768px) and (max-width: 1120px) {
+            #homeDeals.home-grid {
+                gap: 8px !important;
+            }
+        }
+
+        /* ---- 900px → 1120px: 3-col grid, bump card sizes ---- */
+        @media (min-width: 900px) and (max-width: 1120px) {
+            #homeDeals.home-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
+            }
+        }
+
+        .compact-card-aspect {
+            aspect-ratio: 17/19;
         }
 
         .carousel .compact-card {
-            width: 290px !important;
-            flex: 0 0 290px !important;
+            width: 280px !important;
+            flex: 0 0 280px !important;
             margin: 0 !important;
         }
 
-        @media (max-width: 700px) {
+        /* Mobile & Tablet (< 770px) - SYNCHRONIZED */
+        @media (max-width: 770px) {
             .carousel .compact-card {
-                width: 180px !important;
-                flex: 0 0 180px !important;
+                width: 270px !important;
+                flex: 0 0 270px !important;
             }
 
             .compact-card-aspect {
-                aspect-ratio: 17/20 !important;
+                aspect-ratio: 17/19 !important;
             }
         }
 
@@ -132,15 +283,16 @@
             scroll-snap-align: start;
         }
 
-        @media (min-width: 480px) {
+        /* These legacy breakpoints are now handled by the unified < 770px rule above */
+        @media (min-width: 771px) and (max-width: 899px) {
             .carousel .compact-card {
-                width: 200px !important;
+                width: 240px !important;
             }
         }
 
-        @media (min-width: 900px) {
+        @media (min-width: 900px) and (max-width: 1199px) {
             .carousel .compact-card {
-                width: 240px !important;
+                width: 260px !important;
             }
         }
 
@@ -157,9 +309,56 @@
             line-height: 1;
         }
 
+        /* Cleaned IATA style matching site theme */
+        .iata-flag-fill {
+            color: var(--wander-primary) !important;
+            font-weight: 900 !important;
+            /* Using clean external outline only */
+            text-shadow:
+                -0.5px -0.5px 0 #888787fb,
+                0.5px -0.5px 0 #888787fb,
+                -0.5px 0.5px 0 #888787fb,
+                0.5px 0.5px 0 #888787fb;
+        }
+
         .card-iata {
-            font-size: 1.3rem;
+            font-size: clamp(14px, 3.5vw, 19px);
             line-height: 1.1;
+            display: inline-block;
+            letter-spacing: 2px;
+        }
+
+        /* Responsive Plane Path Icon: 
+           - x2 for DEALS (Standard compact-card)
+           - Overridden for #homeDeals (Flights) below */
+        @media (max-width: 768px) {
+            .compact-card .absolute.bg-wander-primary.rounded-full {
+                width: 3.2em !important;
+                height: 3.2em !important;
+            }
+
+            .compact-card .absolute.bg-wander-primary.rounded-full svg {
+                width: 2.2em !important;
+                height: 2.2em !important;
+            }
+
+            /* Specific scaling for FLIGHTS (Home) - Refined 2.2em/1.35em */
+            #homeDeals .compact-card .absolute.bg-wander-primary.rounded-full {
+                width: 2.2em !important;
+                height: 2.2em !important;
+            }
+
+            #homeDeals .compact-card .absolute.bg-wander-primary.rounded-full svg {
+                width: 1.35em !important;
+                height: 1.35em !important;
+            }
+        }
+
+        /* Festivals Search Box mobile move-up */
+        @media (max-width: 768px) {
+            #searchWidgetFestivals {
+                margin-top: -140px !important;
+            }
         }
 
         .card-city {
@@ -180,33 +379,72 @@
         }
 
         .card-price-value {
-            font-size: 16px;
+            font-size: 1.55rem;
+            /* +55% from original 16px */
             line-height: 1;
         }
 
-        @media (min-width: 701px) {
+        /* Mobile & Tablet Font Sizes (< 770px) */
+        @media (max-width: 770px) {
+            .card-iata {
+                font-size: 1.5rem !important;
+            }
+
+            .card-city {
+                font-size: 0.85rem !important;
+            }
+
+            .card-date-label {
+                font-size: 10px !important;
+            }
+
+            .card-date-value {
+                font-size: 1rem !important;
+            }
+
+            .card-price-value {
+                font-size: 1.55rem !important;
+            }
+        }
+
+        /* Desktop Font Sizes (771px+) */
+        @media (min-width: 771px) {
             .card-label {
                 font-size: 11px !important;
             }
 
             .card-iata {
-                font-size: 1.65rem !important;
+                font-size: 1.5rem !important;
             }
 
             .card-city {
-                font-size: 13.5px !important;
+                font-size: 0.85rem !important;
             }
 
             .card-date-label {
-                font-size: 9px !important;
+                font-size: 10px !important;
             }
 
             .card-date-value {
-                font-size: 15px !important;
+                font-size: 1rem !important;
             }
 
             .card-price-value {
-                font-size: 24px !important;
+                font-size: 1.55rem !important;
+            }
+        }
+
+        /* Responsive Header Extras Hiding (< 930px) */
+        @media (max-width: 930px) {
+            .glass-header .nav-link-premium {
+                font-size: 0.85rem !important;
+                padding: 5px 10px !important;
+            }
+
+            .glass-header #langSelector,
+            .glass-header button[onclick="openQRScanner()"],
+            .glass-header button[onclick="openFavoritesPopup()"] {
+                display: none !important;
             }
         }
 
@@ -381,7 +619,7 @@
             height: 100vh;
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(3px);
-            z-index: 99;
+            z-index: 4999;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
@@ -401,7 +639,7 @@
             max-width: 300px;
             height: 100vh;
             background: #ffffff;
-            z-index: 100;
+            z-index: 5000;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
@@ -1363,7 +1601,7 @@
             bottom: 0;
             background-image: var(--current-bg);
             background-size: cover;
-            background-position: center center;
+            background-position: center bottom;
             z-index: 0;
             transition: background-image 1s ease-in-out, transform 0.8s ease;
         }
@@ -1456,8 +1694,8 @@
                 linear-gradient(135deg, var(--wander-primary), var(--wander-accent)) border-box;
             padding: 25px;
             border-radius: 26px;
-            width: 100%;
-            max-width: 1100px;
+            width: calc(100% - 60px);
+            max-width: 1400px;
             margin: 50px auto;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
             z-index: 20;
@@ -1696,6 +1934,9 @@
                 margin-right: 12px;
                 margin-bottom: 30px;
                 box-sizing: border-box;
+                background: #ffffff !important;
+                z-index: 1000 !important;
+                border-radius: 20px !important;
             }
 
             .v2-input-group {
@@ -1800,7 +2041,7 @@
             }
 
             .compact-card .text-4xl {
-                font-size: 1.25rem !important;
+                font-size: 2rem !important;
             }
 
             /* Container principal */
@@ -1919,127 +2160,12 @@
             justify-content: center;
         }
 
-        /* Base sizes for desktop (700px+) */
-        @media (min-width: 700px) {
-            .card-label {
-                font-size: 0.65rem;
-                line-height: 1.2;
-            }
+        /* Legacy desktop/tablet font rules - REPLACED by unified rules at top of file */
+        /* (Lines 189-229 now handle all font sizing) */
 
-            .card-iata {
-                font-size: 1.25rem;
-                line-height: 1.1;
-            }
+        /* Medium screens (570-699px) - now handled by unified < 770px rule */
 
-            .card-city {
-                font-size: 0.875rem;
-                line-height: 1.2;
-            }
-
-            .card-date-label {
-                font-size: 0.65rem;
-                line-height: 1.2;
-            }
-
-            .card-date-value {
-                font-size: 0.875rem;
-                line-height: 1.2;
-            }
-
-            .card-price-value {
-                font-size: 1.125rem;
-                line-height: 1.1;
-            }
-        }
-
-        /* Medium screens (570px to 699px) - FILL THE SPACE */
-        @media (min-width: 570px) and (max-width: 699px) {
-            .card-label {
-                font-size: 0.75rem;
-            }
-
-            .card-iata {
-                font-size: 1.3rem;
-                font-weight: 900;
-            }
-
-            .card-city {
-                font-size: 0.9rem;
-                max-width: 100%;
-            }
-
-            .card-date-label {
-                font-size: 0.75rem;
-            }
-
-            .card-date-value {
-                font-size: 0.9rem;
-            }
-
-            .card-price-value {
-                font-size: 1.15rem;
-            }
-
-            /* Show flags on medium screens */
-            .compact-card img[alt="flag"] {
-                display: inline-block !important;
-            }
-
-            /* Slightly larger plane icon to fill space */
-            .compact-card .bg-wander-primary {
-                width: 40px !important;
-                height: 40px !important;
-            }
-
-            .compact-card .bg-wander-primary svg {
-                width: 22px !important;
-                height: 22px !important;
-            }
-        }
-
-        /* Small screens (420px to 569px) - Balanced */
-        @media (min-width: 420px) and (max-width: 569px) {
-            .card-label {
-                font-size: 0.6rem;
-                line-height: 1.1;
-            }
-
-            .card-iata {
-                font-size: 1.05rem;
-                line-height: 1.1;
-            }
-
-            .card-city {
-                font-size: 0.75rem;
-                line-height: 1.2;
-                max-width: 100%;
-                word-break: break-word;
-            }
-
-            .card-date-label {
-                font-size: 0.6rem;
-            }
-
-            .card-date-value {
-                font-size: 0.72rem;
-                line-height: 1.1;
-            }
-
-            .card-price-value {
-                font-size: 0.95rem;
-            }
-
-            /* Reduce plane icon size for better fit */
-            .compact-card .bg-wander-primary {
-                width: 32px !important;
-                height: 32px !important;
-            }
-
-            .compact-card .bg-wander-primary svg {
-                width: 16px !important;
-                height: 16px !important;
-            }
-        }
+        /* Small screens (420-569px) - now handled by unified < 770px rule */
 
 
         .carousel {
@@ -2051,23 +2177,7 @@
             padding-bottom: 1rem;
         }
 
-        /* Keep carousel items fixed width to enable scrolling behavior */
-        .carousel .compact-card {
-            width: 280px !important;
-            flex-shrink: 0;
-        }
-
-        @media (max-width: 768px) {
-            .carousel .compact-card {
-                width: 220px !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .carousel .compact-card {
-                width: 180px !important;
-            }
-        }
+        /* Carousel card widths - now handled by unified rules at top of file */
 
         /* Custom Scrollbar for Carousel - High Visibility */
         .carousel::-webkit-scrollbar {
@@ -2173,16 +2283,6 @@
             .date-separator {
                 display: none !important;
             }
-
-            /* Increase box height relative to card (+20% effectively via padding/flex) */
-            .details-box {
-                height: 48% !important;
-                padding: 0.5rem 0.4rem !important;
-            }
-
-            .card-price-value {
-                font-size: 1rem !important;
-            }
         }
 
         /* Zone 3: 900px - 1135px (4 cols tight) */
@@ -2196,55 +2296,14 @@
             .date-separator {
                 display: none !important;
             }
-
-            /* Increase box height relative to card */
-            .details-box {
-                height: 48% !important;
-                padding: 0.5rem 0.4rem !important;
-            }
-
-            .card-price-value {
-                font-size: 1rem !important;
-            }
         }
 
 
         /* --- TYPOGRAPHY ADJUSTMENTS FOR NEW GRID --- */
 
 
-        /* Keep existing small screen internal styling but ensure it applies to the new 2-col layout */
-        /* 300-470px with 2 cols is TIGHT. Use microscopic styling */
-        @media (max-width: 470px) {
-            .card-iata {
-                font-size: 0.9rem !important;
-            }
-
-            .card-city {
-                font-size: 0.65rem !important;
-            }
-
-            .card-date-value {
-                font-size: 0.6rem !important;
-            }
-
-            .card-price-value {
-                font-size: 0.85rem !important;
-            }
-
-            .compact-card img[alt="flag"] {
-                display: none !important;
-            }
-
-            .compact-card .bg-wander-primary {
-                width: 24px !important;
-                height: 24px !important;
-            }
-
-            .compact-card .bg-wander-primary svg {
-                width: 12px !important;
-                height: 12px !important;
-            }
-        }
+        /* < 470px typography - now handled by unified < 770px rule */
+        /* Flags are always visible, sizing is consistent */
 
         /* Deals Carousel Styling */
         .deals-carousel {
@@ -2265,31 +2324,7 @@
         }
 
 
-        @media (min-width: 480px) {
-
-            .deals-carousel>*,
-            .carousel .compact-card {
-                width: 200px !important;
-            }
-        }
-
-        @media (min-width: 900px) {
-
-            .deals-carousel>*,
-            .carousel .compact-card {
-                width: 240px !important;
-            }
-        }
-
-        /* Force exactly 4 cards per row on large desktop */
-        @media (min-width: 1200px) {
-
-            .deals-carousel>*,
-            .carousel .compact-card {
-                width: calc(25% - 12px) !important;
-                max-width: 280px;
-            }
-        }
+        /* Deals carousel sizing - now handled by unified rules at top of file */
 
         @keyframes shake {
 
@@ -3415,12 +3450,12 @@
 
         .festival-glass-card {
             position: absolute;
-            top: 36%;
+            top: 28%;
+            /* Lower than 34% to allow 2-3 lines of text on large screens (iPad Pro) */
             bottom: 8px;
             left: 4%;
             width: 92%;
             height: auto;
-            /* Glass starts at 45% of image height for centering room (desktop/tablet) */
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
@@ -3443,22 +3478,24 @@
             transition: all 0.4s ease-in-out;
         }
 
-        /* Mobile: Glass 15% higher (at 35%) and text -10% */
         @media (max-width: 768px) {
             .festival-glass-card {
-                top: 35%;
+                top: 22% !important;
+                /* Unified higher top for mobile visibility */
+                padding: 12px 14px !important;
             }
 
             .fest-title {
-                font-size: 112% !important;
+                font-size: clamp(15px, 6vw, 22px) !important;
+                -webkit-line-clamp: 3 !important;
+                line-clamp: 3 !important;
             }
 
-            .fest-location {
-                font-size: clamp(12px, 1.2vw, 15px);
-            }
-
-            .fest-date-group {
-                font-size: clamp(12px, 1.5vw, 17px);
+            .fest-btn-group a,
+            .fest-btn-group button {
+                padding-top: 12px !important;
+                padding-bottom: 12px !important;
+                font-size: 11px !important;
             }
         }
 
@@ -3482,17 +3519,44 @@
         /* --- Inner Elements --- */
         .fest-title {
             color: #ffffff;
-            font-size: clamp(12px, 1.2vw, 18px);
-            margin-bottom: 2px;
+            font-size: clamp(14px, 6vw, 20px) !important;
+            font-weight: 900 !important;
+            line-height: 1.1 !important;
+            margin-bottom: 4px;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
-            line-clamp: 3;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            word-break: break-word;
             transition: all 0.4s ease;
-            /* Text Stroke 6px as requested */
-            -webkit-text-stroke: 6px var(--wander-primary);
-            paint-order: stroke fill;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.8), 0 0 1px #000;
+        }
+
+        @media (max-width: 430px) {
+            .festival-profile-container {
+                aspect-ratio: 16/20 !important;
+            }
+
+            .festival-glass-card {
+                padding: 12px 14px !important;
+                top: 22% !important;
+                /* More space for titles on iPhone 12/14 */
+            }
+
+            .fest-title {
+                -webkit-line-clamp: 3 !important;
+                line-clamp: 3 !important;
+                font-size: 115% !important;
+            }
+
+            /* Enlarge Button Group */
+            .fest-btn-group a,
+            .fest-btn-group button {
+                padding-top: 12px !important;
+                padding-bottom: 12px !important;
+                font-size: 11px !important;
+            }
         }
 
         .fest-location {
@@ -3646,7 +3710,7 @@
     </div>
 
     <!-- POPUP AU DÉMARRAGE -->
-    <div id="cityPopup" class="fixed inset-0 bg-black/70 z-[500] hidden items-center justify-center p-4">
+    <div id="cityPopup" class="fixed inset-0 bg-black/70 z-[10000] hidden items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center relative">
             <!-- Popup Loader Overlay (Scanning effect) -->
             <div id="popupLoader"
@@ -3739,8 +3803,10 @@
             <div class="hidden md:flex items-center gap-4 relative z-10">
                 <!-- Favorites Button -->
                 <button onclick="openFavoritesPopup()"
-                    class="relative p-2 rounded-full hover:bg-red-50 transition-colors group" title="My Saved Deals">
-                    <i class="fa-solid fa-heart text-2xl text-red-500 transition-transform group-hover:scale-110"></i>
+                    class="relative w-10 h-10 flex items-center justify-center rounded-full bg-gray-400/10 hover:bg-gray-400/20 transition-colors group"
+                    title="My Saved Deals">
+                    <i class="fa-solid fa-heart text-2xl transition-transform group-hover:scale-110"
+                        style="color: #a78bfa;"></i>
                     <span id="favCountBadge"
                         class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white hidden">0</span>
                 </button>
@@ -4230,17 +4296,19 @@
                             class="fa-solid fa-music mr-2"></i>Find Festivals</span>
                 </div>
                 <div class="search-row-flex flex items-center gap-2">
-                    <div class="v2-input-group">
-                        <span class="v2-label">Country</span>
-                        <select id="festivalCountryFilter" class="v2-select">
-                            <option value="">All countries</option>
-                        </select>
-                    </div>
-                    <div class="v2-input-group">
-                        <span class="v2-label">Month</span>
-                        <select id="festivalMonthFilter" class="v2-select">
-                            <option value="">Any month</option>
-                        </select>
+                    <div class="flex gap-2 w-full">
+                        <div class="v2-input-group flex-1">
+                            <span class="v2-label">Country</span>
+                            <select id="festivalCountryFilter" class="v2-select">
+                                <option value="">All countries</option>
+                            </select>
+                        </div>
+                        <div class="v2-input-group flex-1">
+                            <span class="v2-label">Month</span>
+                            <select id="festivalMonthFilter" class="v2-select">
+                                <option value="">Any month</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="v2-input-group">
                         <span class="v2-label">Sort</span>
@@ -4312,6 +4380,7 @@
         let iataToCity = {};
         let iataToCountry = {};
         let iataToCountryCode = {};
+        let cityToIata = {};
 
         const cityToCountryCode = {
             'London': 'gb', 'Paris': 'fr', 'Berlin': 'de', 'Madrid': 'es', 'Rome': 'it',
@@ -4991,6 +5060,14 @@
                                 iataToCity[iata] = normalizedCity;
                                 iataToCountry[iata] = country;
                                 if (countryCode) iataToCountryCode[iata] = countryCode;
+
+                                // Map city names to IATA (both normalized and lowercase for robust lookup)
+                                cityToIata[normalizedCity] = iata;
+                                cityToIata[normalizedCity.toLowerCase()] = iata;
+                                // Handle variants like "Frankfurt am Main" -> "Frankfurt"
+                                if (normalizedCity.includes(' ')) {
+                                    cityToIata[normalizedCity.split(' ')[0].toLowerCase()] = iata;
+                                }
                             }
                         }
                     });
@@ -6053,10 +6130,17 @@
 
                         const origin = row.city_dep;
                         const destination = row.city_dest;
-                        const depIATA = row.iata_dep;
-                        const destIATA = row.iata_dest;
+                        let depIATA = row.iata_dep || "";
+                        let destIATA = row.iata_dest || "";
 
                         if (!origin || !destination) return null;
+
+                        // CLEAN CITY NAMES for lookup (strip " (United Kingdom)" etc.)
+                        const cleanCity = (name) => name.split('(')[0].trim().toLowerCase();
+
+                        // Missing IATA recovery
+                        if (!depIATA) depIATA = cityToIata[cleanCity(origin)] || "";
+                        if (!destIATA) destIATA = cityToIata[cleanCity(destination)] || "";
 
                         // Normalize city names
                         const normalizedFrom = normalizeCity(origin, depIATA);
@@ -7301,7 +7385,7 @@
             </div>
             `;
 
-        const compactCardTemplate = (d) => {
+        const compactCardTemplate = (d, isHome = false) => {
             // Date Formatting Logic: Prepared for CSS Control
             // We split dates to allow CSS to stack them in specific breakpoints
             let dateHtml = '';
@@ -7309,9 +7393,14 @@
                 const parts = d.date.split('-').map(s => s.trim());
                 if (parts.length === 2) {
                     dateHtml = `
-                        <div class="flex flex-col md:flex-row md:items-center leading-tight">
+                        <div class="flex flex-col ${isHome ? 'sm:flex-row' : 'md:flex-row'} md:items-center leading-tight">
                             <span>${parts[0]}</span>
-                            <span class="hidden md:inline mx-1">-</span>
+                            <span class="${isHome ? 'hidden sm:inline' : 'hidden md:inline'} mx-1">-</span>
+                            <span>${parts[1]}</span>
+                        </div>
+                        <!-- Z-Fold specific vertical stack (hidden > 344px) -->
+                        <div class="hidden zfold-show-block flex-col leading-none">
+                            <span>${parts[0]}</span>
                             <span>${parts[1]}</span>
                         </div>
                      `;
@@ -7326,39 +7415,49 @@
             const depCountryCode = cityToCountryCode[d.from] || 'fr';
 
             // Main image (destination country flag/image)
-            const mainImgSrc = flagStore[d.countryCode?.toLowerCase()] || `https://flagcdn.com/w320/${d.countryCode?.toLowerCase()}.png`;
+            const destinationCC = d.countryCode?.toLowerCase() || 'fr';
+            const mainImgSrc = flagStore[destinationCC] || `https://flagcdn.com/w320/${destinationCC}.png`;
 
-            // IATA Codes (always 3 chars, no truncation)
-            const iataFrom = d.iataFrom || (d.from ? d.from.substring(0, 3).toUpperCase() : 'DEP');
-            const iataTo = d.iataTo || (d.to ? d.to.substring(0, 3).toUpperCase() : 'ARR');
+            // IATA Codes logic: PRIORITIZE CSV values, fallback to database only if empty/generic
+            let iataFrom = (d.iataFrom || '').toUpperCase();
+            let iataTo = (d.iataTo || '').toUpperCase();
+
+            // Only use electronic mapping if CSV data is missing or generic placeholder
+            const isGeneric = (code) => !code || code === 'DEP' || code === 'ARR';
+
+            if (isGeneric(iataFrom) && d.from && cityToIata[d.from.toLowerCase()]) {
+                iataFrom = cityToIata[d.from.toLowerCase()];
+            }
+            if (isGeneric(iataTo) && d.to && cityToIata[d.to.toLowerCase()]) {
+                iataTo = cityToIata[d.to.toLowerCase()];
+            }
+
+            // Absolute final fallback: substring
+            if (isGeneric(iataFrom)) iataFrom = (d.from ? d.from.substring(0, 3).toUpperCase() : 'DEP');
+            if (isGeneric(iataTo)) iataTo = (d.to ? d.to.substring(0, 3).toUpperCase() : 'ARR');
 
             // Generate unique ID for favorites
             const dealUniqueId = btoa(encodeURIComponent(`${d.from}-${d.to}-${d.date}-${d.price}`)).replace(/=/g, '');
             const isFav = typeof isDealFavorite === 'function' && isDealFavorite(dealUniqueId);
             const heartClass = isFav ? 'fa-solid text-red-500' : 'fa-regular text-white';
 
-            // Helper to generate Trip.com Layout
+            // Helper to generate Trip.com Layout (Restored version with confirmed working parameters)
             const generateTripComLink = (deal) => {
-                const iataFrom = deal.iataFrom || (deal.from ? deal.from.substring(0, 3).toUpperCase() : 'PAR');
-                const iataTo = deal.iataTo || (deal.to ? deal.to.substring(0, 3).toUpperCase() : 'XXX');
+                const cleanD = iataFrom.toLowerCase();
+                const cleanA = iataTo.toLowerCase();
 
                 let ddate = '';
                 let rdate = '';
                 let isRT = false;
 
-                // Parse date "1 Apr - 7 Apr" or "12 Mar"
                 if (deal.date) {
                     const now = new Date();
                     const currentYear = now.getFullYear();
                     const parts = deal.date.split('-');
 
                     const parsePart = (str) => {
-                        // Append current year first to try parsing
                         let d = new Date(str + " " + currentYear);
                         if (isNaN(d.getTime())) return null;
-
-                        // If date is in the past (e.g. "2 Jan" parsed in "Feb"), assume next year
-                        // Strict check: if date < today - 1 day, add 1 year.
                         if (d < new Date(now.getTime() - 86400000)) {
                             d.setFullYear(currentYear + 1);
                         }
@@ -7379,21 +7478,23 @@
 
                 if (!ddate) return deal.url || '#';
 
-                // 1. Build Base Trip.com URL (Target)
-                let targetUrl = `https://fr.trip.com/flights/showfarefirst?dcity=${iataFrom.toLowerCase()}&acity=${iataTo.toLowerCase()}`;
-                targetUrl += `&ddate=${ddate}`;
+                // Target URL matching the working example provided by USER
+                let targetUrl = `https://fr.trip.com/flights/showfarefirst`;
+                targetUrl += `?dcity=${cleanD}&acity=${cleanA}&ddate=${ddate}`;
+
                 if (isRT && rdate) {
                     targetUrl += `&rdate=${rdate}&triptype=rt`;
                 } else {
                     targetUrl += `&triptype=ow`;
                 }
+
+                // Append mandatory parameters from working example
                 targetUrl += `&class=y&lowpricesource=searchform&quantity=1&searchboxarg=t&nonstoponly=off&locale=fr-FR&curr=EUR`;
 
-                // 2. Encode for Travelpayouts (tp.media)
-                const encodedUrl = encodeURIComponent(targetUrl);
+                // Revenue Parameters (Restored as requested: AllianceID, SID)
+                targetUrl += `&allianceid=1094387&sid=1443653&SID=2209817&subMark=10001000`;
 
-                // 3. Wrapper URL
-                // marker=598952, trs=394660, p=8626, campaign_id=121
+                const encodedUrl = encodeURIComponent(targetUrl);
                 return `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
             };
 
@@ -7423,53 +7524,62 @@
 
                         <!-- Floating Info Card -->
                         <div class="absolute bg-white shadow-xl z-10"
-                            style="width: 92%; left: 4%; top: 34%; bottom: 12px; border-radius: 1rem; padding: 0.6rem 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
+                            style="width: 92%; left: 4%; ${isHome ? 'bottom: 12px; max-height: 75%;' : 'top: 34%; bottom: 12px;'} border-radius: 1rem; padding: 0.6rem 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; gap: ${isHome ? '2px' : '4px'};">
 
                             <!-- Top Row: Origin - Plane - Dest -->
-                            <div class="grid items-center relative" style="flex: 1; grid-template-columns: 1fr 28% 1fr;">
+                            <div class="grid items-center relative ${isHome ? 'zfold-grid-stack' : ''}" style="${isHome ? '' : 'flex: 1;'} grid-template-columns: 1fr 28% 1fr;">
 
-                                <!-- Origin (Left) -->
-                                <div class="flex flex-col items-start z-10" style="min-width: 0;">
-                                    <span class="card-label text-gray-400 font-black uppercase tracking-tighter">DEPART</span>
-                                    <span class="card-iata text-wander-primary font-black w-full notranslate" translate="no">${iataFrom}</span>
-                                    <div class="flex items-center gap-1.5 w-full">
-                                        <span class="card-city text-gray-800 font-black truncate flex-1 min-w-0">${d.from}</span>
-                                        ${iataToCountryCode[iataFrom] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataFrom].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm flex-shrink-0" alt="flag">` : ''}
+                                <!-- Origin (Center-Aligned for perfect symmetry) -->
+                                <div class="flex flex-col items-center text-center z-10 zfold-items-center" style="min-width: 0;">
+                                    <span class="card-label text-gray-400 font-black uppercase tracking-tighter sm-hide">DEPART</span>
+                                    <div class="flex items-center justify-center gap-1.5 w-full zfold-justify-center">
+                                        <!-- IATA Styled with theme color -->
+                                        <span class="card-iata iata-flag-fill notranslate" translate="no">${iataFrom}</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-1.5 w-full">
+                                        <span class="card-city text-gray-800 font-black truncate flex-1 min-w-0 ${isHome ? 'text-[10px]' : ''} md:text-base">${d.from}</span>
                                     </div>
                                 </div>
 
-                                <!-- Plane Icon -->
-                                <div class="flex flex-col items-center justify-center relative z-0">
+                                <!-- Plane Icon (Dynamic scale: 1.1x IATA text size) -->
+                                <div class="flex flex-col items-center justify-center relative z-0 zfold-hide" style="font-size: clamp(14px, 3.5vw, 19px);">
                                     <div class="w-full border-t-2 border-dashed border-gray-300 opacity-60"></div>
                                     <div class="absolute bg-wander-primary rounded-full flex items-center justify-center shadow-md border-2 border-white"
-                                        style="width: 38px; height: 38px; left: 50%; top: 50%; transform: translate(calc(-50% + 1px), -50%);">
+                                        style="width: 1.8em; height: 1.8em; left: 50%; top: 50%; transform: translate(-50%, -50%);">
                                         <svg class="text-white transform rotate-45"
-                                            style="width: 20px; height: 20px;"
+                                            style="width: 1.2em; height: 1.2em;"
                                             viewBox="0 0 24 24" fill="currentColor">
                                             <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
                                         </svg>
                                     </div>
                                 </div>
 
-                                <!-- Destination (Right) -->
-                                <div class="flex flex-col items-end z-10" style="min-width: 0;">
-                                    <span class="card-label text-gray-400 font-black uppercase tracking-tighter">ARRIVE</span>
-                                    <span class="card-iata text-wander-primary font-black text-right w-full notranslate" translate="no">${iataTo}</span>
-                                    <div class="flex items-center justify-end gap-1.5 w-full">
-                                        ${iataToCountryCode[iataTo] ? `<img src="https://flagcdn.com/w40/${iataToCountryCode[iataTo].toLowerCase()}.png" class="w-4 h-3 rounded-sm shadow-sm flex-shrink-0" alt="flag">` : ''}
-                                        <span class="card-city text-gray-800 font-black truncate text-right flex-1 min-w-0">${d.to}</span>
+                                <!-- Z-Fold Interchange Icon (hidden > 344px) -->
+                                <div class="hidden zfold-show-flex flex-col items-center justify-center py-0.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-wander-primary opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg>
+                                </div>
+
+                                <!-- Destination (Center-Aligned for perfect symmetry) -->
+                                <div class="flex flex-col items-center text-center z-10 zfold-items-center" style="min-width: 0;">
+                                    <span class="card-label text-gray-400 font-black uppercase tracking-tighter sm-hide">DESTINATION</span>
+                                    <div class="flex items-center justify-center gap-1.5 w-full zfold-justify-center">
+                                        <!-- IATA Styled with theme color -->
+                                        <span class="card-iata iata-flag-fill notranslate" translate="no">${iataTo}</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-1.5 w-full">
+                                        <span class="card-city text-gray-800 font-black truncate flex-1 min-w-0 ${isHome ? 'text-[10px]' : ''} md:text-base">${d.to}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Details Box -->
-                            <div class="details-box bg-gray-50 border border-gray-200 rounded-lg flex justify-center gap-6 items-start md:justify-between md:items-center md:gap-0 mt-auto flex-shrink-0 p-[0.2rem] px-2 md:p-2 md:px-3"
+                            <div class="details-box bg-gray-50 border border-gray-200 rounded-lg flex justify-center gap-6 items-start md:justify-between md:items-center md:gap-0 ${isHome ? '' : 'mt-auto'} flex-shrink-0 p-[0.2rem] px-2 md:p-2 md:px-3"
                                 style="height: auto; min-height: 42px;">
 
                                 <!-- Date -->
                                 <div class="flex flex-col items-start justify-center overflow-hidden" style="flex: 1;">
                                     <span class="card-date-label text-gray-400 font-black uppercase tracking-tighter">Dates</span>
-                                    <span class="card-date-value text-gray-800 font-black uppercase text-lg md:text-sm overflow-hidden w-full notranslate" translate="no">${dateHtml}</span>
+                                    <span class="card-date-value text-gray-800 font-black uppercase ${isHome ? 'text-sm' : 'text-lg'} md:text-sm overflow-hidden w-full notranslate" translate="no">${dateHtml}</span>
                                 </div>
 
                                 <!-- Price -->
@@ -7482,45 +7592,8 @@
                         </div>
             </a>
             `;
-
-
-
         };
 
-        const flightTicketSkeleton = () => {
-            return `
-            <div class="flight-ticket shimmer-overlay" style="border: 2px solid #e5e7eb; background: #fff;">
-                <div class="shimmer-sweep"></div>
-                <div class="ticket-top flex flex-col items-center gap-4 pt-6">
-                    <!-- Logo placeholder -->
-                    <div class="h-4 w-20 bg-gray-100 rounded-full"></div>
-                    
-                    <!-- Route placeholder -->
-                    <div class="flex flex-col items-center gap-3 w-full px-4">
-                        <div class="h-6 w-12 bg-gray-200 rounded"></div>
-                        <div class="flex items-center gap-2 w-full justify-center">
-                            <div class="h-px bg-gray-200 flex-1"></div>
-                            <div class="w-5 h-5 rounded-full bg-gray-200"></div>
-                            <div class="h-px bg-gray-200 flex-1"></div>
-                        </div>
-                        <div class="h-6 w-12 bg-gray-200 rounded"></div>
-                    </div>
-                    
-                    <!-- Dates -->
-                    <div class="h-8 w-11/12 bg-gray-50 rounded-lg mt-2"></div>
-                    
-                    <!-- Price -->
-                    <div class="mt-auto mb-2 flex flex-col items-center gap-1">
-                        <div class="h-2 w-10 bg-gray-100 rounded"></div>
-                        <div class="h-8 w-16 bg-gray-200 rounded"></div>
-                    </div>
-                </div>
-                <div class="ticket-bottom">
-                    <div class="w-14 h-14 bg-gray-200/50 rounded-md"></div>
-                </div>
-            </div>
-            `;
-        };
 
         function getMoreDealsUrl(monthStr) {
             let origin = 'PAR'; // Default
@@ -7741,7 +7814,7 @@
                 const source = allDeals.filter(d => d.price <= 100);
                 const deals = diversifyHomeDeals(source, homeDisplayedCount);
                 if (deals.length > 0) {
-                    homeDealsContainer.innerHTML = deals.map(compactCardTemplate).join('');
+                    homeDealsContainer.innerHTML = deals.map(d => compactCardTemplate(d, true)).join('');
                     if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
                 } else {
                     homeDealsContainer.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No flight deals found under €100.</p>';
@@ -7958,7 +8031,7 @@
                     html += `
                         <div class="pb-24" data-month="${monthBase}" data-total="${monthDeals.length}">
                             <!-- Header Title (Static) -->
-                            <div class="flex flex-col md:flex-row items-end justify-between mb-2 gap-4 border-b border-gray-100 pt-4 px-3 mt-4">
+                            <div class="flex flex-row items-center justify-between mb-2 gap-4 border-b border-gray-100 pt-4 px-3 mt-4">
                                 <div class="text-left">
                                      <h3 class="text-4xl md:text-6xl font-black tracking-tighter uppercase text-gray-900 mb-2 leading-none">${month} DEALS</h3>
                                      <div class="flex items-center gap-2 mb-2">
@@ -7993,30 +8066,32 @@
                 } else {
                     html += `
                         <div class="carousel-container relative group mb-16" data-month="${monthBase}">
-                            <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-4 pb-2 border-b border-gray-100 px-4 gap-3">
-                                <div class="text-left flex-1">
-                                    <h3 class="text-3xl md:text-5xl font-black tracking-tighter uppercase leading-none text-gray-900">${month}</h3>
-                                    <div class="flex items-center gap-2 mt-2">
-                                        <span class="px-3 py-1 bg-gray-100 text-gray-500 rounded-md text-xs font-bold uppercase tracking-widest">${monthDeals.length} deals</span>
-                                        ${monthDeals.length > displayCount ?
-                            `<span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md text-xs font-bold uppercase tracking-widest">Showing ${Math.min(displayCount, monthDeals.length)}</span>`
+                        <div class="flex flex-row items-center justify-between mb-4 pb-2 border-b border-gray-100 px-4 min-h-[50px] gap-2">
+                            <div class="flex items-center gap-3 overflow-hidden">
+                                <h3 class="text-xl md:text-5xl font-black tracking-tighter uppercase leading-none text-gray-900 flex-shrink-0">${month}</h3>
+                                <div class="hidden md:flex items-center gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-500 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-widest">${monthDeals.length} deals</span>
+                                    ${monthDeals.length > displayCount ?
+                            `<span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-widest">Showing ${Math.min(displayCount, monthDeals.length)}</span>`
                             : ''}
-                                    </div>
                                 </div>
+                            </div>
+                            <div class="flex-shrink-0">
                                 ${filterHTML}
                             </div>
-                            
-                            <div class="relative">
-                                <div class="carousel month-carousel pr-4 flex flex-row overflow-x-auto whitespace-nowrap scrollbar-hide py-4 items-center gap-4 pl-2" id="carousel-${shortMonth}" data-month="${monthBase}" data-count="${displayCount}" data-total="${monthDeals.length}" style="scroll-behavior: auto;">
-                                    ${diversifiedMonth.map(deal => compactCardTemplate(deal)).join('')}
-                                </div>
-                            </div>
-                            
-                            <div class="carousel-controls absolute inset-y-0 -left-4 -right-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity flex justify-between items-center z-10">
-                                <button onclick="document.getElementById('carousel-${shortMonth}').scrollBy({left: -300, behavior: 'smooth'})" class="carousel-prev bg-white/90 backdrop-blur-sm shadow-xl p-3 rounded-full pointer-events-auto hover:scale-110 border border-gray-100 text-indigo-600 transition-transform" aria-label="Previous"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
-                                <button onclick="onNextCarouselClick('carousel-${shortMonth}', '${monthBase}', ${displayCount}, ${monthDeals.length})" class="carousel-next bg-white/90 backdrop-blur-sm shadow-xl p-3 rounded-full pointer-events-auto hover:scale-110 border border-gray-100 text-indigo-600 transition-transform" aria-label="Next"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
+                        </div>
+
+                        <div class="relative">
+                            <div class="carousel month-carousel pr-4 flex flex-row overflow-x-auto whitespace-nowrap scrollbar-hide py-4 items-center gap-4 pl-2" id="carousel-${shortMonth}" data-month="${monthBase}" data-count="${displayCount}" data-total="${monthDeals.length}" style="scroll-behavior: auto;">
+                                ${diversifiedMonth.map(deal => compactCardTemplate(deal)).join('')}
                             </div>
                         </div>
+
+                        <div class="carousel-controls absolute inset-y-0 -left-4 -right-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity flex justify-between items-center z-10">
+                            <button onclick="document.getElementById('carousel-${shortMonth}').scrollBy({left: -300, behavior: 'smooth'})" class="carousel-prev bg-white/90 backdrop-blur-sm shadow-xl p-3 rounded-full pointer-events-auto hover:scale-110 border border-gray-100 text-indigo-600 transition-transform" aria-label="Previous"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+                            <button onclick="onNextCarouselClick('carousel-${shortMonth}', '${monthBase}', ${displayCount}, ${monthDeals.length})" class="carousel-next bg-white/90 backdrop-blur-sm shadow-xl p-3 rounded-full pointer-events-auto hover:scale-110 border border-gray-100 text-indigo-600 transition-transform" aria-label="Next"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
+                        </div>
+                    </div>
                     `;
                 }
             });
@@ -8088,7 +8163,7 @@
 
             // Load more deals if we are at/near end and more are available
             if (currentCount < totalAvailable && (atEnd || nearEnd)) {
-                console.log(`[Carousel] Loading more deals for ${monthKey} (${currentCount} -> ${currentCount + 50})`);
+                console.log(`[Carousel] Loading more deals for ${monthKey}(${currentCount} -> ${currentCount + 50})`);
                 expandDealsCarousel(monthKey, currentCount + 50);
 
                 // After re-render, scroll forward to reveal new items
