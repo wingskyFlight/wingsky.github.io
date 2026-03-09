@@ -97,8 +97,7 @@
         /* Each property scales progressively with viewport width */
 
         #homeDeals .card-iata {
-            /* Reduced by 15% (0.85x) for a cleaner look: 0.935rem - 1.32rem */
-            font-size: clamp(0.935rem, 0.72rem + 2.1vw, 1.32rem) !important;
+            font-size: clamp(17px, 3.5vw, 19px) !important;
             line-height: 1.1 !important;
         }
 
@@ -109,7 +108,7 @@
         }
 
         #homeDeals .compact-card-aspect {
-            aspect-ratio: 17/18 !important;
+            aspect-ratio: 17/19 !important;
         }
 
         #homeDeals .card-date-value {
@@ -244,6 +243,13 @@
             }
         }
 
+        /* Fluid Flag Scaling: H3 (12px) to H5 (20px) for Mobile/Tablet */
+        .flag-responsive {
+            height: clamp(12px, 4vw, 20px) !important;
+            width: auto;
+            aspect-ratio: 5 / 3.2;
+        }
+
         .compact-card-aspect {
             aspect-ratio: 17/19;
         }
@@ -322,7 +328,7 @@
         }
 
         .card-iata {
-            font-size: clamp(14px, 3.5vw, 19px);
+            font-size: clamp(17px, 3.5vw, 19px);
             line-height: 1.1;
             display: inline-block;
             letter-spacing: 2px;
@@ -6198,6 +6204,7 @@
                             date: row.date || "",
                             url: finalUrl,
                             countryCode: cc ? cc.toLowerCase() : 'un',
+                            depCountryCode: (row.country_dep_code || iataToCountryCode[depIATA.toUpperCase()] || 'un').toLowerCase(),
                             iataFrom: depIATA,
                             iataTo: destIATA
                         };
@@ -6718,7 +6725,10 @@
             // FESTIVALS : Peupler le dropdown de mois avec TOUS les 12 mois
             const festivalMonthEl = document.getElementById('festivalMonthFilter');
             if (festivalMonthEl) {
-                festivalMonthEl.innerHTML = '<option value="">All Months</option>' + monthNames.map(m => `<option value="${m}">${m}</option>`).join('');
+                const currentMonth = new Date().getMonth();
+                const upcomingMonths = monthNames.filter((_, index) => index >= currentMonth);
+                festivalMonthEl.innerHTML = '<option value="">All Months</option>' +
+                    upcomingMonths.map(m => `<option value="${m}">${m}</option>`).join('');
             }
 
             // INITIALIZATION: Set default selection and update 'available destinations'
@@ -7412,7 +7422,7 @@
             }
 
             // Get departure country code for flag
-            const depCountryCode = cityToCountryCode[d.from] || 'fr';
+            const depCountryCode = d.depCountryCode || 'un';
 
             // Main image (destination country flag/image)
             const destinationCC = d.countryCode?.toLowerCase() || 'fr';
@@ -7435,6 +7445,8 @@
             // Absolute final fallback: substring
             if (isGeneric(iataFrom)) iataFrom = (d.from ? d.from.substring(0, 3).toUpperCase() : 'DEP');
             if (isGeneric(iataTo)) iataTo = (d.to ? d.to.substring(0, 3).toUpperCase() : 'ARR');
+
+            const iconScale = isHome ? 'clamp(15px, 3vw, 17px)' : 'clamp(17px, 3.5vw, 19px)';
 
             // Generate unique ID for favorites
             const dealUniqueId = btoa(encodeURIComponent(`${d.from}-${d.to}-${d.date}-${d.price}`)).replace(/=/g, '');
@@ -7539,10 +7551,14 @@
                                     <div class="flex items-center justify-center gap-1.5 w-full">
                                         <span class="card-city text-gray-800 font-black truncate flex-1 min-w-0 ${isHome ? 'text-[10px]' : ''} md:text-base">${d.from}</span>
                                     </div>
+                                    <!-- Country Flag -->
+                                    <div class="mt-1">
+                                        <img src="https://flagcdn.com/w40/${depCountryCode}.png" class="${isHome ? 'flag-responsive' : 'h-5 w-8'} object-cover rounded shadow-sm border border-white/40" onerror="this.style.display='none'">
+                                    </div>
                                 </div>
 
                                 <!-- Plane Icon (Dynamic scale: 1.1x IATA text size) -->
-                                <div class="flex flex-col items-center justify-center relative z-0 zfold-hide" style="font-size: clamp(14px, 3.5vw, 19px);">
+                                <div class="flex flex-col items-center justify-center relative z-0 zfold-hide" style="font-size: ${iconScale};">
                                     <div class="w-full border-t-2 border-dashed border-gray-300 opacity-60"></div>
                                     <div class="absolute bg-wander-primary rounded-full flex items-center justify-center shadow-md border-2 border-white"
                                         style="width: 1.8em; height: 1.8em; left: 50%; top: 50%; transform: translate(-50%, -50%);">
@@ -7568,6 +7584,10 @@
                                     </div>
                                     <div class="flex items-center justify-center gap-1.5 w-full">
                                         <span class="card-city text-gray-800 font-black truncate flex-1 min-w-0 ${isHome ? 'text-[10px]' : ''} md:text-base">${d.to}</span>
+                                    </div>
+                                    <!-- Country Flag -->
+                                    <div class="mt-1">
+                                        <img src="https://flagcdn.com/w40/${destinationCC}.png" class="${isHome ? 'flag-responsive' : 'h-5 w-8'} object-cover rounded shadow-sm border border-white/40" onerror="this.style.display='none'">
                                     </div>
                                 </div>
                             </div>
