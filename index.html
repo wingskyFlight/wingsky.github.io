@@ -11,6 +11,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Wingsky – Real Flight Deals</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'wander-primary': '#5D3FD3',
+                        'wander-primaryDark': '#4830a6',
+                        'wander-accent': '#FFD700',
+                        'wander-bg': '#EBF2F7',
+                    },
+                    backgroundImage: {
+                        'wander-gradient': 'linear-gradient(135deg, #5D3FD3, #8E2DE2)',
+                    }
+                }
+            }
+        }
+    </script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <link
@@ -90,89 +107,89 @@
         /* ============================================
            HOME DEALS (FLIGHTS) - FLUID RESPONSIVE SYSTEM
            Uses clamp() for smooth, continuous scaling.
-           Scoped to #homeDeals only — Deals carousels untouched.
+           Scoped to .home-grid only — Deals carousels untouched.
            ============================================ */
 
         /* ---- FLUID TYPOGRAPHY: applies from 344px -> 1120px ---- */
         /* Each property scales progressively with viewport width */
 
-        #homeDeals .card-iata {
-            font-size: clamp(17px, 3.5vw, 19px) !important;
+        .home-grid .card-iata {
+            font-size: clamp(17px, 3.5vw, 22px) !important;
             line-height: 1.1 !important;
         }
 
-        #homeDeals .card-city {
+        .home-grid .card-city {
             /* 9px at 345px → 14px at 768px → 15px at 1120px */
             font-size: clamp(9px, 2px + 2vw, 15px) !important;
             line-height: 1.2 !important;
         }
 
-        #homeDeals .compact-card-aspect {
-            aspect-ratio: 17/19 !important;
+        .home-grid .compact-card-aspect {
+            aspect-ratio: 17/25 !important;
         }
 
-        #homeDeals .card-date-value {
+        .home-grid .card-date-value {
             /* 9px at 345px → 11px at 768px → 12px at 1120px */
-            font-size: clamp(9px, 5px + 1.1vw, 12px) !important;
+            font-size: clamp(14.5px, 5px + 1.1vw, 14px) !important;
             line-height: 1.15 !important;
         }
 
-        #homeDeals .card-price-value {
+        .home-grid .card-price-value {
             /* 1.2rem at 345px → 1.55rem at 1120px */
             font-size: clamp(1.2rem, 0.8rem + 2vw, 1.55rem) !important;
             line-height: 1 !important;
         }
 
-        #homeDeals .card-label,
-        #homeDeals .card-date-label {
+        .home-grid .card-label,
+        .home-grid .card-date-label {
             /* 7px → 10px fluid */
             font-size: clamp(7px, 5px + 0.6vw, 10px) !important;
         }
 
         /* ---- Galaxy Z Fold 5 (≤ 344px) - pinned overrides ---- */
         @media (max-width: 344px) {
-            #homeDeals .card-iata {
+            .home-grid .card-iata {
                 font-size: 1.05rem !important;
             }
 
             /* Plane Icon: Refined scaling (2.2em circle, 1.35em SVG) */
-            #homeDeals .compact-card .absolute.bg-wander-primary.rounded-full {
+            .home-grid .compact-card .absolute.bg-wander-primary.rounded-full {
                 width: 2.2em !important;
                 height: 2.2em !important;
             }
 
-            #homeDeals .compact-card .absolute.bg-wander-primary.rounded-full svg {
+            .home-grid .compact-card .absolute.bg-wander-primary.rounded-full svg {
                 width: 1.35em !important;
                 height: 1.35em !important;
             }
 
-            #homeDeals .card-city {
+            .home-grid .card-city {
                 font-size: 8px !important;
                 white-space: normal !important;
                 word-break: break-word !important;
             }
 
-            #homeDeals .card-date-value {
+            .home-grid .card-date-value {
                 font-size: 7px !important;
             }
 
-            #homeDeals .card-price-value {
+            .home-grid .card-price-value {
                 font-size: 1.1rem !important;
             }
 
-            #homeDeals .card-date-label,
-            #homeDeals .card-label {
+            .home-grid .card-date-label,
+            .home-grid .card-label {
                 font-size: 5.5px !important;
             }
 
             /* Tighten the floating info card padding on ultra-small */
-            #homeDeals .compact-card .absolute.bg-white.shadow-xl {
+            .home-grid .compact-card .absolute.bg-white.shadow-xl {
                 padding: 0.25rem 0.35rem !important;
                 bottom: 8px !important;
                 top: auto !important;
             }
 
-            #homeDeals .zfold-grid-stack {
+            .home-grid .zfold-grid-stack {
                 display: flex !important;
                 flex-direction: column !important;
                 align-items: center !important;
@@ -180,38 +197,42 @@
                 grid-template-columns: none !important;
             }
 
-            #homeDeals .zfold-hide {
+            .home-grid .zfold-hide {
                 display: none !important;
             }
 
-            #homeDeals .zfold-show-block {
+            .home-grid .zfold-show-block {
                 display: block !important;
             }
 
-            #homeDeals .zfold-show-flex {
+            .home-grid .zfold-show-flex {
                 display: flex !important;
             }
 
-            #homeDeals .zfold-items-center {
+            .home-grid .zfold-items-center {
                 align-items: center !important;
                 text-align: center !important;
             }
 
-            #homeDeals .zfold-text-center {
+            .home-grid .zfold-text-center {
                 text-align: center !important;
             }
 
-            #homeDeals .zfold-justify-center {
+            .home-grid .zfold-justify-center {
                 justify-content: center !important;
             }
 
-            #homeDeals .sm-hide {
+            .home-grid .sm-hide {
                 display: none !important;
             }
 
             /* Date specific for ZFold */
-            #homeDeals .card-date-value div:not(.zfold-show-block) {
+            .home-grid .card-date-value div:not(.zfold-show-block) {
                 display: none !important;
+            }
+
+            .compact-card .text-4xl {
+                font-size: 0.8rem !important;
             }
         }
 
@@ -219,27 +240,40 @@
         /* The clamp() already handles this zone, this rule ensures the city
            minimum is slightly bigger on actual phones */
         @media (min-width: 345px) and (max-width: 430px) {
-            #homeDeals .card-city {
+            .home-grid .card-city {
                 font-size: clamp(8.3px, 1px + 1.9vw, 10px) !important;
             }
 
-            #homeDeals .card-date-value {
+            .home-grid .card-date-value {
                 font-size: clamp(11px, 5px + 0.9vw, 10px) !important;
             }
+
+            .compact-card .text-4xl {
+                font-size: 1.3rem !important;
+            }
+
         }
 
         /* ---- 768px → 1120px: ensure grid gap is tighter so cards fill space ---- */
         @media (min-width: 768px) and (max-width: 1120px) {
-            #homeDeals.home-grid {
+            .home-grid {
                 gap: 8px !important;
+            }
+
+            .compact-card .text-4xl {
+                font-size: 1.8rem !important;
             }
         }
 
         /* ---- 900px → 1120px: 3-col grid, bump card sizes ---- */
         @media (min-width: 900px) and (max-width: 1120px) {
-            #homeDeals.home-grid {
+            .home-grid {
                 grid-template-columns: repeat(3, 1fr) !important;
                 gap: 10px !important;
+            }
+
+            .compact-card .text-4xl {
+                font-size: 2rem !important;
             }
         }
 
@@ -348,13 +382,13 @@
                 height: 2.2em !important;
             }
 
-            /* Specific scaling for FLIGHTS (Home) - Refined 2.2em/1.35em */
-            #homeDeals .compact-card .absolute.bg-wander-primary.rounded-full {
+            /* Specific scaling for ALL GRIDS - Refined 2.2em/1.35em */
+            .home-grid .compact-card .absolute.bg-wander-primary.rounded-full {
                 width: 2.2em !important;
                 height: 2.2em !important;
             }
 
-            #homeDeals .compact-card .absolute.bg-wander-primary.rounded-full svg {
+            .home-grid .compact-card .absolute.bg-wander-primary.rounded-full svg {
                 width: 1.35em !important;
                 height: 1.35em !important;
             }
@@ -380,8 +414,33 @@
 
         .card-date-value {
             font-size: 11px;
+            font-weight: 900 !important;
             line-height: 1.2;
             letter-spacing: -0.01em;
+        }
+
+        @media (min-width: 768px) {
+            .card-iata {
+                font-size: 1.1rem;
+            }
+
+            .card-city {
+                font-size: 1rem;
+            }
+
+            .card-date-value span {
+                font-size: 0.9rem !important;
+            }
+        }
+
+        @media (min-width: 1120px) {
+            .card-iata {
+                font-size: 1.25rem;
+            }
+
+            .card-date-value span {
+                font-size: 1rem !important;
+            }
         }
 
         .card-price-value {
@@ -404,9 +463,7 @@
                 font-size: 10px !important;
             }
 
-            .card-date-value {
-                font-size: 1rem !important;
-            }
+
 
             .card-price-value {
                 font-size: 1.55rem !important;
@@ -431,9 +488,7 @@
                 font-size: 10px !important;
             }
 
-            .card-date-value {
-                font-size: 1rem !important;
-            }
+
 
             .card-price-value {
                 font-size: 1.55rem !important;
@@ -1561,6 +1616,9 @@
     <style>
         /* --- INTEGRATION DES STYLES V2/V3 --- */
         :root {
+            --wander-primary: #5D3FD3;
+            --wander-primaryDark: #4830a6;
+            --wander-accent: #FFD700;
             --primary-yellow: #F4D03F;
             --bg-body: #EBF2F7;
             --bg-white: #FFFFFF;
@@ -2046,9 +2104,9 @@
                 font-size: 0.9rem !important;
             }
 
-            .compact-card .text-4xl {
-                font-size: 2rem !important;
-            }
+            /* .compact-card .text-4xl {
+                font-size: 1.8rem !important;
+            } */
 
             /* Container principal */
             .container {
@@ -4280,7 +4338,7 @@
         <section id="festivals" class="hidden relative text-center pt-12">
             <!-- Abstract Gradient Background -->
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-[800px] -z-10 overflow-hidden"
-                style="mask-image: linear-gradient(to bottom, black 70%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);">
+                style="mask-image: linear-gradient(to bottom, black 70%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%); mask: linear-gradient(to bottom, black 70%, transparent 100%);">
                 <div
                     class="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-wander-primary/40 rounded-full blur-[100px]">
                 </div>
@@ -4349,22 +4407,82 @@
 
     <!-- FLIGHT MODAL -->
     <div id="flightModal"
-        class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4 overflow-y-auto backdrop-blur-sm transition-all duration-300">
+        class="fixed inset-0 bg-black/80 z-[10000] hidden items-center justify-center p-0 sm:p-4 md:p-8 overflow-y-auto backdrop-blur-sm transition-all duration-300">
         <div
-            class="bg-white rounded-[2rem] shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col my-8 modal-gradient-bg border border-white/20">
-            <div class="p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
-                <div>
-                    <h2 id="modalTitle" class="text-3xl font-black text-gray-900"></h2>
-                    <p id="modalSubtitle" class="text-gray-600 mt-1"></p>
+            class="bg-white rounded-none sm:rounded-[2rem] shadow-2xl w-full sm:max-w-[1250px] min-h-[100dvh] sm:min-h-0 h-full sm:h-auto max-h-none sm:max-h-[90vh] overflow-hidden flex flex-col modal-gradient-bg border border-white/20 sm:my-auto">
+            <div
+                class="px-4 py-5 sm:p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10 shrink-0">
+                <div class="min-w-0 flex-1 pr-4">
+                    <h2 id="modalTitle" class="text-xl sm:text-3xl font-black text-gray-900 leading-tight break-words">
+                    </h2>
+                    <p id="modalSubtitle" class="text-xs sm:text-base text-gray-600 mt-1 truncate"></p>
                 </div>
-                <button onclick="closeFlightModal()" class="p-2 rounded-full hover:bg-gray-100 transition"
-                    aria-label="Close modal">
-                    <i data-lucide="x" class="w-8 h-8"></i>
+                <div class="flex items-center justify-end">
+                    <button onclick="closeFlightModal()"
+                        class="p-2 -mr-2 sm:mr-0 rounded-full hover:bg-gray-100 transition shrink-0 flex items-center justify-center"
+                        aria-label="Close modal">
+                        <i data-lucide="x" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="modalContent"
+                class="px-0 py-6 sm:p-6 overflow-x-hidden overflow-y-auto flex-1 flex flex-col gap-6 sm:gap-8 w-full max-w-[100vw]">
+                <!-- Featured Flight (Your Choice) -->
+                <div id="featuredFlightContainer" class="hidden px-4 sm:px-0 w-full overflow-hidden">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span
+                            class="px-3 py-1 bg-wander-primary/10 text-wander-primary rounded-full text-[10px] font-black uppercase tracking-widest border border-wander-primary/20">Your
+                            Choice</span>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-wander-primary/20 to-transparent"></div>
+                    </div>
+                    <div id="featuredFlightSlot" class="w-full max-w-md mx-auto"></div>
+                </div>
+
+                <!-- Suggested Grid -->
+                <div class="w-full overflow-hidden">
+                    <div class="flex items-center gap-3 mb-6 px-4 sm:px-0 w-full">
+                        <span
+                            class="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-gray-200">Suggested
+                            Hubs</span>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-gray-200 to-transparent"></div>
+                    </div>
+                    <div id="suggestedFlightsGrid" class="home-grid w-full"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTHER CITY MODAL (SUB-MODAL) -->
+    <div id="otherCityModal"
+        class="fixed inset-0 bg-black/60 z-[10000] hidden items-center justify-center p-4 backdrop-blur-md transition-all duration-300">
+        <div class="bg-white rounded-[2.5rem] shadow-2xl max-w-md w-full p-8 border border-white/40 transform scale-95 transition-transform duration-300"
+            id="otherCityModalInner">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-black text-gray-900" style="font-family: 'Luckiest Guy', cursive;">Search
+                    Wingsky</h3>
+                <button onclick="closeOtherCityModal()" class="p-2 rounded-full hover:bg-gray-100 transition">
+                    <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <div id="modalContent" class="p-6 overflow-y-auto flex-1">
-                <!-- Flight cards will be inserted here -->
+
+            <div class="space-y-6">
+                <div class="relative">
+                    <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                    </div>
+                    <input type="text" id="otherCityInput" placeholder="Enter departure city..."
+                        class="w-full h-16 pl-14 pr-6 rounded-2xl border-2 border-gray-100 bg-gray-50 text-lg font-bold focus:border-wander-primary focus:bg-white outline-none transition-all shadow-inner">
+                </div>
+
+                <button onclick="confirmOtherCity()"
+                    class="w-full h-16 bg-gradient-to-r from-wander-primary to-wander-accent text-white text-xl font-bold rounded-2xl shadow-xl flex items-center justify-center gap-3 transform active:scale-95 transition-all"
+                    style="font-family: 'Luckiest Guy', cursive; letter-spacing: 1px; text-shadow: 2px 2px 0px #5d3fd3;">
+                    VALIDATE
+                    <i data-lucide="check-circle" class="w-6 h-6"></i>
+                </button>
             </div>
+            <p class="mt-4 text-center text-gray-400 text-xs font-medium uppercase tracking-widest">Premium Flight
+                Selection</p>
         </div>
     </div>
 
@@ -4846,81 +4964,75 @@
         // SEARCH EXECUTION (Routes to Trip.com or Aviasales)
         // ============================================================================
         function performSearchProject() {
-            const originIATA = searchState.originIATA;
-            if (!originIATA) {
+            const originIATA = (searchState.originIATA || 'PAR').toUpperCase();
+            const destIATA = (searchState.destType === 'anywhere' ? '' : (searchState.destIATA || '')).toUpperCase();
+
+            if (!searchState.originIATA && searchState.destType !== 'anywhere') {
                 document.getElementById('searchHomeError')?.classList.remove('hidden');
                 return;
             }
             document.getElementById('searchHomeError')?.classList.add('hidden');
 
-            const destIATA = searchState.destType === 'anywhere' ? null : searchState.destIATA;
-
-            // Determine date range
-            let startDate, endDate;
             const today = new Date();
-
-            if (searchState.dateMode === 'month' && searchState.selectedMonth) {
-                const { month, year } = searchState.selectedMonth;
-                startDate = new Date(year, month - 1, 1);
-                endDate = new Date(year, month, 0);
-            } else if (searchState.departureDate) {
-                startDate = searchState.departureDate;
-                endDate = searchState.returnDate || new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
-            } else {
-                // Flexible Mode: Next 3 months
-                startDate = new Date(today);
-                startDate.setDate(startDate.getDate() + 7);
-                endDate = new Date(today);
-                endDate.setMonth(endDate.getMonth() + 3);
-            }
-
-            // Format: YYYY-MM-DD for Trip.com
             const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-            const ddateStr = (searchState.dateMode === 'exact' && searchState.tripType === 'oneway')
-                ? fmt(startDate)
-                : `${fmt(startDate)},${fmt(endDate)}`; // Use comma separator for Trip.com range
-            const tripTypeParam = (searchState.tripType === 'oneway') ? 'ow' : 'rt';
 
-            // ROUTING LOGIC:
-            // - If Anywhere or Flexible/Monthly date: Trip.com Explore
-            // - If Specific City + Exact Dates: Aviasales
-            if (searchState.destType === 'anywhere' || searchState.dateMode !== 'exact') {
-                // Trip.com Explore
-                let tripUrl = `https://www.trip.com/flights/explore?dcity=${originIATA}&ddate=${ddateStr}&triptype=${tripTypeParam}&class=y&quantity=1&searchboxarg=t&nonstoponly=off&locale=en-XX&curr=EUR`;
+            let tripUrl = "";
+            const isRT = searchState.tripType === 'roundtrip';
+            const tripTypeParam = isRT ? 'rt' : 'ow';
 
-                // Add return date only if NOT one-way
-                if (searchState.tripType !== 'oneway') {
-                    tripUrl += `&rdate=${ddateStr}`;
-                }
+            // --- DEPARTURE & RETURN PROCESSING ---
+            let ddateVal = "";
+            let rdateVal = "";
 
-                // If specific destination city but flexible/month date, append acity
-                if (searchState.destType === 'city' && destIATA) {
-                    tripUrl += `&acity=${destIATA.toLowerCase()}`;
-                }
+            // Mode 1: EXACT DATES (Use showfarefirst)
+            if (searchState.dateMode === 'exact' && searchState.departureDate) {
+                ddateVal = fmt(searchState.departureDate);
+                rdateVal = (isRT && searchState.returnDate) ? fmt(searchState.returnDate) : "";
 
-                const encodedUrl = encodeURIComponent(tripUrl);
-                const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
-                window.open(finalUrl, '_blank');
-            } else if (destIATA && searchState.departureDate) {
-                // Aviasales Specific Route
-                const depStr = `${String(searchState.departureDate.getDate()).padStart(2, '0')}${String(searchState.departureDate.getMonth() + 1).padStart(2, '0')}`;
-                let aviasalesUrl = `https://www.aviasales.com/search/${originIATA}${depStr}${destIATA}`;
-                if (searchState.tripType === 'roundtrip' && searchState.returnDate) {
-                    const retStr = `${String(searchState.returnDate.getDate()).padStart(2, '0')}${String(searchState.returnDate.getMonth() + 1).padStart(2, '0')}`;
-                    aviasalesUrl += retStr;
-                }
-                aviasalesUrl += '1'; // 1 Passenger
-
-                const encodedUrl = encodeURIComponent(aviasalesUrl);
-                const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=4114&u=${encodedUrl}&campaign_id=100`;
-                window.open(finalUrl, '_blank');
-            } else {
-                // Fallback to Trip.com
-                let tripUrl = `https://www.trip.com/flights/explore?dcity=${originIATA}&ddate=${ddateStr}&triptype=${tripTypeParam}&class=y&quantity=1&searchboxarg=t&nonstoponly=off&locale=en-XX&curr=EUR`;
-                const encodedUrl = encodeURIComponent(tripUrl);
-                const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
-                window.open(finalUrl, '_blank');
+                tripUrl = `https://fr.trip.com/flights/showfarefirst?dcity=${originIATA.toLowerCase()}&acity=${destIATA.toLowerCase() || 'lon'}&ddate=${ddateVal}&triptype=${tripTypeParam}&class=y&lowpricesource=searchform&quantity=1&searchboxarg=t&nonstoponly=off&locale=fr-FR&curr=EUR`;
+                if (isRT && rdateVal) tripUrl += `&rdate=${rdateVal}`;
             }
+            // Mode 2: MONTHLY (Use explore)
+            else if (searchState.dateMode === 'month' && searchState.selectedMonth) {
+                const startDep = new Date(searchState.selectedMonth.year, searchState.selectedMonth.month - 1, 1);
+                const endDep = new Date(searchState.selectedMonth.year, searchState.selectedMonth.month, 0);
+                ddateVal = `${fmt(startDep)},${fmt(endDep)}`;
+
+                if (isRT) {
+                    const retMonth = searchState.selectedReturnMonth || searchState.selectedMonth;
+                    const startRet = new Date(retMonth.year, retMonth.month - 1, 1);
+                    const endRet = new Date(retMonth.year, retMonth.month, 0);
+                    rdateVal = `${fmt(startRet)},${fmt(endRet)}`;
+                }
+
+                tripUrl = `https://www.trip.com/flights/explore?dcity=${originIATA}&ddate=${ddateVal}&triptype=${tripTypeParam}&class=y&curr=EUR&locale=en-XX&nonstoponly=off&quantity=1&searchboxarg=t`;
+                if (destIATA) tripUrl += `&acity=${destIATA.toLowerCase()}`;
+                if (isRT) tripUrl += `&rdate=${rdateVal}`;
+            }
+            // Mode 3: FLEXIBLE (Use explore with specific range)
+            else {
+                if (searchState.departureDate && searchState.returnDate) {
+                    ddateVal = `${fmt(searchState.departureDate)},${fmt(searchState.returnDate)}`;
+                    rdateVal = ddateVal;
+                } else {
+                    // Fallback Anytime
+                    const startF = new Date(today); startF.setDate(startF.getDate() + 1);
+                    const endF = new Date(today); endF.setMonth(endF.getMonth() + 6);
+                    ddateVal = `${fmt(startF)},${fmt(endF)}`;
+                    rdateVal = ddateVal;
+                }
+
+                tripUrl = `https://www.trip.com/flights/explore?dcity=${originIATA}&ddate=${ddateVal}&triptype=${tripTypeParam}&class=y&curr=EUR&locale=en-XX&nonstoponly=off&quantity=1&searchboxarg=t`;
+                if (destIATA) tripUrl += `&acity=${destIATA.toLowerCase()}`;
+                if (isRT) tripUrl += `&rdate=${rdateVal}`;
+            }
+
+            // Append Tracking
+            tripUrl += `&allianceid=1094387&sid=1443653&SID=2209817`;
+
+            const encodedUrl = encodeURIComponent(tripUrl);
+            const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
+            window.open(finalUrl, '_blank');
         }
 
         // ============================================================================
@@ -5266,7 +5378,7 @@
                         // Re-use compactCardTemplate logic but wrapped differently if needed
                         // Or simply inject the card HTML. 
                         // Warning: compactCardTemplate expects raw deal object.
-                        return compactCardTemplate(f.data);
+                        return compactCardTemplate(f.data, true);
                     }).join('')
                 }
                         </div>
@@ -5585,7 +5697,7 @@
                                 </a>
                                 <button 
                                    class="fest-btn-flight flex-1 flex items-center justify-center gap-1.5 px-1 py-2 bg-gradient-to-r from-wander-primary to-wander-accent text-white font-black hover:from-wander-primaryDark hover:to-wander-primary active:scale-95 transition-all text-[10px] sm:text-xs whitespace-nowrap"
-                                   onclick="event.stopPropagation(); showFlightsModal('${f.city.replace(/'/g, "\\'")}', '${f.month}', '${f.title.replace(/'/g, "\\'")}', '${f.start || ''}');">
+                                   onclick="event.stopPropagation(); showFlightsModal('${f.city.replace(/'/g, "\\'")}', '${f.month}', '${f.title.replace(/'/g, "\\'")}', '${f.start || ''}', '${f.end || ''}');">
                                     <i data-lucide="plane" class="w-3 h-3"></i>
                                     <span>FLIGHTS</span>
                                 </button>
@@ -5608,128 +5720,161 @@
             }
         }
 
-        async function showFlightsModal(city, month, festivalTitle, festivalStartDate = '') {
+        async function showFlightsModal(city, month, festivalTitle, festivalStartDate = '', festivalEndDate = '') {
             const modal = document.getElementById('flightModal');
             const modalTitle = document.getElementById('modalTitle');
             const modalSubtitle = document.getElementById('modalSubtitle');
-            const modalContent = document.getElementById('modalContent');
+            const grid = document.getElementById('suggestedFlightsGrid');
+            const featuredContainer = document.getElementById('featuredFlightContainer');
+            const featuredSlot = document.getElementById('featuredFlightSlot');
 
-            // SMART DATE LOGIC: Calculate arrival date (1 day before festival start)
-            let targetArrivalDate = '';
+            if (!modal || !grid) return;
+
+            // Variables for later use in "Other" logic
+            let flightDateRange = '';
             let subtitleText = `Premium Flight Manifest to ${city}`;
+            const festival = allFestivals.find(f => f.title === festivalTitle);
+            const endD = festivalEndDate || (festival ? festival.end : '');
 
+            // DATE CALCULATION
             if (festivalStartDate) {
                 try {
-                    // Parse the festival start date (format: YYYY-MM-DD or DD-MM-YYYY)
-                    let festivalDate;
-                    if (festivalStartDate.includes('-')) {
-                        const parts = festivalStartDate.split('-');
-                        if (parts[0].length === 4) {
-                            // YYYY-MM-DD format
-                            festivalDate = new Date(festivalStartDate);
-                        } else {
-                            // DD-MM-YYYY format
-                            festivalDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-                        }
-                    } else {
-                        festivalDate = new Date(festivalStartDate);
+                    const parseD = (s) => {
+                        if (!s) return null;
+                        const parts = s.includes('-') ? s.split('-') : [s];
+                        if (parts[0].length === 4) return new Date(s);
+                        return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                    };
+                    const start = parseD(festivalStartDate);
+                    const end = parseD(endD);
+                    if (start && !isNaN(start.getTime())) {
+                        const arrivalDate = new Date(start);
+                        arrivalDate.setDate(arrivalDate.getDate() - 1);
+                        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+                        const fmtShort = (d) => `${d.getDate()} ${months[d.getMonth()]}`;
+                        flightDateRange = end && !isNaN(end.getTime()) ? `${fmtShort(arrivalDate)} - ${fmtShort(end)}` : fmtShort(arrivalDate);
+                        subtitleText = `Flights arriving ${arrivalDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} (1 day before festival)`;
                     }
-
-                    // Calculate -1 day
-                    const arrivalDate = new Date(festivalDate);
-                    arrivalDate.setDate(arrivalDate.getDate() - 1);
-
-                    // Format for display
-                    const options = { month: 'short', day: 'numeric', year: 'numeric' };
-                    const formattedDate = arrivalDate.toLocaleDateString('en-US', options);
-                    targetArrivalDate = arrivalDate.toISOString().split('T')[0]; // YYYY-MM-DD
-
-                    subtitleText = `Flights arriving ${formattedDate} (1 day before festival)`;
-                    console.log(`🎯 Smart Date: Festival starts ${festivalStartDate}, showing flights for ${targetArrivalDate}`);
-                } catch (e) {
-                    console.warn('⚠️ Could not parse festival date:', festivalStartDate, e);
-                }
+                } catch (e) { console.warn('⚠️ Date parse error:', e); }
             }
 
-            // Set title
             modalTitle.textContent = festivalTitle;
             modalSubtitle.textContent = subtitleText;
-
-            // Show loading state with skeletons
-            modalContent.innerHTML = `
-                <div class="tickets-container">
-                    ${Array(3).fill(0).map(() => `
-                        <div class="city-flight-box">
-                            <div class="city-box-header px-4">
-                                <div class="w-8 h-8 rounded bg-gray-200 animate-pulse"></div>
-                                <div class="space-y-2 flex-1">
-                                    <div class="h-4 w-1/3 bg-gray-200 rounded animate-pulse"></div>
-                                    <div class="h-3 w-1/4 bg-gray-100 rounded animate-pulse"></div>
-                                </div>
-                            </div>
-                            <div class="city-tickets-row">
-                                ${flightTicketSkeleton()}
-                                ${flightTicketSkeleton()}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
+            featuredContainer.classList.add('hidden');
+            grid.innerHTML = Array(6).fill(0).map(() => compactCardSkeleton()).join('');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
-            if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
 
-            let matchingFlights = [];
-            // Robust match for festival link and image
-            const festival = allFestivals.find(f =>
-                (f.title && f.title.toLowerCase() === festivalTitle.toLowerCase()) ||
-                (f.title && f.city && `${f.title} (${f.city})`.toLowerCase() === festivalTitle.toLowerCase())
-            );
-            const festivalImg = festival ? (R2_BASE_URL ? `${R2_BASE_URL}/festivals_images/${festival.month}/${festival.image}` : `data/inputs/festivals/festivals_images/${festival.month}/${festival.image}`) : '';
-            const festivalLink = (festival && festival.link && festival.link !== '#') ? festival.link : 'https://Wingsky.com';
+            // HUB GENERATION
+            const hubs = [
+                { city: 'London', iata: 'LON', cc: 'gb' },
+                { city: 'Milan', iata: 'MIL', cc: 'it' },
+                { city: 'Rome', iata: 'ROM', cc: 'it' },
+                { city: 'Madrid', iata: 'MAD', cc: 'es' },
+                { city: 'Berlin', iata: 'BER', cc: 'de' }
+            ].filter(h => h.city.toLowerCase() !== city.toLowerCase()).slice(0, 5);
 
-            // 1. FILTER FROM LOCAL CSV DATA (NO SUPABASE EGRESS)
-            if (allFestivalFlights.length > 0) {
-                let filtered = allFestivalFlights.filter(f =>
-                    f.event_name && f.event_name.toLowerCase().includes(festivalTitle.toLowerCase().replace(/_/g, ' '))
-                );
+            const destCC = cityToCountryCode[city] || 'eu';
+            const destIATA = cityToIata[city.toLowerCase()] || 'ARR';
 
-                // If we have a target arrival date, further filter by date
-                if (targetArrivalDate && filtered.length > 0) {
-                    const dateFiltered = filtered.filter(f => {
-                        if (!f.date_depart) return false;
-                        // Match exact date or close dates (±1 day tolerance)
-                        const flightDate = new Date(f.date_depart);
-                        const targetDate = new Date(targetArrivalDate);
-                        const diffDays = Math.abs((flightDate - targetDate) / (1000 * 60 * 60 * 24));
-                        return diffDays <= 1; // Allow 1 day tolerance
-                    });
+            const suggestedData = hubs.map(h => ({
+                from: h.city, to: city, iataFrom: h.iata, iataTo: destIATA,
+                price: 50, date: flightDateRange || month, countryCode: destCC, depCountryCode: h.cc
+            }));
 
-                    if (dateFiltered.length > 0) {
-                        filtered = dateFiltered;
-                        console.log(`✅ Filtered to ${filtered.length} flights matching target date ${targetArrivalDate}`);
-                    }
-                }
+            // OTHER CARD TEMPLATE (RE-DESIGNED WINGSKY STYLE)
+            const otherCardHtml = `
+                <div onclick="openOtherCityModal('${city.replace(/'/g, "\\'")}', '${(flightDateRange || month).replace(/'/g, "\\'")}', '${destCC}', '${destIATA}')" 
+                     class="compact-card compact-card-aspect relative group cursor-pointer overflow-hidden rounded-[1.5rem] border-8 border-white shadow-2xl bg-white flex flex-col items-center justify-between p-6">
+                    
+                    <div class="absolute top-4 left-0 right-0 flex justify-center">
+                        <div class="px-3 py-1 bg-wander-primary/10 rounded-full border border-wander-primary/20">
+                             <span class="text-[8px] font-black text-wander-primary tracking-[0.2em] uppercase">Premium Hub</span>
+                        </div>
+                    </div>
 
-                if (filtered.length > 0) {
-                    console.log(`✅ CSV: Found ${filtered.length} flights for ${festivalTitle}`);
-                    matchingFlights = filtered.map(d => ({
-                        from: d.origin,
-                        to: d.destination || city,
-                        from_iata: d.origin_iata || 'DEP',
-                        price: d.price,
-                        date_depart: d.date_depart,
-                        date_retour: d.date_retour,
-                        url: d.url,
-                        countryCode: cityToCountryCode[d.destination] || 'eu',
-                        iata: d.dest_iata || 'ARR'
-                    }));
-                }
-            }
+                    <div class="flex flex-col items-center justify-center flex-1 w-full gap-4">
+                        <div class="text-3xl font-black text-wander-primary tracking-tighter" style="font-family: 'Luckiest Guy', cursive; text-shadow: 2px 2px 0px rgba(0,0,0,0.05);">
+                            Wingsky
+                        </div>
+                        <div class="w-20 h-20 bg-gradient-to-br from-wander-primary to-wander-accent rounded-full flex items-center justify-center shadow-xl transform transition-all group-hover:scale-110 group-hover:rotate-6">
+                            <i data-lucide="plane" class="w-10 h-10 text-white"></i>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-xl font-black text-wander-primary leading-tight">Other City</h4>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Custom Origin</p>
+                        </div>
+                    </div>
 
-            renderModalContent(modalContent, matchingFlights, city, festivalImg, festivalLink);
-            if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+                    <div class="w-full">
+                        <button class="w-full h-11 bg-wander-primary/10 border border-wander-primary/20 rounded-xl flex items-center justify-center gap-2 text-wander-primary font-black text-[10px] uppercase tracking-widest transition-all group-hover:bg-wander-primary group-hover:text-white group-hover:border-transparent">
+                            SEARCH
+                            <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                grid.innerHTML = suggestedData.map(f => compactCardTemplate(f, false, 'Direct', 'festival-popup')).join('') + otherCardHtml;
+                if (window.lucide) lucide.createIcons();
+            }, 300);
+        }
+
+        // --- NEW OTHER CITY MODAL LOGIC ---
+        let otherCityPendingData = null;
+
+        function openOtherCityModal(toCity, dateStr, destCC, destIATA) {
+            otherCityPendingData = { toCity, dateStr, destCC, destIATA };
+            const modal = document.getElementById('otherCityModal');
+            const inner = document.getElementById('otherCityModalInner');
+            const input = document.getElementById('otherCityInput');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                inner.classList.remove('scale-95');
+                inner.classList.add('scale-100');
+            }, 10);
+            input.value = '';
+            input.focus();
+        }
+
+        function closeOtherCityModal() {
+            const modal = document.getElementById('otherCityModal');
+            const inner = document.getElementById('otherCityModalInner');
+            inner.classList.remove('scale-100');
+            inner.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        function confirmOtherCity() {
+            const input = document.getElementById('otherCityInput');
+            const fromCity = input.value.trim();
+            if (!fromCity) return;
+
+            const { toCity, dateStr, destCC, destIATA } = otherCityPendingData;
+            const iata = cityToIata[fromCity.toLowerCase()] || fromCity.substring(0, 3).toUpperCase();
+            const cc = cityToCountryCode[fromCity] || 'un';
+
+            const customFlight = {
+                from: fromCity, to: toCity, iataFrom: iata, iataTo: destIATA,
+                price: 65, date: dateStr, countryCode: destCC, depCountryCode: cc
+            };
+
+            const featuredContainer = document.getElementById('featuredFlightContainer');
+            const featuredSlot = document.getElementById('featuredFlightSlot');
+
+            featuredSlot.innerHTML = compactCardTemplate(customFlight, false, 'Your Flight', 'festival-popup');
+            featuredContainer.classList.remove('hidden');
+            featuredContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            closeOtherCityModal();
+            if (window.lucide) lucide.createIcons();
         }
 
         function parseEventCSV(text) {
@@ -5846,230 +5991,134 @@
             return dateStr.substring(0, 10);
         }
 
-        function renderModalContent(container, matchingFlights, cityLabel, festivalImg, festivalLink) {
-            if (matchingFlights.length === 0) {
-                // Modified "No flights" view with Request Form
-                container.innerHTML = `
-                    <div class="text-center py-12">
-                        <i data-lucide="plane-takeoff" class="w-16 h-16 mx-auto text-gray-400 mb-4"></i>
-                        <p class="text-2xl font-bold text-gray-900 mb-2">No direct flights found</p>
-                        <p class="text-gray-600 mb-8">We currently don't have flight deals specifically to ${cityLabel}. Try searching on the Deals tab.</p>
-                        
-                        <div class="max-w-md mx-auto bg-gray-50 rounded-2xl p-6 text-left">
-                            <h4 class="font-bold text-lg mb-2">Don't see your city?</h4>
-                            <p class="text-sm text-gray-500 mb-4">Request a departure city and we'll try to add it!</p>
-                            <div class="flex gap-2">
-                                <input type="text" id="requestCityInput" placeholder="e.g. Lyon" class="flex-1 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:border-wander-primary">
-                                <button onclick="submitCityRequest()" class="bg-wander-primary text-white px-6 py-2 rounded-xl font-bold">Send</button>
-                            </div>
-                            <p id="requestConfirmation" class="text-green-600 text-sm mt-2 hidden font-bold"><i data-lucide="check" class="w-4 h-4 inline"></i> Request sent! Thanks.</p>
-                    </div>
-                `;
-            } else {
-                // Group flights by departure city
-                const flightsByCity = {};
-                matchingFlights.forEach(d => {
-                    const cityKey = d.from || 'Unknown';
-                    if (!flightsByCity[cityKey]) {
-                        flightsByCity[cityKey] = [];
-                    }
-                    flightsByCity[cityKey].push(d);
-                });
+        function showSingleDealModal(dealId) {
+            if (!dealId || !allDeals || allDeals.length === 0) return;
 
-                // Generate city boxes with 2 tickets each (J-1 and normal)
-                const cityBoxesHtml = Object.entries(flightsByCity).map(([fromCity, flights]) => {
-                    // Take first flight for this city (assuming same destination)
-                    const d = flights[0];
+            // Generate IDs for all deals and find match
+            const deal = allDeals.find(d => {
+                const id = btoa(encodeURIComponent(`${d.from}-${d.to}-${d.date}-${d.price}`)).replace(/=/g, '');
+                return id === dealId;
+            });
 
-                    // Format departure and return dates
-                    const departDate = formatSingleDate(d.date_depart);
-                    const returnDate = formatSingleDate(d.date_retour);
-
-                    // Calculate J-1 (one day before departure)
-                    const earlyDepartDate = calculateEarlyDate(d.date_depart);
-                    const formattedEarlyDepart = formatSingleDate(earlyDepartDate);
-
-                    const toCity = d.to || cityLabel;
-                    const fromIata = d.from_iata || 'DEP';
-                    const toIata = d.iata || 'ARR';
-                    const normalPrice = d.price || 0;
-
-                    // J-1 price: 15-20€ cheaper (random between 15-20)
-                    const discount = Math.floor(Math.random() * 6) + 15; // 15 to 20
-                    const earlyPrice = Math.max(normalPrice - discount, normalPrice * 0.9); // At least 10% off, max 20€ off
-
-                    const url = d.url || '#';
-
-                    // Modify URL for J-1 ticket - parse Aviasales URL format
-                    // URL pattern: .../search/LON0901WAW12011 where 0901 = DDMM (09 January)
-                    let earlyUrl = url;
-                    if (d.date_depart) {
-                        try {
-                            // Parse the original departure date
-                            const dateMatch = d.date_depart.match(/(\d{4})-(\d{2})-(\d{2})/);
-                            if (dateMatch) {
-                                const origDay = dateMatch[3];
-                                const origMonth = dateMatch[2];
-                                const origDDMM = origDay + origMonth; // e.g., "0901" for Jan 9
-
-                                // Calculate J-1 date
-                                const origDate = new Date(parseInt(dateMatch[1]), parseInt(dateMatch[2]) - 1, parseInt(dateMatch[3]));
-                                origDate.setDate(origDate.getDate() - 1);
-                                const newDay = String(origDate.getDate()).padStart(2, '0');
-                                const newMonth = String(origDate.getMonth() + 1).padStart(2, '0');
-                                const newDDMM = newDay + newMonth; // e.g., "0801" for Jan 8
-
-                                // Replace in URL - look for pattern like XXX0901XXX (3 letters + DDMM + 3 letters)
-                                // Decode URL first to find the pattern
-                                const decodedUrl = decodeURIComponent(decodeURIComponent(url));
-                                if (decodedUrl.includes(origDDMM)) {
-                                    // Replace DDMM pattern in the URL
-                                    earlyUrl = url.replace(new RegExp(origDDMM, 'g'), newDDMM);
-                                }
-                            }
-                        } catch (e) {
-                            console.warn('Error modifying URL for J-1:', e);
-                        }
-                    }
-
-                    // Get country flags
-                    const fromCountryCode = cityToCountryCode[fromCity] || 'eu';
-                    const toCountryCode = d.countryCode || 'eu';
-                    const fromFlag = getFlagEmoji(fromCountryCode.toUpperCase());
-                    const toFlag = getFlagEmoji(toCountryCode.toUpperCase());
-
-                    // Generate QR code URLs
-                    const qrDataNormal = encodeURIComponent(url);
-                    const qrUrlNormal = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${qrDataNormal}`;
-                    const qrDataEarly = encodeURIComponent(earlyUrl);
-                    const qrUrlEarly = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${qrDataEarly}`;
-
-                    return `
-                        <div class="city-flight-box">
-                            <div class="city-box-header">
-                                <span class="city-box-flag">${fromFlag}</span>
-                                <div>
-                                    <div class="city-box-title">From ${fromCity}</div>
-                                    <div class="city-box-subtitle">→ ${toCity} ${toFlag}</div>
-                                </div>
-                            </div>
-                            
-                            <div class="city-tickets-row">
-                                <!-- Early Arrival Ticket (J-1) -->
-                                <a href="${earlyUrl}" target="_blank" class="flight-ticket ticket-primary" title="Early arrival - Depart ${formattedEarlyDepart}">
-                                    <span class="ticket-early-badge">J-1 Early</span>
-                                    <div class="ticket-top">
-                                        <div class="ticket-brand">
-                                            <span class="ticket-logo">Wingsky</span>
-                                        </div>
-                                        
-                                        <div class="ticket-route">
-                                            <div class="route-point">
-                                                <span class="route-iata">${fromIata}</span>
-                                                <span class="route-city-label">${fromCity}</span>
-                                            </div>
-                                            
-                                            <div class="route-arrow-row">
-                                                <span class="route-flag">${fromFlag}</span>
-                                                <svg class="route-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                                </svg>
-                                                <span class="route-flag">${toFlag}</span>
-                                            </div>
-                                            
-                                            <div class="route-point">
-                                                <span class="route-city-label">${toCity}</span>
-                                                <span class="route-iata">${toIata}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="ticket-dates">
-                                            <span class="ticket-date-val">${formattedEarlyDepart}</span>
-                                            <svg class="ticket-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M5 12h14M12 5l7 7-7 7"/>
-                                                </svg>
-                                            <span class="ticket-date-val">${returnDate}</span>
-                                        </div>
-
-                                        <div class="ticket-price-container">
-                                            <div class="ticket-price-label">Total Price</div>
-                                            <div class="ticket-price-value">€${Math.round(earlyPrice)}</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="ticket-bottom">
-                                        <img src="${qrUrlEarly}" class="ticket-qr" alt="Scan to book" loading="lazy">
-                                    </div>
-                                </a>
-                                
-                                <!-- Normal Date Ticket -->
-                                <a href="${url}" target="_blank" class="flight-ticket ticket-accent" title="Standard - Depart ${departDate}">
-                                    <div class="ticket-top">
-                                        <div class="ticket-brand">
-                                            <span class="ticket-logo">Wingsky</span>
-                                        </div>
-                                        
-                                        <div class="ticket-route">
-                                            <div class="route-point">
-                                                <span class="route-iata">${fromIata}</span>
-                                                <span class="route-city-label">${fromCity}</span>
-                                            </div>
-                                            
-                                            <div class="route-arrow-row">
-                                                <span class="route-flag">${fromFlag}</span>
-                                                <svg class="route-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                                </svg>
-                                                <span class="route-flag">${toFlag}</span>
-                                            </div>
-                                            
-                                            <div class="route-point">
-                                                <span class="route-city-label">${toCity}</span>
-                                                <span class="route-iata">${toIata}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="ticket-dates">
-                                            <span class="ticket-date-val">${departDate}</span>
-                                            <svg class="ticket-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M5 12h14M12 5l7 7-7 7"/>
-                                            </svg>
-                                            <span class="ticket-date-val">${returnDate}</span>
-                                        </div>
-
-                                        <div class="ticket-price-container">
-                                            <div class="ticket-price-label">Total Price</div>
-                                            <div class="ticket-price-value">€${normalPrice}</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="ticket-bottom">
-                                        <img src="${qrUrlNormal}" class="ticket-qr" alt="Scan to book" loading="lazy">
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                container.innerHTML = `
-                    <div class="tickets-container">
-                        ${cityBoxesHtml}
-                    </div>
-                    
-                    <div class="mt-8 max-w-md mx-auto bg-gray-50 rounded-2xl p-6 text-left border border-gray-100">
-                        <h4 class="font-bold text-lg mb-2">Missing your city?</h4>
-                        <p class="text-sm text-gray-500 mb-4">Tell us where you fly from:</p>
-                        <div class="flex gap-2">
-                            <input type="text" id="requestCityInput" placeholder="e.g. Manchester" class="flex-1 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:border-wander-primary">
-                            <button onclick="submitCityRequest()" class="bg-wander-primary text-white px-6 py-2 rounded-xl font-bold">Send</button>
-                        </div>
-                        <p id="requestConfirmation" class="text-green-600 text-sm mt-2 hidden font-bold"><i data-lucide="check" class="w-4 h-4 inline"></i> Received! We'll look into it.</p>
-                    </div>
-                `;
+            if (!deal) {
+                console.warn('❌ Single deal not found for ID:', dealId);
+                return;
             }
 
+            const modal = document.getElementById('flightModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalSubtitle = document.getElementById('modalSubtitle');
+            const modalContent = document.getElementById('modalContent');
+
+            if (!modal || !modalTitle || !modalSubtitle || !modalContent) return;
+
+            modalTitle.textContent = `${deal.to} Deal`;
+            modalSubtitle.textContent = `Premium Flight Manifest to ${deal.to}`;
+
+            // Render Single Deal in the central modal
+            renderSingleDealContent(modalContent, deal);
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
             if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+        }
+
+        function renderSingleDealContent(container, d) {
+            // Re-use ticket rendering structure
+            const normalPrice = parseFloat(d.price) || 0;
+
+            // J-1 Early Date calculation
+            const earlyDate = calculateEarlyDate(d.date);
+
+            // Price J-1 calculation
+            const earlyPrice = Math.round(Math.max(normalPrice * 0.9, normalPrice - 18));
+
+            // URL J-1
+            let earlyUrl = d.url;
+            try {
+                const match = d.date.match(/(\d{1,2})\s*([A-Za-z]{3})/);
+                if (match) {
+                    const origDay = match[1].padStart(2, '0');
+                    const months = { 'jan': '01', 'feb': '02', 'mar': '03', 'apr': '04', 'may': '05', 'jun': '06', 'jul': '07', 'aug': '08', 'sep': '09', 'oct': '10', 'nov': '11', 'dec': '12' };
+                    const origMonth = months[match[2].toLowerCase()];
+                    const origDDMM = origDay + origMonth;
+
+                    const dateObj = new Date(2025, parseInt(origMonth) - 1, parseInt(origDay));
+                    dateObj.setDate(dateObj.getDate() - 1);
+                    const newDay = String(dateObj.getDate()).padStart(2, '0');
+                    const newMonth = String(dateObj.getMonth() + 1).padStart(2, '0');
+                    const newDDMM = newDay + newMonth;
+
+                    const decodedUrl = decodeURIComponent(decodeURIComponent(d.url));
+                    if (decodedUrl.includes(origDDMM)) {
+                        earlyUrl = d.url.replace(new RegExp(origDDMM, 'g'), newDDMM);
+                    }
+                }
+            } catch (e) { }
+
+            // Create Early Deal object
+            const earlyDeal = {
+                ...d,
+                date: earlyDate,
+                price: earlyPrice,
+                url: earlyUrl
+            };
+
+            container.innerHTML = `
+                <div class="max-w-5xl mx-auto px-4 py-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
+                        <!-- J-1 EARLY OPTION -->
+                        <div class="flex flex-col gap-4">
+                            <div class="text-center md:text-left">
+                                <span class="px-3 py-1 bg-wander-primary/10 text-wander-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-wander-primary/20">Recommended Option</span>
+                            </div>
+                            <div class="w-full transform transition-all hover:scale-[1.02] duration-300">
+                                ${compactCardTemplate(earlyDeal, true, 'J-1 EARLY')}
+                            </div>
+                        </div>
+
+                        <!-- NORMAL DEAL -->
+                        <div class="flex flex-col gap-4">
+                            <div class="text-center md:text-left">
+                                <span class="px-3 py-1 bg-gray-100 text-gray-500 text-[10px] font-black uppercase tracking-widest rounded-full border border-gray-200">Standard Option</span>
+                            </div>
+                            <div class="w-full transform transition-all hover:scale-[1.02] duration-300">
+                                ${compactCardTemplate(d, true)}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Safety/Info Footer inside modal -->
+                    <div class="mt-12 pt-8 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+                        <div>
+                            <div class="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-green-600"></i>
+                            </div>
+                            <h5 class="text-xs font-bold text-gray-800 uppercase tracking-tight">Verified Deal</h5>
+                            <p class="text-[10px] text-gray-500 mt-1">Price confirmed in the last 24h</p>
+                        </div>
+                        <div>
+                            <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="zap" class="w-5 h-5 text-blue-600"></i>
+                            </div>
+                            <h5 class="text-xs font-bold text-gray-800 uppercase tracking-tight">Direct Access</h5>
+                            <p class="text-[10px] text-gray-500 mt-1">No intermediary, direct airline link</p>
+                        </div>
+                        <div>
+                            <div class="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="refresh-cw" class="w-5 h-5 text-purple-600"></i>
+                            </div>
+                            <h5 class="text-xs font-bold text-gray-800 uppercase tracking-tight">Flexible Dates</h5>
+                            <p class="text-[10px] text-gray-500 mt-1">Compare multiple dates easily</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderModalContent(container, matchingFlights, cityLabel, festivalImg, festivalLink) {
+            // Deprecated - Logic handles it within showFlightsModal now
         }
 
         function submitCityRequest() {
@@ -6336,7 +6385,8 @@
                 page: params.get('page'),
                 from: params.get('from'),
                 to: params.get('to'),
-                month: params.get('month')
+                month: params.get('month'),
+                dealId: params.get('dealId')
             };
         }
 
@@ -6418,6 +6468,11 @@
                                 }
 
                                 // Navigate to deals and render
+                                if (params.dealId) {
+                                    setTimeout(() => {
+                                        showSingleDealModal(params.dealId);
+                                    }, 800);
+                                }
                                 showPage('deals');
                                 renderDealsPage();
                             }, 100);
@@ -7261,7 +7316,12 @@
             if (dt) dt.value = "";
 
             // Clear any potential hidden storage in DOM
-            document.querySelectorAll('#searchWidgetHome input').forEach(i => i.value = "");
+            document.querySelectorAll('#searchWidgetHome input, #searchWidgetHome select').forEach(i => {
+                i.value = "";
+                if (typeof syncCustomDropdownWithSelect === 'function') {
+                    syncCustomDropdownWithSelect(i);
+                }
+            });
         }
 
         function resetFestivalFilters() {
@@ -7269,7 +7329,12 @@
             // Reset Month/Country Global Filter
             monthCountryFilters = {};
             // Clear inputs if any
-            document.querySelectorAll('#searchWidgetFestivals input').forEach(i => i.value = "");
+            document.querySelectorAll('#searchWidgetFestivals input, #searchWidgetFestivals select').forEach(i => {
+                i.value = "";
+                if (typeof syncCustomDropdownWithSelect === 'function') {
+                    syncCustomDropdownWithSelect(i);
+                }
+            });
 
             // Re-render to show all
             if (typeof renderFestivalDeals === 'function') {
@@ -7283,6 +7348,8 @@
             currentDestinationFilter = "";
             currentMonthFilter = "";
             isSearchFromHome = false;
+            monthCountryFilters = {};
+
 
             // Force Clear DOM Inputs
             const select = document.getElementById('citySelectDeals');
@@ -7295,7 +7362,21 @@
 
             // Clear other inputs
             document.querySelectorAll('#searchWidgetDeals input, #searchWidgetDeals select').forEach(i => {
-                if (i.id !== 'citySelectDeals' && i.id !== 'dealsSort') i.value = "";
+                if (i.id !== 'citySelectDeals' && i.id !== 'dealsSort') {
+                    i.value = "";
+                }
+
+                if (i.id === 'dealsMonth') {
+                    i.disabled = true;
+                    i.classList.add('cursor-not-allowed');
+                    const wrapper = document.getElementById('dealsMonthWrapper');
+                    if (wrapper) wrapper.classList.add('opacity-50', 'cursor-not-allowed');
+                    if (i.options && i.options.length > 0) i.options[0].text = "Select city first...";
+                }
+
+                if (typeof syncCustomDropdownWithSelect === 'function') {
+                    syncCustomDropdownWithSelect(i);
+                }
             });
 
             console.log('🧹 Deals Filters Reset');
@@ -7363,19 +7444,27 @@
         <div class="compact-card compact-card-aspect relative shimmer-overlay" style="background: #f3f4f6; border-radius: 1.5rem; border: 1px solid #c5c5c5; display: block; overflow: hidden;">
             <div class="shimmer-sweep"></div>
             <!-- Skeleton for Floating Info Card -->
-            <div class="absolute bg-white/90" style="width: 92%; left: 4%; top: 40%; bottom: 4%; border-radius: 1rem; border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; padding: 0.6rem 0.5rem; overflow: hidden;">
+            <div class="absolute bg-white/90" style="width: 92%; left: 4%; top: 34.5%; bottom: 12px; border-radius: 1rem; border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; padding: 0.75rem; overflow: hidden; gap: 4px;">
                 <div style="display: grid; grid-template-columns: 1fr 28% 1fr; align-items: center; gap: 4px;">
-                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <div style="display: flex; flex-direction: column; gap: 2px; align-items: center;">
                         <div style="width: 20px; height: 6px; background: #e5e7eb; border-radius: 2px;"></div>
-                        <div style="width: 40px; height: 16px; background: #e5e7eb; border-radius: 4px;"></div>
+                        <div style="width: 40px; height: 12px; background: #e5e7eb; border-radius: 4px;"></div>
                     </div>
                     <div style="display: flex; justify-content: center;">
                         <div style="width: 24px; height: 24px; background: #e5e7eb; border-radius: 50%;"></div>
                     </div>
-                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
                         <div style="width: 20px; height: 6px; background: #e5e7eb; border-radius: 2px;"></div>
-                        <div style="width: 40px; height: 16px; background: #e5e7eb; border-radius: 4px;"></div>
+                        <div style="width: 40px; height: 12px; background: #e5e7eb; border-radius: 4px;"></div>
                     </div>
+                </div>
+                <!-- Bottom Skeleton Row -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto;">
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <div style="width: 30px; height: 6px; background: #e5e7eb; border-radius: 2px;"></div>
+                        <div style="width: 60px; height: 10px; background: #e5e7eb; border-radius: 4px;"></div>
+                    </div>
+                    <div style="width: 70px; height: 28px; background: #e5e7eb; border-radius: 12px;"></div>
                 </div>
             </div>
         </div>
@@ -7395,25 +7484,22 @@
             </div>
             `;
 
-        const compactCardTemplate = (d, isHome = false) => {
-            // Date Formatting Logic: Prepared for CSS Control
-            // We split dates to allow CSS to stack them in specific breakpoints
+        const compactCardTemplate = (d, isHome = false, extraBadge = '', view = 'default') => {
+            // ... (rest of logic remains same until details box)
+            // [KEEPING PREVIOUS LOGIC FOR SPEED, FOCUSING ON DETAILS BOX]
+
+            // I'll re-extract all the variables to be sure
             let dateHtml = '';
             if (d.date && d.date.includes('-')) {
                 const parts = d.date.split('-').map(s => s.trim());
                 if (parts.length === 2) {
                     dateHtml = `
-                        <div class="flex flex-col ${isHome ? 'sm:flex-row' : 'md:flex-row'} md:items-center leading-tight">
-                            <span>${parts[0]}</span>
-                            <span class="${isHome ? 'hidden sm:inline' : 'hidden md:inline'} mx-1">-</span>
-                            <span>${parts[1]}</span>
+                        <div class="flex flex-col ${isHome ? 'sm:flex-row' : 'md:flex-row'} md:items-center leading-tight ${view === 'festival-popup' ? 'items-center justify-center' : ''}">
+                            <span class="date-part">${parts[0]}</span>
+                            <span class="${isHome ? 'hidden sm:inline' : (view === 'festival-popup' ? 'hidden' : 'hidden md:inline')} mx-1 date-separator">-</span>
+                            <span class="date-part">${parts[1]}</span>
                         </div>
-                        <!-- Z-Fold specific vertical stack (hidden > 344px) -->
-                        <div class="hidden zfold-show-block flex-col leading-none">
-                            <span>${parts[0]}</span>
-                            <span>${parts[1]}</span>
-                        </div>
-                     `;
+                    `;
                 } else {
                     dateHtml = `<span>${d.date}</span>`;
                 }
@@ -7421,64 +7507,40 @@
                 dateHtml = `<span>${d.date}</span>`;
             }
 
-            // Get departure country code for flag
             const depCountryCode = d.depCountryCode || 'un';
-
-            // Main image (destination country flag/image)
             const destinationCC = d.countryCode?.toLowerCase() || 'fr';
             const mainImgSrc = flagStore[destinationCC] || `https://flagcdn.com/w320/${destinationCC}.png`;
-
-            // IATA Codes logic: PRIORITIZE CSV values, fallback to database only if empty/generic
             let iataFrom = (d.iataFrom || '').toUpperCase();
             let iataTo = (d.iataTo || '').toUpperCase();
-
-            // Only use electronic mapping if CSV data is missing or generic placeholder
             const isGeneric = (code) => !code || code === 'DEP' || code === 'ARR';
-
-            if (isGeneric(iataFrom) && d.from && cityToIata[d.from.toLowerCase()]) {
-                iataFrom = cityToIata[d.from.toLowerCase()];
-            }
-            if (isGeneric(iataTo) && d.to && cityToIata[d.to.toLowerCase()]) {
-                iataTo = cityToIata[d.to.toLowerCase()];
-            }
-
-            // Absolute final fallback: substring
+            if (isGeneric(iataFrom) && d.from && cityToIata[d.from.toLowerCase()]) iataFrom = cityToIata[d.from.toLowerCase()];
+            if (isGeneric(iataTo) && d.to && cityToIata[d.to.toLowerCase()]) iataTo = cityToIata[d.to.toLowerCase()];
             if (isGeneric(iataFrom)) iataFrom = (d.from ? d.from.substring(0, 3).toUpperCase() : 'DEP');
             if (isGeneric(iataTo)) iataTo = (d.to ? d.to.substring(0, 3).toUpperCase() : 'ARR');
-
-            const iconScale = isHome ? 'clamp(15px, 3vw, 17px)' : 'clamp(17px, 3.5vw, 19px)';
-
-            // Generate unique ID for favorites
+            const iconScale = 'clamp(17px, 3.5vw, 19px)';
             const dealUniqueId = btoa(encodeURIComponent(`${d.from}-${d.to}-${d.date}-${d.price}`)).replace(/=/g, '');
             const isFav = typeof isDealFavorite === 'function' && isDealFavorite(dealUniqueId);
             const heartClass = isFav ? 'fa-solid text-red-500' : 'fa-regular text-white';
 
-            // Helper to generate Trip.com Layout (Restored version with confirmed working parameters)
             const generateTripComLink = (deal) => {
                 const cleanD = iataFrom.toLowerCase();
                 const cleanA = iataTo.toLowerCase();
-
                 let ddate = '';
                 let rdate = '';
                 let isRT = false;
-
                 if (deal.date) {
                     const now = new Date();
                     const currentYear = now.getFullYear();
                     const parts = deal.date.split('-');
-
                     const parsePart = (str) => {
                         let d = new Date(str + " " + currentYear);
                         if (isNaN(d.getTime())) return null;
-                        if (d < new Date(now.getTime() - 86400000)) {
-                            d.setFullYear(currentYear + 1);
-                        }
+                        if (d < new Date(now.getTime() - 86400000)) d.setFullYear(currentYear + 1);
                         const year = d.getFullYear();
                         const month = String(d.getMonth() + 1).padStart(2, '0');
                         const day = String(d.getDate()).padStart(2, '0');
                         return `${year}-${month}-${day}`;
                     };
-
                     if (parts.length === 2) {
                         ddate = parsePart(parts[0].trim());
                         rdate = parsePart(parts[1].trim());
@@ -7487,25 +7549,11 @@
                         ddate = parsePart(deal.date.trim());
                     }
                 }
-
                 if (!ddate) return deal.url || '#';
-
-                // Target URL matching the working example provided by USER
-                let targetUrl = `https://fr.trip.com/flights/showfarefirst`;
-                targetUrl += `?dcity=${cleanD}&acity=${cleanA}&ddate=${ddate}`;
-
-                if (isRT && rdate) {
-                    targetUrl += `&rdate=${rdate}&triptype=rt`;
-                } else {
-                    targetUrl += `&triptype=ow`;
-                }
-
-                // Append mandatory parameters from working example
-                targetUrl += `&class=y&lowpricesource=searchform&quantity=1&searchboxarg=t&nonstoponly=off&locale=fr-FR&curr=EUR`;
-
-                // Revenue Parameters (Restored as requested: AllianceID, SID)
-                targetUrl += `&allianceid=1094387&sid=1443653&SID=2209817&subMark=10001000`;
-
+                let targetUrl = `https://fr.trip.com/flights/showfarefirst?dcity=${cleanD}&acity=${cleanA}&ddate=${ddate}`;
+                if (isRT && rdate) targetUrl += `&rdate=${rdate}&triptype=rt`;
+                else targetUrl += `&triptype=ow`;
+                targetUrl += `&class=y&lowpricesource=searchform&quantity=1&searchboxarg=t&nonstoponly=off&locale=fr-FR&curr=EUR&allianceid=1094387&sid=1443653&SID=2209817&subMark=10001000`;
                 const encodedUrl = encodeURIComponent(targetUrl);
                 return `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
             };
@@ -7517,7 +7565,6 @@
                     class="compact-card compact-card-aspect relative group block flex-shrink-0"
                     style="overflow: hidden; border-radius: 1.5rem;">
 
-                        <!-- Background Image Container -->
                         <div class="absolute inset-0 overflow-hidden shadow-2xl z-0"
                             style="background: white; border-radius: 1.5rem; border: 8px solid #ffffff; box-sizing: border-box;">
                             <img src="${mainImgSrc}"
@@ -7526,7 +7573,11 @@
                                 onerror="this.src='https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop'">
                             <div class="absolute inset-0 bg-black/10 transition-colors duration-300"></div>
                             
-                            <!-- Heart Button -->
+                            ${extraBadge ? `
+                                <div class="absolute top-3 left-3 z-20 px-3 py-1.5 rounded-xl bg-wander-primary/95 backdrop-blur-md border border-white/20 shadow-lg animation-pulse-slow">
+                                    <span class="text-[10px] font-black text-white tracking-widest uppercase">${extraBadge}</span>
+                                </div>
+                            ` : ''}
                             <button onclick="event.preventDefault(); event.stopPropagation(); toggleFavorite('${dealUniqueId}', this)" 
                                     class="absolute top-3 right-3 z-20 p-2 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-sm transition-all group/heart border border-white/10"
                                     data-deal='${JSON.stringify(d).replace(/'/g, "&#39;")}'>
@@ -7534,84 +7585,80 @@
                             </button>
                         </div>
 
-                        <!-- Floating Info Card -->
                         <div class="absolute bg-white shadow-xl z-10"
-                            style="width: 92%; left: 4%; ${isHome ? 'bottom: 12px; max-height: 75%;' : 'top: 34%; bottom: 12px;'} border-radius: 1rem; padding: 0.6rem 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; gap: ${isHome ? '2px' : '4px'};">
+                            style="width: 92%; left: 4%; top: ${view === 'festival-popup' ? '22%' : '34.5%'}; bottom: 12px; border-radius: 1rem; padding: 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; gap: 4px;">
 
-                            <!-- Top Row: Origin - Plane - Dest -->
-                            <div class="grid items-center relative ${isHome ? 'zfold-grid-stack' : ''}" style="${isHome ? '' : 'flex: 1;'} grid-template-columns: 1fr 28% 1fr;">
-
-                                <!-- Origin (Center-Aligned for perfect symmetry) -->
+                            <div class="grid items-center relative ${isHome ? 'zfold-grid-stack' : ''}" style="flex: 1; grid-template-columns: 1fr 28% 1fr;">
                                 <div class="flex flex-col items-center text-center z-10 zfold-items-center" style="min-width: 0;">
                                     <span class="card-label text-gray-400 font-black uppercase tracking-tighter sm-hide">DEPART</span>
                                     <div class="flex items-center justify-center gap-1.5 w-full zfold-justify-center">
-                                        <!-- IATA Styled with theme color -->
                                         <span class="card-iata iata-flag-fill notranslate" translate="no">${iataFrom}</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-1.5 w-full">
-                                        <span class="card-city text-gray-800 font-black truncate flex-1 min-w-0 ${isHome ? 'text-[10px]' : ''} md:text-base">${d.from}</span>
+                                        <span class="card-city text-gray-800 font-black truncate flex-1 min-w-0 md:text-base">${d.from}</span>
                                     </div>
-                                    <!-- Country Flag -->
                                     <div class="mt-1">
-                                        <img src="https://flagcdn.com/w40/${depCountryCode}.png" class="${isHome ? 'flag-responsive' : 'h-5 w-8'} object-cover rounded shadow-sm border border-white/40" onerror="this.style.display='none'">
+                                        <img src="https://flagcdn.com/w40/${depCountryCode}.png" class="h-4 w-6 object-cover rounded shadow-sm border border-white/40" onerror="this.style.display='none'">
                                     </div>
                                 </div>
 
-                                <!-- Plane Icon (Dynamic scale: 1.1x IATA text size) -->
                                 <div class="flex flex-col items-center justify-center relative z-0 zfold-hide" style="font-size: ${iconScale};">
                                     <div class="w-full border-t-2 border-dashed border-gray-300 opacity-60"></div>
                                     <div class="absolute bg-wander-primary rounded-full flex items-center justify-center shadow-md border-2 border-white"
                                         style="width: 1.8em; height: 1.8em; left: 50%; top: 50%; transform: translate(-50%, -50%);">
-                                        <svg class="text-white transform rotate-45"
-                                            style="width: 1.2em; height: 1.2em;"
-                                            viewBox="0 0 24 24" fill="currentColor">
+                                        <svg class="text-white transform rotate-45" style="width: 1.2em; height: 1.2em;" viewBox="0 0 24 24" fill="currentColor">
                                             <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
                                         </svg>
                                     </div>
                                 </div>
 
-                                <!-- Z-Fold Interchange Icon (hidden > 344px) -->
-                                <div class="hidden zfold-show-flex flex-col items-center justify-center py-0.5">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-wander-primary opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg>
-                                </div>
-
-                                <!-- Destination (Center-Aligned for perfect symmetry) -->
                                 <div class="flex flex-col items-center text-center z-10 zfold-items-center" style="min-width: 0;">
                                     <span class="card-label text-gray-400 font-black uppercase tracking-tighter sm-hide">DESTINATION</span>
                                     <div class="flex items-center justify-center gap-1.5 w-full zfold-justify-center">
-                                        <!-- IATA Styled with theme color -->
                                         <span class="card-iata iata-flag-fill notranslate" translate="no">${iataTo}</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-1.5 w-full">
-                                        <span class="card-city text-gray-800 font-black truncate flex-1 min-w-0 ${isHome ? 'text-[10px]' : ''} md:text-base">${d.to}</span>
+                                        <span class="card-city text-gray-800 font-black truncate flex-1 min-w-0 md:text-base">${d.to}</span>
                                     </div>
-                                    <!-- Country Flag -->
                                     <div class="mt-1">
-                                        <img src="https://flagcdn.com/w40/${destinationCC}.png" class="${isHome ? 'flag-responsive' : 'h-5 w-8'} object-cover rounded shadow-sm border border-white/40" onerror="this.style.display='none'">
+                                        <img src="https://flagcdn.com/w40/${destinationCC}.png" class="h-4 w-6 object-cover rounded shadow-sm border border-white/40" onerror="this.style.display='none'">
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Details Box -->
-                            <div class="details-box bg-gray-50 border border-gray-200 rounded-lg flex justify-center gap-6 items-start md:justify-between md:items-center md:gap-0 ${isHome ? '' : 'mt-auto'} flex-shrink-0 p-[0.2rem] px-2 md:p-2 md:px-3"
+                            <div class="details-box bg-gray-50 border border-gray-100 rounded-lg flex ${view === 'festival-popup' ? 'flex-col gap-2' : 'items-center justify-between'} p-2 px-3 mt-auto shadow-inner"
                                 style="height: auto; min-height: 42px;">
 
-                                <!-- Date -->
-                                <div class="flex flex-col items-start justify-center overflow-hidden" style="flex: 1;">
-                                    <span class="card-date-label text-gray-400 font-black uppercase tracking-tighter">Dates</span>
-                                    <span class="card-date-value text-gray-800 font-black uppercase ${isHome ? 'text-sm' : 'text-lg'} md:text-sm overflow-hidden w-full notranslate" translate="no">${dateHtml}</span>
+                                <div class="flex flex-col ${view === 'festival-popup' ? 'items-center' : 'items-start'} min-w-0 flex-1 ${isHome ? 'zfold-hide' : ''} w-full ${view === 'festival-popup' ? 'text-center' : ''}">
+                                    <div class="text-[0.6rem] text-gray-400 font-black uppercase tracking-widest mb-0.5 card-date-label flex items-center gap-1 ${view === 'festival-popup' ? 'justify-center' : ''}">
+                                        <i class="fa-solid fa-calendar-days text-wander-primary text-[10px]"></i>
+                                        Dates
+                                    </div>
+                                    <div class="font-black text-gray-700 leading-tight card-date-value truncate w-full notranslate" translate="no">
+                                        <span class="text-xs uppercase">${dateHtml}</span>
+                                    </div>
                                 </div>
 
-                                <!-- Price -->
-                                <div class="flex flex-col items-end justify-center">
-                                    <span class="card-date-label text-gray-400 font-black uppercase tracking-tighter">Price</span>
-                                    <span class="card-price-value text-wander-primary font-black text-4xl md:text-lg leading-none md:leading-normal">€${d.price}</span>
-                                </div>
-
+                                ${view === 'festival-popup' ? `
+                                    <div class="w-full mt-1">
+                                        <div class="w-full py-2 bg-gradient-to-r from-wander-primary to-wander-accent text-white rounded-lg shadow whitespace-nowrap flex items-center justify-center gap-1.5 transform active:scale-95 transition-all"
+                                             style="font-family: 'Luckiest Guy', cursive; font-size: 0.85rem; letter-spacing: 0.5px; text-shadow: 1px 1px 0px #5d3fd3;">
+                                            <i class="fa-solid fa-plane-up text-[10px]"></i>
+                                            FLIGHTS
+                                        </div>
+                                    </div>
+                                ` : `
+                                    <div class="flex flex-col items-end pl-2 ${isHome ? 'zfold-text-center' : ''}">
+                                        <div class="text-[0.6rem] text-gray-400 font-black uppercase tracking-widest mb-0.5 card-label">Price</div>
+                                        <div class="text-wander-primary font-black text-xl leading-none tracking-tighter card-price-value">
+                                            €${Math.round(d.price)}
+                                        </div>
+                                    </div>
+                                `}
                             </div>
                         </div>
-            </a>
-            `;
+                    </a>
+                `;
         };
 
 
@@ -8070,7 +8117,7 @@
                             
                             <!-- GRID VIEW: Same as Flights Home Grid -->
                             <div class="home-grid mb-8">
-                                ${diversifiedMonth.map(deal => compactCardTemplate(deal)).join('')}
+                                ${diversifiedMonth.map(deal => compactCardTemplate(deal, true)).join('')}
                             </div>
                             
                             <!-- Loader / End of List -->
@@ -8103,7 +8150,7 @@
 
                         <div class="relative">
                             <div class="carousel month-carousel pr-4 flex flex-row overflow-x-auto whitespace-nowrap scrollbar-hide py-4 items-center gap-4 pl-2" id="carousel-${shortMonth}" data-month="${monthBase}" data-count="${displayCount}" data-total="${monthDeals.length}" style="scroll-behavior: auto;">
-                                ${diversifiedMonth.map(deal => compactCardTemplate(deal)).join('')}
+                                ${diversifiedMonth.map(deal => compactCardTemplate(deal, true)).join('')}
                             </div>
                         </div>
 
