@@ -4816,6 +4816,51 @@
             }
         }
 
+        /**
+         * Checks if a flight date string (e.g., "30 MAR - 4 APR" or "30 MAR") is in the past.
+         * Useful for filtering out expired deals from CSV downloads.
+         */
+        function isFlightDatePast(dateStr) {
+            if (!dateStr || dateStr.toLowerCase().includes('teaser')) return false;
+
+            const months = {
+                'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'jun': 5,
+                'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
+            };
+
+            // Extract the departure part (the first date before the dash)
+            const depPart = dateStr.includes(' - ') ? dateStr.split(' - ')[0] : dateStr;
+            const bits = depPart.trim().split(/\s+/);
+
+            // Expected format: "DD MON" or "MON DD"
+            let day, mon;
+
+            if (bits.length >= 2) {
+                if (parseInt(bits[0])) {
+                    day = parseInt(bits[0]);
+                    mon = months[bits[1].toLowerCase().substring(0, 3)];
+                } else if (parseInt(bits[1])) {
+                    day = parseInt(bits[1]);
+                    mon = months[bits[0].toLowerCase().substring(0, 3)];
+                }
+
+                if (day !== undefined && mon !== undefined) {
+                    const now = new Date();
+                    // Using current year from system context: 2026
+                    const todayDate = new Date(2026, now.getMonth(), now.getDate());
+                    const dealDate = new Date(2026, mon, day);
+
+                    // Year detection
+                    if (mon < now.getMonth() || (mon === now.getMonth() && day < now.getDate() - 15)) {
+                        dealDate.setFullYear(2027);
+                    }
+
+                    return dealDate < todayDate;
+                }
+            }
+            return false;
+        }
+
 
         function setTripType(type) {
             searchState.tripType = type;
@@ -5924,17 +5969,14 @@
                 cols.forEach((c, i) => cols[i] = c.replace(/^"|"$/g, '').trim());
                 if (cols.length < 7) return null;
 
+                // --- SAFETY: Skip past dates ---
+                if (isFlightDatePast(cols[3])) return null;
+
                 // Map to common deal format
                 return {
                     from: cols[0],
                     to: cols[9] || "Destination", // Destination City
-                    countryCode: (cols[2] || "FR").substring(0, 2).toLowerCase(), // Only have Origin Country name, assuming FR/US etc? 
-                    // Wait, col 2 is "France". We need 2-letter code for flag. 
-                    // Let's assume most users fly from known countries or we can map names.
-                    // Or just use a default flag or map 'France' -> 'fr'.
-                    // Actually logic in server.js/original parsedData used city mapping.
-                    // Let's reuse cityToCountryCode if possible or mapped name.
-                    // For now, simpler: map 'France' to 'fr', 'Germany' to 'de' etc if easy, or skip flag.
+                    countryCode: (cols[2] || "FR").substring(0, 2).toLowerCase(),
                     originCountry: cols[2],
                     price: parseInt(cols[6]) || 0,
                     date: `${cols[3]} - ${cols[4]}`,
@@ -6296,7 +6338,11 @@
                             iataFrom: depIATA,
                             iataTo: destIATA
                         };
-                    }).filter(d => d !== null);
+                    }).filter(d => {
+                        if (!d || !d.date) return !!d;
+                        // --- SAFETY: Skip past dates ---
+                        return !isFlightDatePast(d.date);
+                    });
 
                     console.log(`📊 Valid deals parsed via PapaParse: ${allDeals.length}`);
 
