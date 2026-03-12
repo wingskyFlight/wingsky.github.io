@@ -81,14 +81,28 @@
             top: -9999px !important;
         }
 
-        body {
-            top: 0 !important;
-            position: static !important;
+        html {
+            overflow-x: hidden !important;
+            width: 100vw;
+            max-width: 100%;
         }
 
         html.translated-ltr body,
         html.translated-rtl body {
             top: 0 !important;
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        body {
+            top: 0 !important;
+            position: static !important;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            overflow-x: hidden !important;
+            width: 100%;
+            max-width: 100vw;
         }
 
         /* Custom Language Selector with Flags */
@@ -125,7 +139,7 @@
         }
 
         .home-grid .compact-card-aspect {
-            aspect-ratio: 17/25 !important;
+            aspect-ratio: 17/22 !important;
         }
 
         .home-grid .card-date-value {
@@ -144,6 +158,24 @@
         .home-grid .card-date-label {
             /* 7px → 10px fluid */
             font-size: clamp(7px, 5px + 0.6vw, 10px) !important;
+        }
+
+        /* ---- POPUP SPECIFIC OVERRIDES (Mobile) ---- */
+        @media (max-width: 768px) {
+            #flightModal .home-grid .card-iata {
+                font-size: clamp(16px, 3.3vw, 20.9px) !important;
+                /* -5% reduction to show the flag more */
+            }
+
+            #flightModal .home-grid .card-city {
+                font-size: clamp(10.35px, 2.3px + 2.3vw, 17.25px) !important;
+                /* +15% augmentation */
+            }
+
+            #flightModal .home-grid .card-date-value {
+                font-size: clamp(11.7px, 4.1px + 1vw, 11.3px) !important;
+                /* -10% reduction */
+            }
         }
 
         /* ---- Galaxy Z Fold 5 (≤ 344px) - pinned overrides ---- */
@@ -429,7 +461,11 @@
             }
 
             .card-date-value span {
-                font-size: 0.9rem !important;
+                font-size: 0.77rem !important;
+            }
+
+            .home-grid .compact-card-aspect {
+                aspect-ratio: 17 / 18 !important;
             }
         }
 
@@ -1630,6 +1666,7 @@
         .hero-wrapper {
             position: relative;
             width: 100%;
+            max-width: 100vw;
             height: 360px;
             /* HAUTEUR V2/V3 */
             margin-top: 20px;
@@ -3559,7 +3596,8 @@
             .fest-btn-group button {
                 padding-top: 12px !important;
                 padding-bottom: 12px !important;
-                font-size: 11px !important;
+                font-size: 9px !important;
+                /* Réduit encore de 10% (était 10px) */
             }
         }
 
@@ -3619,7 +3657,8 @@
             .fest-btn-group button {
                 padding-top: 12px !important;
                 padding-bottom: 12px !important;
-                font-size: 11px !important;
+                font-size: 10px !important;
+                /* Réduit de 10% (était 11px) */
             }
         }
 
@@ -4407,9 +4446,9 @@
 
     <!-- FLIGHT MODAL -->
     <div id="flightModal"
-        class="fixed inset-0 bg-black/80 z-[10000] hidden items-center justify-center p-0 sm:p-4 md:p-8 overflow-y-auto backdrop-blur-sm transition-all duration-300">
+        class="fixed inset-0 bg-black/80 z-[10000] hidden items-center justify-center p-0 sm:p-4 md:p-8 overflow-hidden backdrop-blur-sm transition-all duration-300">
         <div
-            class="bg-white rounded-none sm:rounded-[2rem] shadow-2xl w-full sm:max-w-[1250px] min-h-[100dvh] sm:min-h-0 h-full sm:h-auto max-h-none sm:max-h-[90vh] overflow-hidden flex flex-col modal-gradient-bg border border-white/20 sm:my-auto">
+            class="bg-white rounded-none sm:rounded-[2rem] shadow-2xl w-full sm:max-w-[1250px] h-full sm:h-auto max-h-[100dvh] sm:max-h-[90vh] overflow-hidden flex flex-col modal-gradient-bg border border-white/20 sm:my-auto">
             <div
                 class="px-4 py-5 sm:p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10 shrink-0">
                 <div class="min-w-0 flex-1 pr-4">
@@ -4426,7 +4465,7 @@
                 </div>
             </div>
             <div id="modalContent"
-                class="px-0 py-6 sm:p-6 overflow-x-hidden overflow-y-auto flex-1 flex flex-col gap-6 sm:gap-8 w-full max-w-[100vw]">
+                class="px-0 py-6 sm:p-6 overflow-x-hidden overflow-y-auto flex-1 flex flex-col gap-6 sm:gap-8 w-full max-w-[100vw] pb-24 sm:pb-8">
                 <!-- Featured Flight (Your Choice) -->
                 <div id="featuredFlightContainer" class="hidden px-4 sm:px-0 w-full overflow-hidden">
                     <div class="flex items-center gap-3 mb-4">
@@ -4439,7 +4478,7 @@
                 </div>
 
                 <!-- Suggested Grid -->
-                <div class="w-full overflow-hidden">
+                <div class="w-full">
                     <div class="flex items-center gap-3 mb-6 px-4 sm:px-0 w-full">
                         <span
                             class="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-gray-200">Suggested
@@ -5687,8 +5726,8 @@
                                          ${f.end ? `<span>-</span><span>${cleanD(f.end)}</span>` : ''}
                                      </div>
                             </div>
-                            <!-- BUTTONS: Full Width -->
-                            <div class="fest-btn-group flex gap-0 overflow-hidden rounded-xl shadow-lg w-full">
+                            <!-- BUTTONS: Full Width, Spread out -->
+                            <div class="fest-btn-group flex gap-0 overflow-hidden rounded-xl shadow-lg w-[106%] -ml-[3%]">
                                 <a href="${f.facebookLink || f.link || '#'}" target="_blank" rel="noopener noreferrer" 
                                    class="fest-btn-events flex-1 flex items-center justify-center gap-1.5 px-1 py-2 bg-white text-wander-primaryDark font-black hover:bg-gray-50 active:scale-95 transition-all text-[10px] sm:text-xs border-r border-gray-200 whitespace-nowrap"
                                    onclick="event.stopPropagation();">
@@ -7586,9 +7625,9 @@
                         </div>
 
                         <div class="absolute bg-white shadow-xl z-10"
-                            style="width: 92%; left: 4%; top: ${view === 'festival-popup' ? '22%' : '34.5%'}; bottom: 12px; border-radius: 1rem; padding: 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; gap: 4px;">
+                            style="width: 92%; left: 4% ; bottom: 12px; border-radius: 1rem; padding: 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; gap: 10px;">
 
-                            <div class="grid items-center relative ${isHome ? 'zfold-grid-stack' : ''}" style="flex: 1; grid-template-columns: 1fr 28% 1fr;">
+                            <div class="grid items-center relative ${isHome ? 'zfold-grid-stack' : ''}" style="grid-template-columns: 1fr 28% 1fr;">
                                 <div class="flex flex-col items-center text-center z-10 zfold-items-center" style="min-width: 0;">
                                     <span class="card-label text-gray-400 font-black uppercase tracking-tighter sm-hide">DEPART</span>
                                     <div class="flex items-center justify-center gap-1.5 w-full zfold-justify-center">
