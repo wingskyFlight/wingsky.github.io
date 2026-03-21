@@ -320,6 +320,24 @@
             aspect-ratio: 17/19;
         }
 
+        /* Mobile Overrides (Strict < 770px) */
+        @media (max-width: 769px) {
+
+            /* Flights Home Cards Hub */
+            .home-grid .compact-card-aspect {
+                aspect-ratio: 17/24 !important;
+            }
+
+            /* Festivals Popup Cards */
+            #festivalPopup .compact-card {
+                aspect-ratio: 17/26 !important;
+            }
+        }
+
+        .card-airplane-wrapper {
+            font-size: clamp(13px, 2.6vw, 15px);
+        }
+
         .carousel .compact-card {
             width: 280px !important;
             flex: 0 0 280px !important;
@@ -331,10 +349,6 @@
             .carousel .compact-card {
                 width: 270px !important;
                 flex: 0 0 270px !important;
-            }
-
-            .compact-card-aspect {
-                aspect-ratio: 17/19 !important;
             }
         }
 
@@ -578,13 +592,68 @@
         }
 
         .nav-link-premium:hover {
-            color: #5d3fd3;
-            /* Primary color */
             background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)) padding-box,
                 linear-gradient(135deg, var(--wander-primary), var(--wander-accent)) border-box;
             border-color: transparent;
             box-shadow: 0 4px 12px rgba(93, 63, 211, 0.1);
             transform: translateY(-1px);
+        }
+
+        /* Smart City Selector (Other City Modal) */
+        .other-city-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .other-city-item:last-child {
+            border-bottom: none;
+        }
+
+        .other-city-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .other-city-item .flag {
+            font-size: 1.5rem;
+            width: 32px;
+            text-align: center;
+        }
+
+        .other-city-item .city-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .other-city-item .city-name {
+            font-weight: 800;
+            color: #111827;
+            font-size: 0.95rem;
+        }
+
+        .other-city-item .country-name {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .other-city-item .iata-code {
+            margin-left: auto;
+            font-family: 'Luckiest Guy', cursive;
+            color: #5d3fd3;
+            font-size: 1.1rem;
+            opacity: 0.3;
+            transition: opacity 0.2s;
+        }
+
+        .other-city-item:hover .iata-code {
+            opacity: 1;
         }
 
         .nav-link-premium:hover i {
@@ -599,6 +668,87 @@
             -webkit-text-stroke: 0px;
             /* Disable stroke when filled */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* DATE SEPARATOR: Show only in main grid/list, hide when stacked */
+        .card-date-value .date-separator {
+            margin: 0 4px;
+        }
+
+        #flightModal .date-separator,
+        #festivalPopup .date-separator {
+            display: none !important;
+        }
+
+        /* TABLET MODAL FIXES: Stack dates vertically up to 1024px */
+        @media (max-width: 1024px) {
+
+            #flightModal .card-date-value .text-xs>div,
+            #festivalPopup .card-date-value .text-xs>div {
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 2px !important;
+            }
+
+            #flightModal .compact-card-aspect {
+                aspect-ratio: 17/24 !important;
+            }
+
+            #festivalPopup .compact-card-aspect {
+                aspect-ratio: 17/26 !important;
+            }
+        }
+
+        /* GLASS MORPHISM: Mobile only (< 768px) */
+        @media (max-width: 767px) {
+
+            #flightModal,
+            #festivalPopup {
+                background-color: rgba(255, 255, 255, 0.45) !important;
+                backdrop-filter: blur(10px) saturate(180%) !important;
+                -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+            }
+
+            #flightModal>div,
+            #festivalPopup>div {
+                background: transparent !important;
+            }
+
+            #flightModal .bg-white\/90,
+            #festivalPopup .bg-white\/90 {
+                background-color: rgba(255, 255, 255, 0.7) !important;
+                backdrop-filter: blur(8px) !important;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        /* Desktop/Tablet default background (No glass) */
+        @media (min-width: 768px) {
+
+            #flightModal,
+            #festivalPopup {
+                background-color: rgba(0, 0, 0, 0.5) !important;
+                backdrop-filter: none !important;
+            }
+        }
+
+        /* SMART STACKING: Multi-options badge animation */
+        @keyframes pulse-slow {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+
+            50% {
+                opacity: 0.9;
+                transform: translate(-50%, 0) scale(1.05);
+            }
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
 
         .nav-link-premium.active i {
@@ -3909,7 +4059,7 @@
                     class="relative w-10 h-10 flex items-center justify-center rounded-full bg-gray-400/10 hover:bg-gray-400/20 transition-colors group"
                     title="My Saved Deals">
                     <i class="fa-solid fa-heart text-2xl transition-transform group-hover:scale-110"
-                        style="color: #a78bfa;"></i>
+                        style="color: var(--wander-primary);"></i>
                     <span id="favCountBadge"
                         class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white hidden">0</span>
                 </button>
@@ -4242,7 +4392,7 @@
                             <button class="dp-tab" data-tab="flexible" onclick="switchDateTab('flexible')">Anytime /
                                 Flexible</button>
                             <button class="dp-tab" data-tab="month" onclick="switchDateTab('month')">Monthly</button>
-                            <button class="dp-tab active" data-tab="exact" onclick="switchDateTab('exact')">Exact
+                            <button class="dp-tab active" data-tab="exact" onclick="switchDateTab('exact')">Specific
                                 Dates</button>
                         </div>
                     </div>
@@ -4510,7 +4660,13 @@
                         <i data-lucide="map-pin" class="w-6 h-6"></i>
                     </div>
                     <input type="text" id="otherCityInput" placeholder="Enter departure city..."
-                        class="w-full h-16 pl-14 pr-6 rounded-2xl border-2 border-gray-100 bg-gray-50 text-lg font-bold focus:border-wander-primary focus:bg-white outline-none transition-all shadow-inner">
+                        class="w-full h-16 pl-14 pr-6 rounded-2xl border-2 border-gray-100 bg-gray-50 text-lg font-bold focus:border-wander-primary focus:bg-white outline-none transition-all shadow-inner"
+                        autocomplete="off">
+
+                    <div id="otherCityDropdown"
+                        class="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div class="max-h-60 overflow-y-auto" id="otherCityResults"></div>
+                    </div>
                 </div>
 
                 <button onclick="confirmOtherCity()"
@@ -4643,7 +4799,7 @@
             originIATA: 'PAR',
             destType: 'anywhere',
             destIATA: null,
-            dateMode: 'flexible',
+            dateMode: 'exact',
             selectedMonth: null,
             selectedReturnMonth: null,
             departureDate: null,
@@ -4721,6 +4877,9 @@
                                 searchState.destIATA = iata;
                             }
                         }
+
+                        // FIRE input event so cascade (checkOrigin/checkDest) triggers immediately
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
                     };
                 });
             }
@@ -4769,6 +4928,14 @@
             if (modal) modal.classList.remove('show');
         }
 
+        let _skipCalendarSync = false; // Flag to prevent switchDateTab from overriding a fresh calendar
+
+        function getCalendarMode(tab) {
+            const currentTab = tab || searchState.dateMode;
+            // Flexible mode always uses range, Round-trip uses range, One-way Exact/Month uses single
+            return (currentTab === 'flexible' || searchState.tripType === 'roundtrip') ? 'range' : 'single';
+        }
+
         function switchDateTab(tab) {
             searchState.dateMode = tab;
             document.querySelectorAll('.dp-tab').forEach(t => {
@@ -4789,8 +4956,9 @@
             const calendarContainer = document.getElementById('tabExact');
             if (tab === 'flexible' || tab === 'exact') {
                 calendarContainer?.classList.remove('hidden');
-                if (inlineCalendar) {
-                    const mode = (tab === 'flexible' || searchState.tripType === 'roundtrip') ? 'range' : 'single';
+                // ONLY touch the calendar if we didn't JUST reinitialize it
+                if (inlineCalendar && !_skipCalendarSync) {
+                    const mode = getCalendarMode(tab);
                     inlineCalendar.set('mode', mode);
                     inlineCalendar.clear();
                     inlineCalendar.redraw();
@@ -4879,20 +5047,25 @@
                 btnOne?.classList.add('active-trip-type');
                 modalBtnRound?.classList.remove('active');
                 modalBtnOne?.classList.add('active');
+                // Clean return dates if switching to one-way
+                searchState.returnDate = null;
+                searchState.selectedReturnMonth = null;
+                searchState.departureDate = null;
             }
 
             if (inlineCalendar) {
-                const mode = (searchState.dateMode === 'flexible' || type === 'roundtrip') ? 'range' : 'single';
-                inlineCalendar.set('mode', mode);
-                inlineCalendar.clear();
-                searchState.departureDate = null;
-                searchState.returnDate = null;
+                // AGGRESSIVE REINIT: destroy + recreate with correct mode
+                inlineCalendar.destroy();
+                inlineCalendar = null;
+                _skipCalendarSync = true; // prevent switchDateTab from overriding
+                initSearchCalendar();
             }
 
-            // Update monthly picker if open
-            if (searchState.dateMode === 'month') {
-                switchDateTab('month');
-            }
+            // Sync Tab UI (tabs, month grid, container visibility — but NOT calendar mode)
+            switchDateTab(searchState.dateMode);
+            _skipCalendarSync = false; // re-enable for future manual tab switches
+
+            console.log(`✈️ Trip type set to: ${type} | Calendar mode: ${getCalendarMode()}`);
         }
 
 
@@ -4970,7 +5143,7 @@
 
             inlineCalendar = flatpickr("#inlineCalendar", {
                 inline: true,
-                mode: searchState.tripType === 'oneway' ? 'single' : 'range',
+                mode: getCalendarMode(),
                 dateFormat: "Y-m-d",
                 minDate: minDate,
                 showMonths: monthsToShow,
@@ -5091,7 +5264,8 @@
 
                 tripUrl = `https://www.trip.com/flights/explore?dcity=${originIATA}&ddate=${ddateVal}&triptype=${tripTypeParam}&class=y&curr=EUR&locale=en-XX&nonstoponly=off&quantity=1&searchboxarg=t`;
                 if (destIATA) tripUrl += `&acity=${destIATA.toLowerCase()}`;
-                if (isRT) tripUrl += `&rdate=${rdateVal}`;
+                if (isRT && rdateVal) tripUrl += `&rdate=${rdateVal}`;
+                else if (!isRT) tripUrl += `&rdate=`; // Ensure empty return if one-way
             }
             // Mode 3: FLEXIBLE (Use explore with specific range)
             else {
@@ -5108,11 +5282,11 @@
 
                 tripUrl = `https://www.trip.com/flights/explore?dcity=${originIATA}&ddate=${ddateVal}&triptype=${tripTypeParam}&class=y&curr=EUR&locale=en-XX&nonstoponly=off&quantity=1&searchboxarg=t`;
                 if (destIATA) tripUrl += `&acity=${destIATA.toLowerCase()}`;
-                if (isRT) tripUrl += `&rdate=${rdateVal}`;
+                if (isRT && rdateVal) tripUrl += `&rdate=${rdateVal}`;
             }
 
             // Append Tracking
-            tripUrl += `&allianceid=1094387&sid=1443653&SID=2209817`;
+            tripUrl += `&allianceid=1094387&sid=1443653&SID=2209817&subMark=10001000&trip_sub1=ae1c3181eb444f4eb9fbfd367-598952&utm_campaign=598952`;
 
             const encodedUrl = encodeURIComponent(tripUrl);
             const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodedUrl}&campaign_id=121`;
@@ -5263,17 +5437,27 @@
                                 iataToCountry[iata] = country;
                                 if (countryCode) iataToCountryCode[iata] = countryCode;
 
-                                // Map city names to IATA (both normalized and lowercase for robust lookup)
-                                cityToIata[normalizedCity] = iata;
-                                cityToIata[normalizedCity.toLowerCase()] = iata;
+                                // Map city names to IATA (Avoid overwrite if already set by curated list)
+                                if (!cityToIata[normalizedCity]) {
+                                    cityToIata[normalizedCity] = iata;
+                                    cityToIata[normalizedCity.toLowerCase()] = iata;
+                                }
                                 // Handle variants like "Frankfurt am Main" -> "Frankfurt"
                                 if (normalizedCity.includes(' ')) {
-                                    cityToIata[normalizedCity.split(' ')[0].toLowerCase()] = iata;
+                                    const firstWord = normalizedCity.split(' ')[0].toLowerCase();
+                                    if (!cityToIata[firstWord]) cityToIata[firstWord] = iata;
                                 }
                             }
                         }
                     });
-                    console.log(`✅ Loaded ${Object.keys(iataToCity).length} airport codes from local CSV`);
+
+                    // 2. ENFORCE GLOBAL CODES from AIRPORTS (Curated List Priority)
+                    AIRPORTS.forEach(a => {
+                        cityToIata[a.city.toLowerCase()] = a.iata;
+                        cityToIata[a.city] = a.iata;
+                    });
+
+                    console.log(`✅ Loaded ${Object.keys(iataToCity).length} airport codes from local CSV (Curated codes enforced)`);
                 }
             } catch (e) {
                 console.warn("❌ Could not load airport data:", e);
@@ -5474,6 +5658,37 @@
             const div = document.createElement('div');
             div.innerHTML = html;
             document.body.appendChild(div.firstElementChild);
+        }
+
+        // --- NEW CUSTOM FLIGHT STORAGE (7 Day Expiration) ---
+        function saveCustomFlight(festivalTitle, flight) {
+            try {
+                const now = Date.now();
+                let allCustoms = JSON.parse(localStorage.getItem('wingsky_custom_flights') || '{}');
+                if (!allCustoms[festivalTitle]) allCustoms[festivalTitle] = [];
+
+                // Add new flight with timestamp
+                allCustoms[festivalTitle].unshift({ ...flight, storedAt: now });
+
+                // Filter: keep only 10 latest and younger than 7 days
+                const weekMs = 7 * 24 * 60 * 60 * 1000;
+                allCustoms[festivalTitle] = allCustoms[festivalTitle]
+                    .filter(f => (now - f.storedAt) < weekMs)
+                    .slice(0, 10);
+
+                localStorage.setItem('wingsky_custom_flights', JSON.stringify(allCustoms));
+            } catch (e) { console.warn("Fail save custom", e); }
+        }
+
+        function getCustomFlights(festivalTitle) {
+            try {
+                const now = Date.now();
+                let allCustoms = JSON.parse(localStorage.getItem('wingsky_custom_flights') || '{}');
+                if (!allCustoms[festivalTitle]) return [];
+
+                const weekMs = 7 * 24 * 60 * 60 * 1000;
+                return allCustoms[festivalTitle].filter(f => (now - f.storedAt) < weekMs);
+            } catch (e) { return []; }
         }
 
         async function fetchLatestDealsCSV() {
@@ -5832,12 +6047,12 @@
                     const start = parseD(festivalStartDate);
                     const end = parseD(endD);
                     if (start && !isNaN(start.getTime())) {
-                        const arrivalDate = new Date(start);
-                        arrivalDate.setDate(arrivalDate.getDate() - 1);
                         const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
                         const fmtShort = (d) => `${d.getDate()} ${months[d.getMonth()]}`;
-                        flightDateRange = end && !isNaN(end.getTime()) ? `${fmtShort(arrivalDate)} - ${fmtShort(end)}` : fmtShort(arrivalDate);
-                        subtitleText = `Flights arriving ${arrivalDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} (1 day before festival)`;
+
+                        // User request: match festival start (no J-1 offset)
+                        flightDateRange = end && !isNaN(end.getTime()) ? `${fmtShort(start)} - ${fmtShort(end)}` : fmtShort(start);
+                        subtitleText = `Premium Flight Manifest for ${festivalTitle}`;
                     }
                 } catch (e) { console.warn('⚠️ Date parse error:', e); }
             }
@@ -5867,41 +6082,55 @@
                 price: 50, date: flightDateRange || month, countryCode: destCC, depCountryCode: h.cc
             }));
 
-            // OTHER CARD TEMPLATE (RE-DESIGNED WINGSKY STYLE)
+            // ANY CITY CARD TEMPLATE (RE-DESIGNED WINGSKY STYLE)
             const otherCardHtml = `
                 <div onclick="openOtherCityModal('${city.replace(/'/g, "\\'")}', '${(flightDateRange || month).replace(/'/g, "\\'")}', '${destCC}', '${destIATA}')" 
-                     class="compact-card compact-card-aspect relative group cursor-pointer overflow-hidden rounded-[1.5rem] border-8 border-white shadow-2xl bg-white flex flex-col items-center justify-between p-6">
+                     class="compact-card compact-card-aspect relative group cursor-pointer overflow-hidden rounded-[1.5rem] border-8 border-white shadow-2xl bg-white flex flex-col items-center justify-between p-0 transform transition-transform hover:-translate-y-1">
                     
-                    <div class="absolute top-4 left-0 right-0 flex justify-center">
-                        <div class="px-3 py-1 bg-wander-primary/10 rounded-full border border-wander-primary/20">
-                             <span class="text-[8px] font-black text-wander-primary tracking-[0.2em] uppercase">Premium Hub</span>
-                        </div>
-                    </div>
+                    <!-- Premium Background -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-wander-primary/5 via-white to-wander-accent/5 -z-10"></div>
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-wander-primary/10 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-wander-primary/20 transition-colors"></div>
+                    <div class="absolute bottom-0 left-0 w-24 h-24 bg-wander-accent/10 rounded-full -ml-12 -mb-12 blur-2xl group-hover:bg-wander-accent/20 transition-colors"></div>
 
-                    <div class="flex flex-col items-center justify-center flex-1 w-full gap-4">
-                        <div class="text-3xl font-black text-wander-primary tracking-tighter" style="font-family: 'Luckiest Guy', cursive; text-shadow: 2px 2px 0px rgba(0,0,0,0.05);">
-                            Wingsky
+                    <div class="w-full h-full flex flex-col items-center justify-between p-5 relative">
+                        <div class="flex justify-center w-full">
+                            <div class="px-3 py-1 bg-wander-primary/10 rounded-full border border-wander-primary/20 backdrop-blur-md">
+                                 <span class="text-[8px] font-black text-wander-primary tracking-[0.2em] uppercase">Premium Hub</span>
+                            </div>
                         </div>
-                        <div class="w-20 h-20 bg-gradient-to-br from-wander-primary to-wander-accent rounded-full flex items-center justify-center shadow-xl transform transition-all group-hover:scale-110 group-hover:rotate-6">
-                            <i data-lucide="plane" class="w-10 h-10 text-white"></i>
-                        </div>
-                        <div class="text-center">
-                            <h4 class="text-xl font-black text-wander-primary leading-tight">Other City</h4>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Custom Origin</p>
-                        </div>
-                    </div>
 
-                    <div class="w-full">
-                        <button class="w-full h-11 bg-wander-primary/10 border border-wander-primary/20 rounded-xl flex items-center justify-center gap-2 text-wander-primary font-black text-[10px] uppercase tracking-widest transition-all group-hover:bg-wander-primary group-hover:text-white group-hover:border-transparent">
-                            SEARCH
-                            <i data-lucide="search" class="w-3.5 h-3.5"></i>
-                        </button>
+                        <div class="flex flex-col items-center justify-center flex-1 w-full scale-90 group-hover:scale-95 transition-transform duration-500">
+                             <div class="relative mb-0.5">
+                                <div class="text-[2.2rem] font-black text-wander-primary tracking-tighter" style="font-family: 'Luckiest Guy', cursive; line-height: 0.9; text-shadow: 2px 2px 0px rgba(93, 63, 211, 0.1);">
+                                    Wingsky
+                                </div>
+                                <div class="absolute -right-2 -top-1 w-5 h-5 bg-wander-accent rounded-full flex items-center justify-center rotate-12 shadow-md">
+                                    <i data-lucide="sparkles" class="w-2.5 h-2.5 text-wander-primaryDark"></i>
+                                </div>
+                             </div>
+                            
+                            <div class="text-center mt-2">
+                                <h4 class="text-lg font-black text-gray-900 leading-tight uppercase tracking-tighter">ANY CITY</h4>
+                                <div class="h-1 w-8 bg-wander-accent mx-auto my-1 rounded-full"></div>
+                                <p class="text-[7px] text-gray-400 font-black uppercase tracking-[0.3em] mt-1">Smart Search</p>
+                            </div>
+                        </div>
+
+                        <div class="w-full">
+                            <button class="w-full h-10 bg-wander-primary text-white rounded-2xl flex items-center justify-center gap-2.5 font-black text-[9px] uppercase tracking-widest shadow-lg shadow-wander-primary/25 transform active:scale-95 transition-all group-hover:bg-wander-primaryDark">
+                                SEARCH
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
 
             setTimeout(() => {
-                grid.innerHTML = suggestedData.map(f => compactCardTemplate(f, false, 'Direct', 'festival-popup')).join('') + otherCardHtml;
+                const storedCustom = getCustomFlights(festivalTitle);
+                let finalHtml = storedCustom.map(f => `<div class="compact-card-root">${compactCardTemplate(f, false, 'Matching', 'festival-popup')}</div>`).join('');
+                finalHtml += suggestedData.map(f => `<div class="compact-card-root">${compactCardTemplate(f, false, 'Direct', 'festival-popup')}</div>`).join('') + `<div class="compact-card-root">${otherCardHtml}</div>`;
+                grid.innerHTML = finalHtml;
                 if (window.lucide) lucide.createIcons();
             }, 300);
         }
@@ -5914,6 +6143,7 @@
             const modal = document.getElementById('otherCityModal');
             const inner = document.getElementById('otherCityModalInner');
             const input = document.getElementById('otherCityInput');
+            const dropdown = document.getElementById('otherCityDropdown');
 
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -5922,7 +6152,106 @@
                 inner.classList.add('scale-100');
             }, 10);
             input.value = '';
+            dropdown.classList.add('hidden');
             input.focus();
+
+            // Function to show results
+            const showResults = (q) => {
+                const query = q.toLowerCase().trim();
+                const resultsContainer = document.getElementById('otherCityResults');
+
+                // If query is empty, show top hubs
+                if (query.length < 1) {
+                    const hubs = [
+                        { city: 'Paris', iata: 'PAR', flag: '🇫🇷', country: 'France' },
+                        { city: 'London', iata: 'LON', flag: '🇬🇧', country: 'United Kingdom' },
+                        { city: 'Milan', iata: 'MIL', flag: '🇮🇹', country: 'Italy' },
+                        { city: 'Madrid', iata: 'MAD', flag: '🇪🇸', country: 'Spain' },
+                        { city: 'Berlin', iata: 'BER', flag: '🇩🇪', country: 'Germany' }
+                    ];
+                    resultsContainer.innerHTML = hubs.map(m => `
+                        <div class="other-city-item" onclick="selectOtherCity('${m.city.replace(/'/g, "\\'")}', '${m.iata}')">
+                            <div class="flag">${m.flag}</div>
+                            <div class="city-info">
+                                <span class="city-name">${m.city}</span>
+                                <span class="country-name">${m.country}</span>
+                            </div>
+                            <div class="iata-code">${m.iata}</div>
+                        </div>
+                    `).join('');
+                    dropdown.classList.remove('hidden');
+                    return;
+                }
+
+                // Filter logic
+                let matches = [];
+                const seen = new Set();
+
+                // 1. Search in main AIRPORTS list
+                AIRPORTS.forEach(a => {
+                    if (a.city.toLowerCase().includes(query) || a.iata.toLowerCase().includes(query)) {
+                        matches.push({ ...a, source: 'core' });
+                        seen.add(a.iata);
+                    }
+                });
+
+                // 2. Search in extended iataToCity map
+                Object.entries(iataToCity).forEach(([iata, city]) => {
+                    if (seen.has(iata)) return;
+                    if (city.toLowerCase().includes(query) || iata.toLowerCase().includes(query)) {
+                        const cc = iataToCountryCode[iata] || 'un';
+                        matches.push({
+                            city: city,
+                            iata: iata,
+                            country: iataToCountry[iata] || '',
+                            flag: getFlagEmoji(cc),
+                            source: 'extended'
+                        });
+                        seen.add(iata);
+                    }
+                });
+
+                matches = matches.slice(0, 10); // Limit results
+
+                if (matches.length > 0) {
+                    resultsContainer.innerHTML = matches.map(m => `
+                        <div class="other-city-item" onclick="selectOtherCity('${m.city.replace(/'/g, "\\'")}', '${m.iata}')">
+                            <div class="flag">${m.flag || '📍'}</div>
+                            <div class="city-info">
+                                <span class="city-name">${m.city}</span>
+                                <span class="country-name">${m.country || ''}</span>
+                            </div>
+                            <div class="iata-code">${m.iata}</div>
+                        </div>
+                    `).join('');
+                    dropdown.classList.remove('hidden');
+                } else {
+                    dropdown.classList.add('hidden');
+                }
+            };
+
+            // Setup Smart Selector Listeners
+            if (!input.dataset.listener) {
+                input.addEventListener('input', (e) => showResults(e.target.value));
+                input.addEventListener('focus', (e) => showResults(e.target.value));
+
+                // Close on outside click
+                document.addEventListener('mousedown', (e) => {
+                    if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                        dropdown.classList.add('hidden');
+                    }
+                });
+
+                input.dataset.listener = "true";
+            }
+        }
+
+        function selectOtherCity(city, iata) {
+            const input = document.getElementById('otherCityInput');
+            const dropdown = document.getElementById('otherCityDropdown');
+            input.value = city;
+            input.dataset.selectedIata = iata;
+            dropdown.classList.add('hidden');
         }
 
         function closeOtherCityModal() {
@@ -5942,20 +6271,79 @@
             if (!fromCity) return;
 
             const { toCity, dateStr, destCC, destIATA } = otherCityPendingData;
-            const iata = cityToIata[fromCity.toLowerCase()] || fromCity.substring(0, 3).toUpperCase();
-            const cc = cityToCountryCode[fromCity] || 'un';
+            const iata = (input.dataset.selectedIata || cityToIata[fromCity.toLowerCase()] || fromCity.substring(0, 3).toUpperCase()).toUpperCase();
+
+            // Dynamic Country Code resolution for departure
+            let cc = cityToCountryCode[fromCity.toLowerCase()] || cityToCountryCode[fromCity] || 'un';
+            if (cc === 'un' && iata) {
+                if (typeof iataToCountryCode !== 'undefined' && iataToCountryCode[iata]) {
+                    cc = iataToCountryCode[iata];
+                } else if (typeof iataToCountry !== 'undefined' && iataToCountry[iata]) {
+                    const cName = iataToCountry[iata].toLowerCase().trim();
+                    if (typeof globalCountryMap !== 'undefined' && globalCountryMap[cName]) {
+                        cc = globalCountryMap[cName];
+                    }
+                }
+                if (cc === 'un' && typeof AIRPORTS !== 'undefined') {
+                    const airport = AIRPORTS.find(a => a.iata.toUpperCase() === iata);
+                    if (airport && airport.country && typeof globalCountryMap !== 'undefined') {
+                        cc = globalCountryMap[airport.country.toLowerCase().trim()] || 'un';
+                    }
+                }
+            }
+
+            // PARSE DATES (e.g., "30 Jul - 4 Aug" or "30 Jul")
+            const months = { 'jan': '01', 'feb': '02', 'mar': '03', 'apr': '04', 'may': '05', 'jun': '06', 'jul': '07', 'aug': '08', 'sep': '09', 'oct': '10', 'nov': '11', 'dec': '12' };
+            const parseToISO = (p) => {
+                if (!p) return null;
+                const match = p.trim().match(/(\d{1,2})\s*([A-Za-z]{3})/i);
+                if (!match) return null;
+                const d = match[1].padStart(2, '0');
+                const m = months[match[2].toLowerCase()];
+                return `${new Date().getFullYear()}-${m}-${d}`;
+            };
+            const parts = dateStr.includes(' - ') ? dateStr.split(' - ') : [dateStr];
+            const ddate = parseToISO(parts[0]);
+            const rdatePart = parts[1] ? parseToISO(parts[1]) : "";
+
+            // Trip.com URL construction matching user's sample
+            // Respect searchState.tripType (One-way vs Round-trip)
+            const isRT = searchState.tripType === 'roundtrip';
+            const finalTripType = (isRT && rdatePart) ? 'rt' : 'ow';
+            const rdate = (isRT && rdatePart) ? rdatePart : "";
+
+            let tripUrl = `https://fr.trip.com/flights/showfarefirst?acity=${destIATA.toLowerCase()}&dcity=${iata.toLowerCase()}&ddate=${ddate}&locale=fr-FR&curr=EUR&class=y&lowpricesource=searchform&nonstoponly=off&quantity=1&searchboxarg=t&triptype=${finalTripType}`;
+            if (rdate) tripUrl += `&rdate=${rdate}`;
+
+            // Affiliate Parameters
+            tripUrl += `&allianceid=1094387&sid=1443653&SID=2209817&subMark=10001000&trip_sub1=35a6f56c6e1d485583564e8c5-598952&utm_campaign=598952`;
+
+            const finalUrl = `https://tp.media/r?marker=598952&trs=394660&p=8626&u=${encodeURIComponent(tripUrl)}&campaign_id=121`;
 
             const customFlight = {
                 from: fromCity, to: toCity, iataFrom: iata, iataTo: destIATA,
-                price: 65, date: dateStr, countryCode: destCC, depCountryCode: cc
+                price: 65, date: dateStr, countryCode: destCC, depCountryCode: cc,
+                url: finalUrl
             };
 
+            // 1. Add to Featured (Original behavior kept for visibility)
             const featuredContainer = document.getElementById('featuredFlightContainer');
             const featuredSlot = document.getElementById('featuredFlightSlot');
-
-            featuredSlot.innerHTML = compactCardTemplate(customFlight, false, 'Your Flight', 'festival-popup');
+            featuredSlot.innerHTML = `<div class="compact-card-root">${compactCardTemplate(customFlight, false, 'Your Flight', 'festival-popup')}</div>`;
             featuredContainer.classList.remove('hidden');
             featuredContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // 2. ALSO ADD TO THE MODAL GRID (User request: "rajouter dans le modal")
+            const grid = document.getElementById('suggestedFlightsGrid');
+            if (grid) {
+                grid.insertAdjacentHTML('afterbegin', `<div class="compact-card-root">${compactCardTemplate(customFlight, false, 'Matching', 'festival-popup')}</div>`);
+            }
+
+            // 3. Persist this custom flight for 7 days
+            saveCustomFlight(toCity, customFlight);
+
+            // 4. Open Search in New Tab (User request: "ouvrir un nouvel onglet")
+            window.open(finalUrl, '_blank');
 
             closeOtherCityModal();
             if (window.lucide) lucide.createIcons();
@@ -5995,6 +6383,37 @@
                 }
                 return d;
             });
+        }
+
+        // GLOBAL DATA STORAGE FOR MULTI-OPTIONS
+        window.stackedDealsByMonth = {};
+
+        function openMultiOptionsModal(monthKey, fromCity, toCity) {
+            const monthDeals = window.stackedDealsByMonth[monthKey];
+            if (!monthDeals || !monthDeals[`${fromCity}-${toCity}`]) return;
+
+            const variations = monthDeals[`${fromCity}-${toCity}`];
+            if (variations.length === 0) return;
+            const leader = variations[0];
+            const modal = document.getElementById('flightModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalSubtitle = document.getElementById('modalSubtitle');
+            const grid = document.getElementById('suggestedFlightsGrid');
+            const featuredContainer = document.getElementById('featuredFlightContainer');
+
+            if (!modal || !grid) return;
+
+            modalTitle.textContent = `${leader.to.toUpperCase()} DEALS`;
+            modalSubtitle.textContent = `Multiple travel dates found for ${monthKey}`;
+            featuredContainer.classList.add('hidden');
+
+            const sortedVariations = [...variations].sort((a, b) => a.price - b.price);
+            grid.innerHTML = sortedVariations.map(v => compactCardTemplate(v, true)).join('');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            if (window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
         }
 
         // Helper function to calculate J-1 (day before) date
@@ -7602,7 +8021,6 @@
             if (isGeneric(iataTo) && d.to && cityToIata[d.to.toLowerCase()]) iataTo = cityToIata[d.to.toLowerCase()];
             if (isGeneric(iataFrom)) iataFrom = (d.from ? d.from.substring(0, 3).toUpperCase() : 'DEP');
             if (isGeneric(iataTo)) iataTo = (d.to ? d.to.substring(0, 3).toUpperCase() : 'ARR');
-            const iconScale = 'clamp(17px, 3.5vw, 19px)';
             const dealUniqueId = btoa(encodeURIComponent(`${d.from}-${d.to}-${d.date}-${d.price}`)).replace(/=/g, '');
             const isFav = typeof isDealFavorite === 'function' && isDealFavorite(dealUniqueId);
             const heartClass = isFav ? 'fa-solid text-red-500' : 'fa-regular text-white';
@@ -7645,8 +8063,16 @@
 
             const finalUrl = generateTripComLink(d);
 
+            const optionsCount = d.optionsCount || 0;
+            const monthKey = d.monthKey || (d.date ? d.date.split(' ')[1]?.toUpperCase() : 'SEARCH');
+            const safeFrom = (d.from || '').toLowerCase().replace(/'/g, "\\'");
+            const safeTo = (d.to || '').toLowerCase().replace(/'/g, "\\'");
+            const linkHref = optionsCount > 0 ? 'javascript:void(0)' : finalUrl;
+            const linkTarget = optionsCount > 0 ? '' : 'target="_blank" rel="noopener noreferrer"';
+            const linkClick = optionsCount > 0 ? `onclick="openMultiOptionsModal('${monthKey}', '${safeFrom}', '${safeTo}')"` : '';
+
             return `
-            <a href="${finalUrl}" target="_blank" rel="noopener noreferrer"
+            <a href="${linkHref}" ${linkTarget} ${linkClick}
                     class="compact-card compact-card-aspect relative group block flex-shrink-0"
                     style="overflow: hidden; border-radius: 1.5rem;">
 
@@ -7663,6 +8089,13 @@
                                     <span class="text-[10px] font-black text-white tracking-widest uppercase">${extraBadge}</span>
                                 </div>
                             ` : ''}
+
+                            ${optionsCount > 0 ? `
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 z-30 px-4 py-1.5 rounded-t-xl bg-gradient-to-r from-violet-600 to-indigo-600 border-x border-t border-white/40 shadow-2xl animate-pulse-slow flex items-center gap-2 transition-transform group-hover:scale-105">
+                                    <i class="fa-solid fa-calendar-days text-[9px] text-white/90"></i>
+                                    <span class="text-[9px] font-black text-white tracking-[0.1em] uppercase">+${optionsCount} OTHER DATES</span>
+                                </div>
+                            ` : ''}
                             <button onclick="event.preventDefault(); event.stopPropagation(); toggleFavorite('${dealUniqueId}', this)" 
                                     class="absolute top-3 right-3 z-20 p-2 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-sm transition-all group/heart border border-white/10"
                                     data-deal='${JSON.stringify(d).replace(/'/g, "&#39;")}'>
@@ -7671,7 +8104,7 @@
                         </div>
 
                         <div class="absolute bg-white shadow-xl z-10"
-                            style="width: 92%; left: 4% ; bottom: 12px; border-radius: 1rem; padding: 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; gap: 10px;">
+                            style="width: 92%; left: 4% ; bottom: 12px; border-radius: 1rem; padding: 0.75rem; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; gap: 8px;">
 
                             <div class="grid items-center relative ${isHome ? 'zfold-grid-stack' : ''}" style="grid-template-columns: 1fr 28% 1fr;">
                                 <div class="flex flex-col items-center text-center z-10 zfold-items-center" style="min-width: 0;">
@@ -7687,10 +8120,10 @@
                                     </div>
                                 </div>
 
-                                <div class="flex flex-col items-center justify-center relative z-0 zfold-hide" style="font-size: ${iconScale};">
+                                <div class="card-airplane-wrapper flex flex-col items-center justify-center relative z-0 zfold-hide">
                                     <div class="w-full border-t-2 border-dashed border-gray-300 opacity-60"></div>
                                     <div class="absolute bg-wander-primary rounded-full flex items-center justify-center shadow-md border-2 border-white"
-                                        style="width: 1.8em; height: 1.8em; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+                                        style="width: 1.6em; height: 1.6em; left: 50%; top: 50%; transform: translate(-50%, -50%);">
                                         <svg class="text-white transform rotate-45" style="width: 1.2em; height: 1.2em;" viewBox="0 0 24 24" fill="currentColor">
                                             <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
                                         </svg>
@@ -8129,8 +8562,52 @@
                 else if (currentSort === 'city-desc') monthDeals.sort((a, b) => b.to.localeCompare(a.to));
                 else monthDeals.sort((a, b) => a.price - b.price || a.to.localeCompare(b.to));
 
-                // 5) Diversify / Slice
-                const diversifiedMonth = diversifyDeals(monthDeals, displayCount, 'countryCode');
+                // 5) Smart Stacking by Route (From-To)
+                window.stackedDealsByMonth = window.stackedDealsByMonth || {};
+                window.stackedDealsByMonth[monthBase] = {};
+
+                // Strict Deduplication (City + Price + Date)
+                const deduplicatedDeals = [];
+                const seenKeys = new Set();
+                monthDeals.forEach(deal => {
+                    const normalizedDate = deal.date ? deal.date.replace(/\s+/g, '') : '';
+                    const signature = `${deal.from.toLowerCase()}-${deal.to.toLowerCase()}-${normalizedDate}-${Math.round(deal.price)}`;
+                    if (!seenKeys.has(signature)) {
+                        seenKeys.add(signature);
+                        deduplicatedDeals.push(deal);
+                    }
+                });
+
+                const stackedDealsMap = new Map();
+                deduplicatedDeals.forEach(deal => {
+                    const fromTo = `${deal.from.toLowerCase()}-${deal.to.toLowerCase()}`;
+                    if (!stackedDealsMap.has(fromTo)) {
+                        stackedDealsMap.set(fromTo, { leader: Object.assign({}, deal), all: [] });
+                        window.stackedDealsByMonth[monthBase][fromTo] = [];
+                    }
+                    stackedDealsMap.get(fromTo).all.push(deal);
+                    window.stackedDealsByMonth[monthBase][fromTo].push(deal);
+
+                    // Leader is the lowest price
+                    if (deal.price < stackedDealsMap.get(fromTo).leader.price) {
+                        stackedDealsMap.get(fromTo).leader = Object.assign({}, deal);
+                    }
+                });
+
+                const mappedMonthDeals = Array.from(stackedDealsMap.values()).map(entry => {
+                    const leaderDeal = entry.leader;
+                    leaderDeal.optionsCount = entry.all.length - 1;
+                    leaderDeal.monthKey = monthBase; // passing monthKey on the object
+                    return leaderDeal;
+                });
+
+                // Sort the groups in global storage by price
+                Object.keys(window.stackedDealsByMonth[monthBase]).forEach(fromToKey => {
+                    window.stackedDealsByMonth[monthBase][fromToKey].sort((a, b) => a.price - b.price);
+                });
+
+                // 6) Diversify / Slice
+                const diversifiedMonth = diversifyDeals(mappedMonthDeals, displayCount, 'countryCode');
 
                 // 6) Build Filter HTML (Same for both views)
                 let filterHTML = '';
@@ -8187,7 +8664,6 @@
                                 <div class="text-left">
                                      <h3 class="text-4xl md:text-6xl font-black tracking-tighter uppercase text-gray-900 mb-2 leading-none">${month} DEALS</h3>
                                      <div class="flex items-center gap-2 mb-2">
-                                        <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-md text-xs font-bold uppercase tracking-widest border border-indigo-100">${monthDeals.length} FLIGHTS FOUND</span>
                                         ${currentCity ? `<span class="px-3 py-1 bg-white border border-gray-200 text-gray-500 rounded-md text-xs font-bold uppercase tracking-widest">FROM ${currentCity}</span>` : ''}
                                      </div>
                                 </div>
@@ -8207,8 +8683,8 @@
                             
                             <!-- Loader / End of List -->
                             <div class="py-8 text-center w-full">
-                                ${diversifiedMonth.length < monthDeals.length
-                            ? `<div class="inline-flex items-center gap-2 text-indigo-400 font-bold uppercase tracking-widest text-xs animate-pulse" id="grid-loader-${monthBase}"><div class="w-2 h-2 bg-indigo-400 rounded-full"></div> Loading more flights...</div>`
+                                ${diversifiedMonth.length < mappedMonthDeals.length
+                            ? `<div class="inline-flex items-center gap-2 text-indigo-400 font-bold uppercase tracking-widest text-xs animate-pulse" id="grid-loader-${monthBase}"><div class="w-2 h-2 bg-indigo-400 rounded-full"></div> Loading more destinations...</div>`
                             : `<div class="text-gray-300 font-bold uppercase tracking-widest text-xs">End of results</div>`}
                             </div>
                             <!-- Infinite Scroll Trigger Zone -->
@@ -8222,9 +8698,8 @@
                             <div class="flex items-center gap-3 overflow-hidden">
                                 <h3 class="text-xl md:text-5xl font-black tracking-tighter uppercase leading-none text-gray-900 flex-shrink-0">${month}</h3>
                                 <div class="hidden md:flex items-center gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
-                                    <span class="px-3 py-1 bg-gray-100 text-gray-500 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-widest">${monthDeals.length} deals</span>
-                                    ${monthDeals.length > displayCount ?
-                            `<span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-widest">Showing ${Math.min(displayCount, monthDeals.length)}</span>`
+                                    ${mappedMonthDeals.length > displayCount ?
+                            `<span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-widest">Showing ${Math.min(displayCount, mappedMonthDeals.length)}</span>`
                             : ''}
                                 </div>
                             </div>
@@ -8234,14 +8709,14 @@
                         </div>
 
                         <div class="relative">
-                            <div class="carousel month-carousel pr-4 flex flex-row overflow-x-auto whitespace-nowrap scrollbar-hide py-4 items-center gap-4 pl-2" id="carousel-${shortMonth}" data-month="${monthBase}" data-count="${displayCount}" data-total="${monthDeals.length}" style="scroll-behavior: auto;">
+                            <div class="carousel month-carousel pr-4 flex flex-row overflow-x-auto whitespace-nowrap scrollbar-hide py-4 items-center gap-4 pl-2" id="carousel-${shortMonth}" data-month="${monthBase}" data-count="${displayCount}" data-total="${mappedMonthDeals.length}" style="scroll-behavior: auto;">
                                 ${diversifiedMonth.map(deal => compactCardTemplate(deal, true)).join('')}
                             </div>
                         </div>
 
                         <div class="carousel-controls absolute inset-y-0 -left-4 -right-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity flex justify-between items-center z-10">
                             <button onclick="document.getElementById('carousel-${shortMonth}').scrollBy({left: -300, behavior: 'smooth'})" class="carousel-prev bg-white/90 backdrop-blur-sm shadow-xl p-3 rounded-full pointer-events-auto hover:scale-110 border border-gray-100 text-indigo-600 transition-transform" aria-label="Previous"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
-                            <button onclick="onNextCarouselClick('carousel-${shortMonth}', '${monthBase}', ${displayCount}, ${monthDeals.length})" class="carousel-next bg-white/90 backdrop-blur-sm shadow-xl p-3 rounded-full pointer-events-auto hover:scale-110 border border-gray-100 text-indigo-600 transition-transform" aria-label="Next"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
+                            <button onclick="onNextCarouselClick('carousel-${shortMonth}', '${monthBase}', ${displayCount}, ${mappedMonthDeals.length})" class="carousel-next bg-white/90 backdrop-blur-sm shadow-xl p-3 rounded-full pointer-events-auto hover:scale-110 border border-gray-100 text-indigo-600 transition-transform" aria-label="Next"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
                         </div>
                     </div>
                     `;
